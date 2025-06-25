@@ -39,6 +39,7 @@
     *   Установите Flask (если еще не установлен):
         ```bash
         pip install Flask
+        pip install -r requirements.txt
         ```
     *   Запустите Flask-сервер:
         ```bash
