@@ -1,5 +1,3 @@
-spacy
-
-# Для корректной работы ml/model_training.py также необходима языковая модель для spaCy.
-# Установите ее с помощью команды:
-# python -m spacy download ru_core_news_sm
+scikit-learn
+joblib
+nltk
