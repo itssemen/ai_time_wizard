@@ -1,71 +1,55 @@
-# Simple Frontend/Backend Project
+# Простой Фронтенд/Бэкенд Проект
 
-This project demonstrates a simple setup with a Python Flask backend and an HTML/JavaScript frontend.
+Этот проект демонстрирует простую настройку с бэкендом на Python Flask и фронтендом на HTML/JavaScript, объединенных в одно приложение.
 
-## Prerequisites
+## Предварительные требования
 
-- Python 3.x installed
-- pip (Python package installer) installed
+*   Установленный Python 3.x
+*   Установленный pip (менеджер пакетов Python)
 
-## Setup and Running
+## Установка и Запуск
 
-1.  **Clone the repository (if applicable) or download the files.**
+1.  **Клонируйте репозиторий (если применимо) или скачайте файлы.**
+    Если вы клонировали репозиторий:
+    ```bash
+    git clone https://github.com/itssemen/time_wizard
+    cd time_wizard
+    ```
 
-```
-git clone https://github.com/itssemen/time_wizard
-cd time_wizard
-```
-
-2.  **Backend Setup:**
-    *   Navigate to the `backend` directory:
+2.  **Настройка и запуск приложения:**
+    *   Перейдите в директорию `backend`:
         ```bash
         cd backend
         ```
-    *   It's recommended to create and activate a virtual environment:
+    *   Рекомендуется создать и активировать виртуальное окружение:
         ```bash
         python -m venv venv
-        # On Windows
+        # Для Windows
         venv\\Scripts\\activate
-        # On macOS/Linux
+        # Для macOS/Linux
         source venv/bin/activate
         ```
-    *   Install Flask:
+    *   Установите Flask (если еще не установлен):
         ```bash
         pip install Flask
         ```
-    *   Run the backend server:
+    *   Запустите Flask-сервер:
         ```bash
         python app.py
         ```
-        The backend will be running on `http://127.0.0.1:5000`.
+    *   Приложение будет доступно по адресу `http://127.0.0.1:5000` в вашем веб-браузере. Сервер Flask теперь обслуживает и фронтенд (index.html) и бэкенд API.
 
-3.  **Frontend Setup:**
-    *   Open a new terminal window/tab.
-    *   Navigate to the `frontend` directory:
-        ```bash
-        cd frontend
-        ```
-    *   You need a simple HTTP server to serve the `index.html` file and allow the `fetch` request to the backend to work correctly (due to Cross-Origin Resource Sharing policies if you just open the file directly in the browser). Python's built-in HTTP server is sufficient for this.
-        *   If you have Python 3:
-            ```bash
-            python -m http.server 8000
-            ```
-        *   If you have Python 2 (less common nowadays):
-            ```bash
-            python -m SimpleHTTPServer 8000
-            ```
-    *   Open your web browser and go to `http://localhost:8000`.
+## Как это работает
 
-## How it Works
+*   **Бэкенд и Фронтенд Сервер** (`backend/app.py`): это Flask-приложение, которое:
+    *   Обслуживает статический файл `index.html` (фронтенд) из папки `static` по корневому URL (`/`).
+    *   Предоставляет API-эндпоинт `/api/data`, который возвращает простой JSON-ответ.
+*   **Фронтенд** (`backend/static/index.html`): это базовая HTML-страница, которая использует JavaScript `fetch` API для запроса данных с эндпоинта `/api/data` того же сервера и отображает полученное сообщение на странице.
 
-*   The **backend** (`backend/app.py`) is a Flask application that serves a simple JSON response at the `/api/data` endpoint.
-*   The **frontend** (`frontend/index.html`) is a basic HTML page that uses JavaScript's `fetch` API to request data from the backend's `/api/data` endpoint and displays the message on the page.
+## Остановка сервера
 
-## Stopping the Servers
-
-*   To stop the backend Flask server, go to its terminal window and press `Ctrl+C`.
-*   To stop the frontend HTTP server, go to its terminal window and press `Ctrl+C`.
-*   If you used a virtual environment, you can deactivate it:
+*   Чтобы остановить Flask-сервер, перейдите в окно терминала, где он запущен, и нажмите `Ctrl+C`.
+*   Если вы использовали виртуальное окружение, вы можете деактивировать его:
     ```bash
     deactivate
     ```
