@@ -3,134 +3,276 @@ from spacy.training import Example
 from spacy.util import minibatch, compounding
 import random
 import json
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import RandomForestClassifier
-import joblib
-from datetime import datetime, timedelta
+# sklearn и joblib больше не нужны для этого скрипта в его текущей конфигурации
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# from sklearn.ensemble import RandomForestClassifier
+# import joblib
+# from datetime import datetime, timedelta # не используется
 import warnings
-warnings.filterwarnings('ignore')
+warnings.filterwarnings('ignore') # Оставим, т.к. spacy может выдавать ворнинги
 
 # 1. Загрузка данных
 with open('freeform_task_dataset.json', 'r', encoding='utf-8') as f:
     dataset = json.load(f)
 
 # Пример из датасета
-print("Пример текста:", dataset[0]["text"])
-print("Сущности:", dataset[0]["entities"])
+if dataset:
+    print("Пример текста из датасета:", dataset[0]["text"])
+    print("Сущности из датасета:", dataset[0]["entities"])
+else:
+    print("Датасет пуст или не загружен.")
+    exit()
 
 # 2. Подготовка данных для NER
+# Теперь каждая сущность в датасете - это TASK с атрибутами priority и duration_minutes.
+# Для NER нам нужны только start, end и label ("TASK").
 def convert_to_spacy_format(data):
     spacy_data = []
     for item in data:
-        entities = []
+        entities_for_spacy = []
         for ent in item["entities"]:
-            entities.append((ent["start"], ent["end"], ent["label"]))
-        
-        spacy_data.append((item["text"], {"entities": entities}))
+            # Убедимся, что start и end существуют и являются числами
+            if isinstance(ent.get("start"), int) and isinstance(ent.get("end"), int) and ent.get("label"):
+                entities_for_spacy.append((ent["start"], ent["end"], ent["label"]))
+            else:
+                print(f"Пропущена некорректная сущность в элементе: {item['text']}, сущность: {ent}")
+
+        if not item["text"]:
+            print(f"Пропущен элемент с пустым текстом.")
+            continue
+
+        spacy_data.append((item["text"], {"entities": entities_for_spacy}))
     return spacy_data
 
 # Разделение данных
 random.shuffle(dataset)
-split = int(0.8 * len(dataset))
-train_data = convert_to_spacy_format(dataset[:split])
-test_data = convert_to_spacy_format(dataset[split:]))
+split_ratio = 0.8
+# Убедимся, что датасет не слишком мал для разделения
+if len(dataset) < 5: # Например, минимальный размер для разделения
+    print("Датасет слишком мал для разделения на обучающую и тестовую выборки.")
+    # Можно либо завершить выполнение, либо использовать весь датасет для обучения
+    # Для примера, используем все для обучения если данных мало
+    train_data_source = dataset
+    test_data_source = dataset
+else:
+    split_idx = int(split_ratio * len(dataset))
+    train_data_source = dataset[:split_idx]
+    test_data_source = dataset[split_idx:]
+
+train_data = convert_to_spacy_format(train_data_source)
+test_data = convert_to_spacy_format(test_data_source)
+
+
+if not train_data:
+    print("Нет данных для обучения после конвертации. Проверьте формат 'freeform_task_dataset.json'.")
+    exit()
 
 # 3. Создание и обучение NER модели
-nlp = spacy.blank("ru")
-ner = nlp.add_pipe("ner")
+# Загружаем предобученную модель ru_core_news_sm как основу
+try:
+    nlp = spacy.load("ru_core_news_sm")
+    print("Модель 'ru_core_news_sm' загружена.")
+except OSError:
+    print("Не удалось загрузить модель 'ru_core_news_sm'. Убедитесь, что она установлена: python -m spacy download ru_core_news_sm")
+    exit()
 
-# Добавление лейблов
-ner.add_label("TASK")
-ner.add_label("DURATION")
+ner_pipe_name = "ner"
+if ner_pipe_name in nlp.pipe_names:
+    ner = nlp.get_pipe(ner_pipe_name)
+    print(f"Используется существующий NER компонент из 'ru_core_news_sm'. Текущие метки: {ner.labels}")
+else:
+    ner = nlp.add_pipe(ner_pipe_name, last=True)
+    print("Добавлен новый NER компонент.")
 
-# Инициализация модели
-nlp.initialize()
+# Добавление нашего лейбла, если его еще нет
+if "TASK" not in ner.labels:
+    ner.add_label("TASK")
+    print("Метка 'TASK' добавлена в NER.")
+# ner.add_label("DURATION") # DURATION больше не извлекается как отдельная сущность
 
-# Функция для оценки
-def evaluate_model(ner_model, examples):
-    correct = 0
-    total = 0
+
+# Инициализация или дообучение
+# Для SpaCy 3.x, nlp.initialize() используется для инициализации весов новых компонентов
+# и для подготовки к обучению. Если мы дообучаем, существующие веса сохраняются.
+# Передача get_examples помогает инициализировать компоненты, такие как 'tok2vec', если они есть.
+# Предоставляем train_data как примеры для инициализации
+def get_training_examples_for_initialize():
+    examples = []
+    for text, annotations in train_data: # train_data это список кортежей (text, annotation_dict)
+        if not text: continue
+        doc = nlp.make_doc(text) # Создаем Doc объект из текста
+        examples.append(Example.from_dict(doc, annotations))
+    if not examples:
+        print("Внимание: get_training_examples_for_initialize не сгенерировал ни одного Example. Проверьте train_data.")
+        # Возвращаем пустой список, чтобы избежать ошибки, но это указывает на проблему с данными.
+        # Или можно вызвать исключение, если это критично.
+        # Для nlp.initialize лучше, если он получит хотя бы один пример.
+        # Если train_data пуст, это вызовет проблемы раньше.
+        # Если train_data не пуст, но все тексты пустые, это тоже проблема.
+
+        # Попробуем создать один фиктивный Example, если train_data пуст, чтобы избежать ошибки,
+        # но это костыль и указывает на проблемы с данными.
+        # Лучше убедиться, что train_data всегда содержит валидные данные.
+        # Сейчас, если examples пуст, nlp.initialize может выдать ошибку дальше.
+        # Пусть пока так, чтобы увидеть, если это произойдет.
+        pass
+    return examples
+
+optimizer = nlp.initialize(get_examples=get_training_examples_for_initialize)
+
+
+# Функция для оценки (исправленная)
+def evaluate_ner_model(nlp_model, examples):
+    scorer = spacy.scorer.Scorer()
+    example_list = []
     for text, annotations in examples:
-        doc = ner_model.make_doc(text)
-        example = Example.from_dict(doc, annotations)
-        ner_model.update([example])
-        predicted = ner_model(text)
+        if not text: # Пропускаем пустые тексты, если они как-то попали
+            continue
+        pred_doc = nlp_model(text)
+        # Создаем Example объект для оценки
+        # Убедимся, что annotations это словарь {'entities': [(start, end, label), ...]}
+        if isinstance(annotations, dict) and "entities" in annotations:
+            example = Example.from_dict(nlp_model.make_doc(text), annotations)
+            example_list.append(example)
+        else:
+            print(f"Некорректный формат аннотаций для текста: {text}")
+
+    if not example_list:
+        return {"ents_p": 0, "ents_r": 0, "ents_f": 0, "ents_per_type": {}}
         
-        # Сравнение с истинными значениями
-        true_ents = annotations["entities"]
-        pred_ents = [(ent.start_char, ent.end_char, ent.label_) for ent in predicted.ents]
-        
-        for true_ent in true_ents:
-            total += 1
-            if true_ent in pred_ents:
-                correct += 1
-    
-    return correct / total if total > 0 else 0
+    scores = scorer.score(example_list)
+    return scores
+
 
 # Обучение с прогрессом
 print("Начало обучения NER модели...")
-for epoch in range(30):
+n_iter = 30 # Количество эпох
+
+# Создаем директорию для моделей, если она не существует
+import os
+output_dir = "models/ner_model"
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+best_f_score = 0.0
+
+for epoch in range(n_iter):
     random.shuffle(train_data)
     losses = {}
-    batches = minibatch(train_data, size=compounding(4.0, 32.0, 1.001))
     
+    # Пакетная обработка данных
+    batches = minibatch(train_data, size=compounding(4.0, 32.0, 1.001))
     for batch in batches:
         examples = []
         for text, annotations in batch:
+            if not text: continue # Пропуск пустых текстов
+            # Создаем Example объект для обучения
             doc = nlp.make_doc(text)
-            examples.append(Example.from_dict(doc, annotations))
+            example = Example.from_dict(doc, annotations)
+            examples.append(example)
         
-        nlp.update(examples, losses=losses, drop=0.3)
+        if examples: # Убедимся, что есть что обновлять
+            nlp.update(examples, sgd=optimizer, losses=losses, drop=0.35)
     
-    # Оценка
-    train_acc = evaluate_model(nlp, train_data[:50])  # Оценка на части тренировочных данных
-    test_acc = evaluate_model(nlp, test_data[:50])    # Оценка на части тестовых данных
-    
-    print(f"Epoch {epoch + 1}, Loss: {losses['ner']:.2f}, Train Acc: {train_acc:.2f}, Test Acc: {test_acc:.2f}")
+    # Оценка после каждой эпохи (на небольшом подмножестве для скорости)
+    # Важно: передавать корректно отформатированные данные в evaluate_ner_model
+    if test_data:
+        # Используем весь тестовый набор для более точной оценки
+        scores = evaluate_ner_model(nlp, test_data)
+        f_score = scores.get('ents_f', 0)
+        print(
+            f"Epoch {epoch + 1}/{n_iter}, Loss: {losses.get('ner', 0.0):.3f}, "
+            f"P: {scores.get('ents_p', 0.0):.3f}, R: {scores.get('ents_r', 0.0):.3f}, F: {f_score:.3f}"
+        )
+        # Сохранение лучшей модели (ЗАКОММЕНТИРОВАНО ДЛЯ ТЕСТА В ОГРАНИЧЕННОМ ОКРУЖЕНИИ)
+        # if f_score > best_f_score:
+        #     best_f_score = f_score
+        #     # nlp.to_disk(output_dir)
+        #     # print(f"Сохранена новая лучшая модель с F-мерой: {f_score:.3f} в {output_dir}")
+        #     print(f"Модель показала F-меру: {f_score:.3f} (сохранение отключено)")
+        # else:
+        #     print(f"F-мера {f_score:.3f} не лучше предыдущей {best_f_score:.3f} (сохранение отключено)")
+        pass # Убрали сохранение, чтобы избежать ошибки размера файлов
+    else:
+         print(f"Epoch {epoch + 1}/{n_iter}, Loss: {losses.get('ner',0.0):.3f}. Тестовые данные отсутствуют для оценки.")
 
-# 4. Обучение классификатора приоритетов
-# Создаем данные для классификации
-priority_data = []
-priority_keywords = {
-    0: ["фильм", "гулять", "книга", "магазин", "отдых"],
-    1: ["домашка", "проект", "отчет", "документы", "презентация"],
-    2: ["срочно", "быстро", "сейчас", "немедленно", "к сроку", "горящее"]
-}
+# # Если тестовых данных не было, сохраняем модель после последней эпохи (ЗАКОММЕНТИРОВАНО)
+# model_saved_during_training = False
+# if best_f_score > 0: # Если модель хоть раз улучшилась и сохранилась
+#     model_saved_during_training = True
 
-for item in dataset:
-    for ent in item["entities"]:
-        if ent["label"] == "TASK":
-            text = ent["text"].lower()
-            priority = 0  # По умолчанию
-            
-            # Проверка ключевых слов
-            for level, keywords in priority_keywords.items():
-                if any(keyword in text for keyword in keywords):
-                    priority = max(priority, level)  # Берем максимальный приоритет
-            
-            # Учитываем длительность (дольше = важнее)
-            duration = ent["duration"]
-            if duration > 120:
-                priority = min(priority + 1, 2)
-            
-            priority_data.append((ent["text"], priority))
+# if not test_data and n_iter > 0 and not model_saved_during_training:
+#     # nlp.to_disk(output_dir)
+#     # print(f"Модель сохранена после {n_iter} эпох обучения в {output_dir} (тестовых данных не было).")
+#     # model_saved_during_training = True
+#     pass
 
-# Векторизация и обучение
-X = [text for text, _ in priority_data]
-y = [priority for _, priority in priority_data]
 
-vectorizer = TfidfVectorizer(ngram_range=(1, 2), max_features=5000)
-X_vec = vectorizer.fit_transform(X)
+# Раздел обучения классификатора приоритетов и векторизатора УДАЛЕН,
+# так как приоритеты и длительность теперь являются частью генерируемого датасета
+# и извлекаются вместе с задачей.
 
-clf = RandomForestClassifier(n_estimators=100, class_weight='balanced')
-clf.fit(X_vec, y)
+# # 5. Сохранение основной NER модели (финальное) (ЗАКОММЕНТИРОВАНО)
+# if n_iter == 0:
+#     print("Обучение не проводилось (0 эпох). Модель не сохранена.")
+# elif not model_saved_during_training:
+#     # Если модель не была сохранена во время обучения (например, F-score всегда был 0, или не было test_data)
+#     # и обучение проводилось (n_iter > 0)
+#     if not os.path.exists(output_dir):
+#         os.makedirs(output_dir)
+#     # nlp.to_disk(output_dir)
+#     # print(f"Финальная NER модель принудительно сохранена в {output_dir} (F-мера могла не улучшаться).")
+# else:
+#     # print(f"Лучшая NER модель уже сохранена в {output_dir} с F-мерой: {best_f_score:.3f}")
+#     pass
 
-# Проверка точности
-print(f"Priority Classifier Accuracy: {clf.score(X_vec, y):.2f}")
+print("Обучение NER модели завершено (сохранение модели было отключено для этого теста).")
 
-# 5. Сохранение моделей
-nlp.to_disk("models/ner_model")
-joblib.dump(clf, "models/priority_model.pkl")
-joblib.dump(vectorizer, "models/priority_vectorizer.pkl")
+# # Пример использования обученной модели для извлечения задач и их атрибутов (ЗАКОММЕНТИРОВАНО)
+# print("\n--- Пример использования обученной модели (демонстрация отключена, т.к. сохранение было отключено) ---")
+# if False: # Блок примера использования модели отключен
+# # if os.path.exists(output_dir):
+#     # nlp_loaded = spacy.load(output_dir)
 
-print("Все модели успешно сохранены")
+#     # # Возьмем пример из тестового набора (если он есть) или из тренировочного
+#     # sample_text_data = test_data[0] if test_data else (train_data[0] if train_data else None)
+
+#     # if sample_text_data:
+#     #     sample_text = sample_text_data[0]
+#     #     print(f"Исходный текст: {sample_text}")
+
+#     #     doc = nlp_loaded(sample_text)
+#     #     print("Извлеченные задачи (сущности NER):")
+#     #     for ent in doc.ents:
+#     #         print(f"- Текст задачи: '{ent.text}', Метка: {ent.label_} (позиции: {ent.start_char}-{ent.end_char})")
+
+#     #         # Теперь найдем соответствующую сущность в исходном датасете, чтобы получить priority и duration
+#     #         # Это важно, так как NER модель сама по себе не хранит эти доп. атрибуты.
+#     #         # В реальном приложении, после извлечения сущности (ent),
+#     #         # вам нужно будет найти ее в первоначальных данных или передать эти данные вместе.
+
+#     #         # Поиск оригинальной сущности для демонстрации
+#     #         original_entity_info = None
+#     #         for item in dataset: # Ищем в исходном полном датасете
+#     #             if item["text"] == sample_text:
+#     #                 for original_ent in item["entities"]:
+#     #                     if original_ent["start"] == ent.start_char and \
+#     #                        original_ent["end"] == ent.end_char and \
+#     #                        original_ent["text"] == ent.text:
+#     #                         original_entity_info = original_ent
+#     #                         break
+#     #                 if original_entity_info:
+#     #                     break
+
+#     #         if original_entity_info:
+#     #             print(f"  Priority (из датасета): {original_entity_info.get('priority')}")
+#     #             print(f"  Duration (из датасета): {original_entity_info.get('duration_minutes')} минут")
+#     #             print(f"  Original duration phrase: {original_entity_info.get('duration_phrase_original')}")
+#     #         else:
+#     #             print("  Дополнительная информация (priority/duration) не найдена в исходных данных для этой сущности.")
+#     # else:
+#     #     print("Нет данных для демонстрации использования модели.")
+# # else:
+# #     print(f"Директория с моделью {output_dir} не найдена. Модель не была загружена для примера.")
+
+print("\nСкрипт model_training.py завершен.")
