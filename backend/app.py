@@ -212,6 +212,18 @@ except LookupError:
     except Exception as e:
         logger.error(f"Failed to download NLTK 'punkt': {e}")
 
+try:
+    nltk.data.find('tokenizers/punkt_tab')
+    logger.info("NLTK resource 'punkt_tab' found.")
+except LookupError:
+    logger.info("NLTK resource 'punkt_tab' not found. Downloading...")
+    try:
+        nltk.download('punkt_tab', quiet=True)
+        nltk.data.find('tokenizers/punkt_tab')
+        logger.info("NLTK resource 'punkt_tab' downloaded successfully.")
+    except Exception as e:
+        logger.error(f"Failed to download NLTK 'punkt_tab': {e}")
+
 def load_ml_models():
     global ner_vectorizer, ner_model, duration_model, priority_model
     all_models_loaded_successfully = True # Флаг для отслеживания успешности загрузки всех моделей
