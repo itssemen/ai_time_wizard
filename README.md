@@ -40,6 +40,7 @@
         ```bash
         pip install Flask
         pip install -r requirements.txt
+        pip install caldav
         ```
     *   Запустите Flask-сервер:
         ```bash
