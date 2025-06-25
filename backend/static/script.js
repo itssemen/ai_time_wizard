@@ -1,59 +1,64 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Элементы интерфейса
     const taskInput = document.getElementById('taskInput');
     const optimizeButton = document.getElementById('optimizeButton');
     const resultsContainer = document.getElementById('resultsContainer');
     const taskList = document.getElementById('taskList');
     const addToCalendarButton = document.getElementById('addToCalendarButton');
     const connectCalendarButton = document.getElementById('connectCalendarButton');
+    const authStatus = document.getElementById('authStatus');
 
-    optimizeButton.addEventListener('click', () => {
+    // Проверка статуса авторизации при загрузке
+    checkAuthStatus();
+
+    // Обработчик кнопки "Оптимизировать"
+    optimizeButton.addEventListener('click', async () => {
         const inputText = taskInput.value.trim();
         if (!inputText) {
             alert('Пожалуйста, введите ваши задачи.');
             return;
         }
 
-        // Вызов API бэкенда для оптимизации
-        fetch('/api/optimize', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: inputText }),
-        })
-        .then(response => response.json())
-        .then(data => {
+        try {
+            const response = await fetch('/api/optimize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: inputText })
+            });
+            
+            const data = await response.json();
+            
             if (data.error) {
-                alert(`Ошибка: ${data.error}`);
-                taskList.innerHTML = `<p>Ошибка обработки запроса: ${data.error}</p>`;
-                resultsContainer.style.display = 'block';
+                showError(data.error);
             } else {
+                window.currentScheduleData = data.schedule;
                 displaySchedule(data.schedule);
             }
-        })
-        .catch(error => {
-            console.error('Error calling optimize API:', error);
-            alert('Произошла ошибка при обращении к серверу.');
-            taskList.innerHTML = '<p>Произошла ошибка при обращении к серверу. Попробуйте позже.</p>';
-            resultsContainer.style.display = 'block';
-        });
+        } catch (error) {
+            console.error('Error:', error);
+            showError('Произошла ошибка при обращении к серверу');
+        }
     });
 
-    addToCalendarButton.addEventListener('click', () => {
+    // Обработчик кнопки "Добавить в календарь"
+    addToCalendarButton.addEventListener('click', async () => {
         if (!window.currentScheduleData) {
             alert('Сначала оптимизируйте расписание');
             return;
         }
-    
-        fetch('/api/add_to_calendar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ schedule: window.currentScheduleData })
-        })
-        .then(response => response.json())
-        .then(data => {
+
+        try {
+            const response = await fetch('/api/add_to_calendar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ schedule: window.currentScheduleData })
+            });
+            
+            const data = await response.json();
+            
             if (data.error) {
                 if (data.error === "Not authorized with Yandex") {
+                    // Перенаправляем на авторизацию
                     window.location.href = '/auth/yandex';
                 } else {
                     alert(`Ошибка: ${data.error}`);
@@ -61,30 +66,41 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 alert(data.message);
             }
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Error:', error);
-            alert('Произошла ошибка');
-        });
+            alert('Произошла ошибка при добавлении в календарь');
+        }
     });
 
+    // Обработчик кнопки "Подключить календарь"
     connectCalendarButton.addEventListener('click', () => {
-        // Временно (MVP): Меняем текст кнопки
-        connectCalendarButton.textContent = 'Календарь подключен ✅';
-        connectCalendarButton.disabled = true;
+        window.location.href = '/auth/yandex';
     });
 
-    // Удаляем локальную функцию parseTasks, так как парсинг теперь на бэкенде
-    // function parseTasks(text) { ... }
+    // Функция проверки статуса авторизации
+    async function checkAuthStatus() {
+        try {
+            const response = await fetch('/auth/status');
+            const data = await response.json();
+            
+            if (data.authenticated) {
+                authStatus.textContent = '✓ Календарь подключен';
+                authStatus.style.color = 'green';
+                connectCalendarButton.style.display = 'none';
+            } else {
+                authStatus.textContent = 'Календарь не подключен';
+                authStatus.style.color = 'red';
+            }
+        } catch (error) {
+            console.error('Auth check error:', error);
+        }
+    }
 
-    // Удаляем локальную функцию formatTime, если она больше нигде не нужна
-    // (в данном MVP она не нужна, т.к. время приходит с бэкенда)
-    // function formatTime(date) { ... }
-
+    // Функция отображения расписания
     function displaySchedule(schedule) {
-        taskList.innerHTML = ''; // Очищаем предыдущие результаты
+        taskList.innerHTML = '';
 
-        if (schedule.length === 0) {
+        if (!schedule || schedule.length === 0) {
             taskList.innerHTML = '<p>Не удалось распознать задачи. Попробуйте другой формат.</p>';
             resultsContainer.style.display = 'block';
             return;
@@ -95,16 +111,22 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'task-card';
 
             const timeP = document.createElement('p');
-            timeP.innerHTML = `Время: <span class="task-time">${item.time}</span>`;
+            timeP.innerHTML = `<strong>Время:</strong> ${item.time}`;
 
             const nameP = document.createElement('p');
-            nameP.innerHTML = `Название задачи: <span class="task-name">${item.task}</span>`;
+            nameP.innerHTML = `<strong>Задача:</strong> ${item.task}`;
 
             card.appendChild(timeP);
             card.appendChild(nameP);
             taskList.appendChild(card);
         });
 
+        resultsContainer.style.display = 'block';
+    }
+
+    // Функция показа ошибок
+    function showError(message) {
+        taskList.innerHTML = `<p class="error">${message}</p>`;
         resultsContainer.style.display = 'block';
     }
 });
