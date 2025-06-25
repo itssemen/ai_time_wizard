@@ -184,95 +184,107 @@ for epoch in range(n_iter):
             f"Epoch {epoch + 1}/{n_iter}, Loss: {losses.get('ner', 0.0):.3f}, "
             f"P: {scores.get('ents_p', 0.0):.3f}, R: {scores.get('ents_r', 0.0):.3f}, F: {f_score:.3f}"
         )
-        # Сохранение лучшей модели (ЗАКОММЕНТИРОВАНО ДЛЯ ТЕСТА В ОГРАНИЧЕННОМ ОКРУЖЕНИИ)
-        # if f_score > best_f_score:
-        #     best_f_score = f_score
-        #     # nlp.to_disk(output_dir)
-        #     # print(f"Сохранена новая лучшая модель с F-мерой: {f_score:.3f} в {output_dir}")
-        #     print(f"Модель показала F-меру: {f_score:.3f} (сохранение отключено)")
-        # else:
-        #     print(f"F-мера {f_score:.3f} не лучше предыдущей {best_f_score:.3f} (сохранение отключено)")
-        pass # Убрали сохранение, чтобы избежать ошибки размера файлов
+        # Сохранение лучшей модели
+        if f_score > best_f_score:
+            best_f_score = f_score
+            nlp.to_disk(output_dir)
+            print(f"Сохранена новая лучшая модель с F-мерой: {f_score:.3f} в {output_dir}")
+        else:
+            print(f"F-мера {f_score:.3f} не лучше предыдущей {best_f_score:.3f}. Модель не сохранена в эту эпоху.")
     else:
          print(f"Epoch {epoch + 1}/{n_iter}, Loss: {losses.get('ner',0.0):.3f}. Тестовые данные отсутствуют для оценки.")
 
-# # Если тестовых данных не было, сохраняем модель после последней эпохи (ЗАКОММЕНТИРОВАНО)
-# model_saved_during_training = False
-# if best_f_score > 0: # Если модель хоть раз улучшилась и сохранилась
-#     model_saved_during_training = True
+model_saved_during_training = best_f_score > 0
 
-# if not test_data and n_iter > 0 and not model_saved_during_training:
-#     # nlp.to_disk(output_dir)
-#     # print(f"Модель сохранена после {n_iter} эпох обучения в {output_dir} (тестовых данных не было).")
-#     # model_saved_during_training = True
-#     pass
+# Если тестовых данных не было, но обучение проводилось, сохраняем модель после последней эпохи
+if not test_data and n_iter > 0 and not model_saved_during_training:
+    nlp.to_disk(output_dir)
+    print(f"Модель сохранена после {n_iter} эпох обучения в {output_dir} (тестовых данных не было, сохранение по F-мере не производилось).")
+    model_saved_during_training = True
+elif not test_data and n_iter > 0 and model_saved_during_training:
+    # Это условие может быть избыточным, если best_f_score инициализирован < 0
+    # и сохранение происходит только при улучшении.
+    # Но если вдруг best_f_score остался на начальном 0.0 и test_data не было,
+    # то первое сохранение произойдет выше. Если же test_data не было,
+    # но каким-то образом best_f_score стал >0 (что невозможно без test_data в текущей логике),
+    # то модель уже сохранена.
+    pass
 
 
 # Раздел обучения классификатора приоритетов и векторизатора УДАЛЕН,
 # так как приоритеты и длительность теперь являются частью генерируемого датасета
 # и извлекаются вместе с задачей.
 
-# # 5. Сохранение основной NER модели (финальное) (ЗАКОММЕНТИРОВАНО)
-# if n_iter == 0:
-#     print("Обучение не проводилось (0 эпох). Модель не сохранена.")
-# elif not model_saved_during_training:
-#     # Если модель не была сохранена во время обучения (например, F-score всегда был 0, или не было test_data)
-#     # и обучение проводилось (n_iter > 0)
-#     if not os.path.exists(output_dir):
-#         os.makedirs(output_dir)
-#     # nlp.to_disk(output_dir)
-#     # print(f"Финальная NER модель принудительно сохранена в {output_dir} (F-мера могла не улучшаться).")
+# 5. Финальное сообщение о сохранении
+if n_iter == 0:
+    print("Обучение не проводилось (0 эпох). Модель не сохранена.")
+elif not model_saved_during_training:
+    # Это может произойти, если F-мера никогда не улучшалась и test_data были,
+    # или если n_iter > 0, test_data не было, но сохранение все равно не произошло (маловероятно с текущей логикой).
+    # В таком случае, можно принудительно сохранить последнюю версию.
+    if not os.path.exists(output_dir): # На всякий случай, если директория не была создана
+        os.makedirs(output_dir)
+    nlp.to_disk(output_dir)
+    print(f"Финальная NER модель принудительно сохранена в {output_dir} (F-мера не улучшалась или не оценивалась).")
+else:
+    if best_f_score > 0 : # Если оценка была
+        print(f"Лучшая NER модель была сохранена в {output_dir} с F-мерой: {best_f_score:.3f}")
+    else: # Если оценки не было (нет test_data), но модель сохранена
+        print(f"NER модель была сохранена в {output_dir} (оценка F-меры не проводилась).")
+
+
+print("Обучение NER модели завершено.")
+
+# Пример использования обученной модели для извлечения задач и их атрибутов
+# Этот блок можно раскомментировать для проверки загрузки и использования модели
+# print("\n--- Пример использования обученной модели ---")
+# if os.path.exists(output_dir):
+#     print(f"Загрузка модели из {output_dir}...")
+#     nlp_loaded = spacy.load(output_dir)
+#     print("Модель успешно загружена.")
+
+#     # Возьмем пример из тестового набора (если он есть) или из тренировочного
+#     sample_text_data = test_data[0] if test_data else (train_data[0] if train_data else None)
+
+#     if sample_text_data:
+#         sample_text = sample_text_data[0]
+#         print(f"\nИсходный текст для теста: \"{sample_text}\"")
+
+#         doc = nlp_loaded(sample_text)
+#         print("Извлеченные задачи (сущности NER):")
+#         if not doc.ents:
+#             print("  Модель не извлекла ни одной задачи из этого текста.")
+
+#         for ent in doc.ents:
+#             print(f"- Текст задачи: '{ent.text}', Метка: {ent.label_} (позиции: {ent.start_char}-{ent.end_char})")
+
+#             # Поиск оригинальной сущности для демонстрации атрибутов
+#             original_entity_info = None
+#             # Ищем в исходном полном датасете (train_data_source + test_data_source) или просто dataset
+#             # Это упрощенный поиск для примера. В реальном приложении структура данных может быть другой.
+#             source_to_search = dataset # Используем весь исходный датасет
+#             for item in source_to_search:
+#                 if item["text"] == sample_text:
+#                     for original_ent in item["entities"]:
+#                         if original_ent["start"] == ent.start_char and \
+#                            original_ent["end"] == ent.end_char and \
+#                            original_ent["text"] == ent.text: # Сравниваем и текст сущности
+#                             original_entity_info = original_ent
+#                             break
+#                     if original_entity_info:
+#                         break
+
+#             if original_entity_info:
+#                 print(f"  Priority (из исходных данных): {original_entity_info.get('priority')}")
+#                 print(f"  Duration (из исходных данных): {original_entity_info.get('duration_minutes')} минут")
+#                 print(f"  Original duration phrase: {original_entity_info.get('duration_phrase_original')}")
+#             else:
+#                 # Это может произойти, если модель выделила сущность, которой не было в исходной разметке
+#                 # или если текст был модифицирован/не найден в исходном датасете.
+#                 print("  Дополнительная информация (priority/duration) не найдена в исходных данных для этой сущности.")
+#     else:
+#         print("Нет данных для демонстрации использования модели.")
 # else:
-#     # print(f"Лучшая NER модель уже сохранена в {output_dir} с F-мерой: {best_f_score:.3f}")
-#     pass
-
-print("Обучение NER модели завершено (сохранение модели было отключено для этого теста).")
-
-# # Пример использования обученной модели для извлечения задач и их атрибутов (ЗАКОММЕНТИРОВАНО)
-# print("\n--- Пример использования обученной модели (демонстрация отключена, т.к. сохранение было отключено) ---")
-# if False: # Блок примера использования модели отключен
-# # if os.path.exists(output_dir):
-#     # nlp_loaded = spacy.load(output_dir)
-
-#     # # Возьмем пример из тестового набора (если он есть) или из тренировочного
-#     # sample_text_data = test_data[0] if test_data else (train_data[0] if train_data else None)
-
-#     # if sample_text_data:
-#     #     sample_text = sample_text_data[0]
-#     #     print(f"Исходный текст: {sample_text}")
-
-#     #     doc = nlp_loaded(sample_text)
-#     #     print("Извлеченные задачи (сущности NER):")
-#     #     for ent in doc.ents:
-#     #         print(f"- Текст задачи: '{ent.text}', Метка: {ent.label_} (позиции: {ent.start_char}-{ent.end_char})")
-
-#     #         # Теперь найдем соответствующую сущность в исходном датасете, чтобы получить priority и duration
-#     #         # Это важно, так как NER модель сама по себе не хранит эти доп. атрибуты.
-#     #         # В реальном приложении, после извлечения сущности (ent),
-#     #         # вам нужно будет найти ее в первоначальных данных или передать эти данные вместе.
-
-#     #         # Поиск оригинальной сущности для демонстрации
-#     #         original_entity_info = None
-#     #         for item in dataset: # Ищем в исходном полном датасете
-#     #             if item["text"] == sample_text:
-#     #                 for original_ent in item["entities"]:
-#     #                     if original_ent["start"] == ent.start_char and \
-#     #                        original_ent["end"] == ent.end_char and \
-#     #                        original_ent["text"] == ent.text:
-#     #                         original_entity_info = original_ent
-#     #                         break
-#     #                 if original_entity_info:
-#     #                     break
-
-#     #         if original_entity_info:
-#     #             print(f"  Priority (из датасета): {original_entity_info.get('priority')}")
-#     #             print(f"  Duration (из датасета): {original_entity_info.get('duration_minutes')} минут")
-#     #             print(f"  Original duration phrase: {original_entity_info.get('duration_phrase_original')}")
-#     #         else:
-#     #             print("  Дополнительная информация (priority/duration) не найдена в исходных данных для этой сущности.")
-#     # else:
-#     #     print("Нет данных для демонстрации использования модели.")
-# # else:
-# #     print(f"Директория с моделью {output_dir} не найдена. Модель не была загружена для примера.")
+#     print(f"Директория с моделью {output_dir} не найдена. Не удалось загрузить модель для примера.")
 
 print("\nСкрипт model_training.py завершен.")
