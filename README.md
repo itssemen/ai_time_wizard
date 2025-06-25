@@ -11,7 +11,8 @@ This project demonstrates a simple setup with a Python Flask backend and an HTML
 
 1.  **Clone the repository (if applicable) or download the files.**
 
-```git clone https://github.com/itssemen/time_wizard
+```
+git clone https://github.com/itssemen/time_wizard
 cd time_wizard
 ```
 
