@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Frontend</title>
+</head>
+<body>
+    <h1>Hello from Frontend!</h1>
+    <p>Loading data from backend...</p>
+    <div id="data-container"></div>
+
+    <script>
+        fetch('/api/data')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('data-container').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('data-container').innerText = 'Error loading data.';
+            });
+    </script>
+</body>
+</html>
