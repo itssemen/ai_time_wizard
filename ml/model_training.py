@@ -185,11 +185,16 @@ duration_labels_all = []
 priority_labels_all = []
 
 def duration_to_category(minutes):
+    if minutes <= 0: return "0-15 min" # Обработка некорректных значений, если вдруг будут
     if minutes <= 15: return "0-15 min"
     if minutes <= 30: return "16-30 min"
-    if minutes <= 60: return "31-60 min"
-    if minutes <= 120: return "61-120 min"
-    return ">120 min"
+    if minutes <= 45: return "31-45 min"
+    if minutes <= 60: return "46-60 min"
+    if minutes <= 90: return "61-90 min"
+    if minutes <= 120: return "91-120 min"
+    if minutes <= 180: return "121-180 min"
+    if minutes <= 240: return "181-240 min"
+    return ">240 min"
 
 for item in dataset: # Используем весь датасет для сбора текстов задач
     for entity in item['entities']:
