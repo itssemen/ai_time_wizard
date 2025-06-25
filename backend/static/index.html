@@ -1,25 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Frontend</title>
+    <title>TimeWizard</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Hello from Frontend!</h1>
-    <p>Loading data from backend...</p>
-    <div id="data-container"></div>
+    <header>
+        <h1>TimeWizard 🧙‍♂️</h1>
+        <p>Просто напишите, что нужно сделать, и TimeWizard автоматически расставит задачи в вашем календаре!</p>
+    </header>
 
-    <script>
-        fetch('/api/data')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('data-container').innerText = data.message;
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                document.getElementById('data-container').innerText = 'Error loading data.';
-            });
-    </script>
+    <main>
+        <div class="input-section">
+            <textarea id="taskInput" rows="5" placeholder="Например: «Подготовить презентацию 2 часа, позвонить маме 30 минут, тренировка завтра в 18:00»"></textarea>
+            <button id="optimizeButton">Оптимизировать</button>
+        </div>
+
+        <div id="resultsContainer" style="display: none;">
+            <h2>Ваше идеальное расписание:</h2>
+            <div id="taskList">
+                <!-- Карточки задач будут здесь -->
+            </div>
+            <button id="addToCalendarButton">Добавить в календарь</button>
+        </div>
+
+        <div class="calendar-section">
+            <button id="connectCalendarButton">Подключить календарь</button>
+        </div>
+    </main>
+
+    <footer>
+        <!-- (Опционально) Переключатель темной темы и примеры запросов -->
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
