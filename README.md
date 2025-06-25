@@ -20,6 +20,13 @@
     *   Перейдите в директорию `backend`:
         ```bash
         cd backend
+        #сгенерируйте ключ для Flask
+        python -c "import secrets; print(secrets.token_hex(16))" 
+        touch .env
+        nano .env
+        #Добавьте ключи
+        #Затем Ctrl+O, Enter, Ctrl+X
+        
         ```
     *   Рекомендуется создать и активировать виртуальное окружение:
         ```bash
