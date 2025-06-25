@@ -21,7 +21,7 @@
         ```bash
         cd backend
         #сгенерируйте ключ для Flask
-        python -c "import secrets; print(secrets.token_hex(16))" 
+        python3 -c "import secrets; print(secrets.token_hex(16))" 
         touch .env
         nano .env
         #Добавьте ключи
