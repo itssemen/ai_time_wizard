@@ -196,6 +196,8 @@ HIGH_PRIORITY_KEYWORDS = ["срочно", "важно", "немедленно", 
 LOW_PRIORITY_KEYWORDS = ["если будет время", "потом", "не горит", "можно отложить"]
 
 # --- Загрузка NLTK ресурсов ---
+from nltk.tokenize.util import align_tokens # Added for robust token span calculation
+
 try:
     nltk.data.find('tokenizers/punkt')
     logger.info("NLTK resource 'punkt' found.")
@@ -228,13 +230,33 @@ def load_ml_models():
         return False
 
 # --- Функции для ML (адаптированные из ml/model_training.py) ---
-def tokenize_text_for_ner(text): # Renamed to avoid conflict if other tokenizers are used
+def tokenize_text_for_ner(text: str) -> list[dict]:
+    """
+    Tokenizes text using nltk.word_tokenize for Russian and aligns tokens to get start/end spans.
+    """
+    tokens_text = nltk.word_tokenize(text, language='russian')
     tokens_info = []
-    # Using WhitespaceTokenizer as in model_training.py
-    tokenizer = nltk.tokenize.WhitespaceTokenizer()
-    for start, end in tokenizer.span_tokenize(text):
-        token_text = text[start:end]
-        tokens_info.append({'text': token_text, 'start': start, 'end': end})
+
+    try:
+        # align_tokens expects a list of strings, which is what word_tokenize provides.
+        # It returns a list of (start, end) tuples.
+        aligned_spans = list(align_tokens(tokens_text, text))
+
+        if len(tokens_text) == len(aligned_spans):
+            for i, token_str in enumerate(tokens_text):
+                start, end = aligned_spans[i]
+                tokens_info.append({'text': token_str, 'start': start, 'end': end})
+        else:
+            logger.warning(f"Mismatch between token count ({len(tokens_text)}) and span count ({len(aligned_spans)}) after align_tokens. Falling back to basic token info.")
+            for token_str in tokens_text:
+                 tokens_info.append({'text': token_str, 'start': -1, 'end': -1}) # Indicate invalid span
+
+    except Exception as e:
+        logger.error(f"Error using align_tokens: {e}. Falling back to basic token info (no spans).")
+        # Fallback: create token_info without proper spans if alignment failed badly
+        for token_str in tokens_text:
+             tokens_info.append({'text': token_str, 'start': -1, 'end': -1}) # Indicate invalid span
+
     return tokens_info
 
 def word2features(sent_tokens_text, i):
@@ -265,11 +287,11 @@ def word2features(sent_tokens_text, i):
 def sent2features(sent_tokens_text):
     return [word2features(sent_tokens_text, i) for i in range(len(sent_tokens_text))]
 
-def iob_tags_to_extracted_tasks(tokens_info_list, predicted_tags_list):
+def iob_tags_to_extracted_tasks(raw_text: str, tokens_info_list: list[dict], predicted_tags_list: list[str]) -> list[dict]:
     entities = []
-    current_entity_tokens = []
     current_entity_start_char = -1
     # current_entity_label = None # Not strictly needed if only one label type (TASK)
+    # current_entity_end_char will be determined by the last token of the entity
 
     if len(tokens_info_list) != len(predicted_tags_list):
         logger.warning(f"Mismatch in token_info ({len(tokens_info_list)}) and predicted_tags ({len(predicted_tags_list)}) lengths.")
@@ -277,66 +299,139 @@ def iob_tags_to_extracted_tasks(tokens_info_list, predicted_tags_list):
 
     for i, token_info in enumerate(tokens_info_list):
         tag = predicted_tags_list[i]
-        token_text = token_info['text']
+
+        # Ensure token_info has valid start and end, otherwise we can't use it for slicing
+        if token_info['start'] == -1 or token_info['end'] == -1:
+            logger.warning(f"Token '{token_info['text']}' at index {i} has invalid span, skipping its effect on entity boundaries.")
+            # If we are in an entity, and this token is O, we should close the entity
+            # based on the *previous* valid token.
+            if tag == 'O' and current_entity_start_char != -1:
+                # Try to find the end of the previous valid token
+                last_valid_token_end = -1
+                if i > 0 and tokens_info_list[i-1]['end'] != -1:
+                    last_valid_token_end = tokens_info_list[i-1]['end']
+
+                if last_valid_token_end != -1:
+                     entities.append({
+                        "text": raw_text[current_entity_start_char : last_valid_token_end],
+                        "start_char": current_entity_start_char,
+                        "end_char": last_valid_token_end
+                    })
+                else:
+                    logger.warning(f"Could not determine end for entity before invalid token at index {i}. Entity may be lost or malformed.")
+                current_entity_start_char = -1
+            continue # Skip this token for boundary decisions if its own span is invalid
 
         if tag.startswith('B-'): # B-TASK
-            if current_entity_tokens: # Finalize previous entity
+            if current_entity_start_char != -1: # Finalize previous entity
+                # Previous entity ended at the end of the previous token
                 entities.append({
-                    "text": " ".join(current_entity_tokens),
-                    "start_char": current_entity_start_char,
-                    "end_char": tokens_info_list[i-1]['end'] # end of the last token of previous entity
-                })
-            current_entity_tokens = [token_text]
-            current_entity_start_char = token_info['start']
-            # current_entity_label = tag[2:]
-        elif tag.startswith('I-'): # I-TASK
-            # if current_entity_tokens and tag[2:] == current_entity_label:
-            if current_entity_tokens: # Simpler check if only one entity type
-                current_entity_tokens.append(token_text)
-            else: # I-tag without B-tag, treat as a new B-tag or ignore
-                  # For simplicity, let's start a new entity if current_entity_tokens is empty
-                if not current_entity_tokens:
-                    current_entity_tokens = [token_text]
-                    current_entity_start_char = token_info['start']
-                    # current_entity_label = tag[2:]
-        elif tag == 'O':
-            if current_entity_tokens: # Finalize current entity
-                entities.append({
-                    "text": " ".join(current_entity_tokens),
+                    "text": raw_text[current_entity_start_char : tokens_info_list[i-1]['end']],
                     "start_char": current_entity_start_char,
                     "end_char": tokens_info_list[i-1]['end']
                 })
-                current_entity_tokens = []
+            current_entity_start_char = token_info['start']
+            # current_entity_label = tag[2:]
+        elif tag.startswith('I-'): # I-TASK
+            if current_entity_start_char == -1: # I-tag without B-tag
+                # Treat as a new B-tag if its span is valid
+                current_entity_start_char = token_info['start']
+                # current_entity_label = tag[2:]
+            # If already in an entity, current_entity_start_char is set, and this token just extends it.
+            # The end_char will be updated when the entity finishes.
+        elif tag == 'O':
+            if current_entity_start_char != -1: # Finalize current entity
+                # Entity ended at the end of the previous token
+                entities.append({
+                    "text": raw_text[current_entity_start_char : tokens_info_list[i-1]['end']],
+                    "start_char": current_entity_start_char,
+                    "end_char": tokens_info_list[i-1]['end']
+                })
                 current_entity_start_char = -1
                 # current_entity_label = None
 
-    if current_entity_tokens: # Finalize any remaining entity
-        entities.append({
-            "text": " ".join(current_entity_tokens),
-            "start_char": current_entity_start_char,
-            "end_char": tokens_info_list[-1]['end']
-        })
+    if current_entity_start_char != -1: # Finalize any remaining entity
+        # Entity ends at the end of the last token processed (which should be valid)
+        last_token_end = -1
+        # Find the last valid token's end to define the entity boundary
+        for k in range(len(tokens_info_list) - 1, -1, -1):
+            if tokens_info_list[k]['end'] != -1:
+                last_token_end = tokens_info_list[k]['end']
+                break
+
+        if last_token_end != -1:
+            entities.append({
+                "text": raw_text[current_entity_start_char : last_token_end],
+                "start_char": current_entity_start_char,
+                "end_char": last_token_end
+            })
+        else:
+            logger.warning(f"Could not determine end for final entity starting at {current_entity_start_char}. Entity may be lost or malformed.")
+
     return entities
 
 # --- Функции для определения длительности и приоритета ---
-def get_task_duration(task_text: str) -> int:
+def get_task_duration(task_text: str) -> tuple[int, str]:
+    """
+    Determines task duration from text.
+    Returns a tuple: (duration_in_minutes, cleaned_task_text).
+    """
     task_text_lower = task_text.lower()
-    # 1. Check for explicit time mentions (e.g., "1 час", "30 минут")
-    time_match = re.search(r'(\d+)\s*(час|часа|часов|ч|мин|минут|м)', task_text_lower)
-    if time_match:
-        value = int(time_match.group(1))
-        unit = time_match.group(2).lower()
-        if unit.startswith('ч'):
-            return value * 60
-        elif unit.startswith('м'):
-            return value
+    cleaned_task_text = task_text # Default to original text
 
-    # 2. Check DEFAULT_TASK_DURATION_MAP
+    # 1. Check for explicit "N час/мин" (e.g., "1 час", "30 минут")
+    explicit_time_pattern = r'\b(\d+)\s*(час(?:а|ов)?|ч|мин(?:ут|уты)?|м)\b'
+    explicit_time_match = re.search(explicit_time_pattern, task_text, re.IGNORECASE)
+
+    if explicit_time_match:
+        value_str = explicit_time_match.group(1)
+        unit_str = explicit_time_match.group(2).lower()
+        try:
+            value = int(value_str)
+            duration_minutes = value * 60 if unit_str.startswith('ч') else value
+
+            start_span, end_span = explicit_time_match.span()
+            temp_cleaned_text = task_text[:start_span] + task_text[end_span:]
+            cleaned_task_text = re.sub(r'\s\s+', ' ', temp_cleaned_text).strip()
+            if not cleaned_task_text:
+                cleaned_task_text = f"Задача ({explicit_time_match.group(0)})"
+            return duration_minutes, cleaned_task_text
+        except ValueError:
+            logger.warning(f"Could not parse value '{value_str}' as integer from time pattern in '{task_text}'. Proceeding to other patterns.")
+
+    # 2. Check for standalone "час" (meaning 1 hour) or "полчаса" (30 minutes)
+    # These are checked after explicit "N час/мин" to avoid conflict.
+    standalone_hour_match = re.search(r'\b(час(?:а|ов)?)\b', task_text, re.IGNORECASE)
+    if standalone_hour_match:
+        # Ensure it's not preceded by a digit (already handled by explicit_time_pattern check order)
+        # Check if the found "час" is part of a larger construct that explicit_time_pattern should have caught.
+        # This is implicitly handled because explicit_time_pattern is more specific and checked first.
+        duration_minutes = 60 # "час" alone means 1 hour
+        start_span, end_span = standalone_hour_match.span()
+        temp_cleaned_text = task_text[:start_span] + task_text[end_span:]
+        cleaned_task_text = re.sub(r'\s\s+', ' ', temp_cleaned_text).strip()
+        if not cleaned_task_text:
+            cleaned_task_text = f"Задача ({standalone_hour_match.group(0)})"
+        return duration_minutes, cleaned_task_text
+
+    standalone_half_hour_match = re.search(r'\b(полчаса)\b', task_text, re.IGNORECASE)
+    if standalone_half_hour_match:
+        duration_minutes = 30
+        start_span, end_span = standalone_half_hour_match.span()
+        temp_cleaned_text = task_text[:start_span] + task_text[end_span:]
+        cleaned_task_text = re.sub(r'\s\s+', ' ', temp_cleaned_text).strip()
+        if not cleaned_task_text:
+            cleaned_task_text = f"Задача ({standalone_half_hour_match.group(0)})"
+        return duration_minutes, cleaned_task_text
+
+    # 3. Check DEFAULT_TASK_DURATION_MAP
+    # This check is on task_text_lower of the original task_text.
     for keyword, duration in DEFAULT_TASK_DURATION_MAP.items():
         if keyword in task_text_lower:
-            return duration
+            return duration, task_text
 
-    return 60 # Default duration if not found
+    # 4. Default duration if no pattern or keyword matched
+    return 60, task_text
 
 def get_task_priority(task_text: str) -> str:
     task_text_lower = task_text.lower()
@@ -365,9 +460,21 @@ def process_text_with_ml(raw_text: str) -> list[dict]:
     # 1. NER: Extract task texts
     tokens_info = tokenize_text_for_ner(raw_text)
     if not tokens_info:
+        logger.info("No tokens were generated from the raw text.")
         return []
 
+    # Filter out tokens with invalid spans if they occurred, as they can't be used for feature extraction
+    # or reliable task extraction. However, word2features expects a list of token texts.
+    # If a token has an invalid span, it might be better to log it and decide if it should be excluded
+    # from sent_tokens_text, which could affect feature generation for adjacent tokens.
+    # For now, we'll pass all token texts to feature generation, assuming word2features can handle them.
+    # The iob_tags_to_extracted_tasks function will handle invalid spans more directly.
+
     sent_tokens_text = [t['text'] for t in tokens_info]
+    if not sent_tokens_text: # Should not happen if tokens_info is not empty, but as a safeguard
+        logger.info("Token texts list is empty after tokenization.")
+        return []
+
     features = sent2features(sent_tokens_text)
 
     try:
@@ -377,20 +484,32 @@ def process_text_with_ml(raw_text: str) -> list[dict]:
         logger.error(f"Error during NER prediction: {e}")
         raise ValueError(f"NER prediction failed: {e}")
 
-    extracted_raw_tasks = iob_tags_to_extracted_tasks(tokens_info, predicted_tags)
+    extracted_raw_tasks = iob_tags_to_extracted_tasks(raw_text, tokens_info, predicted_tags)
 
     # 2. Determine attributes (duration, priority) for each task
     processed_tasks = []
     for raw_task in extracted_raw_tasks:
-        task_text = raw_task['text']
+        task_text_from_ner = raw_task['text']
         # It's possible NER extracts very short/irrelevant text. Add a simple filter.
-        if not task_text or len(task_text.split()) < 1 : # e.g. ignore single punctuation if extracted
+        if not task_text_from_ner or len(task_text_from_ner.split()) < 1 : # e.g. ignore single punctuation if extracted
             continue
 
-        duration_minutes = get_task_duration(task_text)
-        priority_str = get_task_priority(task_text)
+        # Determine priority based on the text as extracted by NER (before time removal)
+        priority_str = get_task_priority(task_text_from_ner)
+
+        # Determine duration and potentially clean the task text
+        duration_minutes, final_task_text = get_task_duration(task_text_from_ner)
+
+        # If after cleaning, the task text becomes empty (e.g. it was only "1 час"),
+        # and get_task_duration returned a placeholder, we use that.
+        # If it's genuinely empty for other reasons, we might skip it or use NER text.
+        if not final_task_text and task_text_from_ner: # If cleaning resulted in empty but original was not
+            final_task_text = task_text_from_ner # Revert to original NER text if cleaning made it empty and no placeholder was made
+            logger.info(f"Task text for '{task_text_from_ner}' became empty after duration removal, using original NER text or placeholder if generated.")
+
+
         processed_tasks.append({
-            "text": task_text,
+            "text": final_task_text, # Use cleaned text
             "duration": duration_minutes,
             "priority": priority_str,
             "original_order": len(processed_tasks) # Keep original order for tie-breaking
