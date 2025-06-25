@@ -27,6 +27,7 @@ python3 -m venv venv
 
 ```bash
 pip install -r requirements.txt
+python -m spacy download ru_core_news_sm
 ```
 
 Если файла `requirements.txt` нет, установите основные библиотеки для обучения моделей, например:
