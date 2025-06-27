@@ -30,7 +30,8 @@ download_nltk_resource('punkt', 'tokenizers/punkt')
 
 # --- 1. Загрузка данных ---
 script_dir = os.path.dirname(os.path.abspath(__file__))
-data_file_path = os.path.join(script_dir, 'ml/freeform_task_dataset.json')
+# Исправляем путь к файлу данных: он должен быть относительно script_dir, а не script_dir + 'ml/'
+data_file_path = os.path.join(script_dir, 'freeform_task_dataset.json')
 
 dataset = []
 try:
@@ -208,36 +209,39 @@ else:
     )
 
     # Пайплайн для удобства: TF-IDF + Регрессор
-    # Попробуем RandomForestRegressor
+    # Возвращаемся к дефолтным параметрам из-за тайм-аутов GridSearchCV
     duration_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2)),
-        ('reg', RandomForestRegressor(random_state=42, n_estimators=100)) # n_estimators - пример
+        ('reg', RandomForestRegressor(random_state=42, n_estimators=100))
     ])
-    # Альтернативно можно использовать Ridge:
-    # duration_pipeline = Pipeline([
-    #     ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2)),
-    #     ('reg', Ridge(random_state=42, alpha=1.0)) # alpha - параметр регуляризации
-    # ])
 
-    # Параметры для GridSearchCV (опционально, но полезно для регрессоров тоже)
+    # # Параметры для GridSearchCV (закомментировано для скорости)
     # duration_parameters = {
-    #     'tfidf__max_df': (0.75, 1.0),
-    #     'reg__n_estimators': (50, 100, 200) # для RandomForestRegressor
-    #     # 'reg__alpha': (0.1, 1.0, 10.0) # для Ridge
+    #     'tfidf__ngram_range': [(1, 1), (1, 2)],
+    #     'tfidf__min_df': [3, 5],
+    #     'tfidf__max_df': [0.75, 0.95],
+    #     'reg__n_estimators': [100, 150],
+    #     'reg__max_depth': [None, 20],
+    #     'reg__min_samples_split': [2, 5]
     # }
-    # duration_gs_reg = GridSearchCV(duration_pipeline, duration_parameters, cv=3, n_jobs=-1, verbose=1, scoring='neg_mean_squared_error')
-    # duration_gs_reg.fit(X_train_dur, y_train_dur)
-    # duration_model = duration_gs_reg.best_estimator_
-    # print(f"Лучшие параметры для регрессии длительности: {duration_gs_reg.best_params_}")
 
-    try:
-        if not X_train_dur:
-            print("ОШИБКА (Длительность): Обучающая выборка пуста.")
-            duration_model = None
-        else:
+    duration_model = None
+    if not X_train_dur:
+        print("ОШИБКА (Длительность): Обучающая выборка пуста.")
+    else:
+        # print("Запуск GridSearchCV для модели регрессии длительности...")
+        # duration_gs_reg = GridSearchCV(duration_pipeline, duration_parameters, cv=2,
+        #                                n_jobs=-1, verbose=1, scoring='neg_mean_absolute_error')
+        try:
+            # duration_gs_reg.fit(X_train_dur, y_train_dur)
+            # duration_model = duration_gs_reg.best_estimator_
+            # print(f"Лучшие параметры для регрессии длительности: {duration_gs_reg.best_params_}")
+            # print(f"Лучший MAE (кросс-валидация): {-duration_gs_reg.best_score_:.2f}")
+
             duration_model = duration_pipeline
             duration_model.fit(X_train_dur, y_train_dur)
-            print("Модель регрессии длительности обучена.")
+            print("Модель регрессии длительности обучена (с параметрами по умолчанию).")
+
             if X_test_dur:
                 y_pred_dur = duration_model.predict(X_test_dur)
                 print("\nОценка регрессии длительности (на тестовой выборке):")
@@ -246,27 +250,14 @@ else:
                 print(f"  Root Mean Squared Error (RMSE): {np.sqrt(mean_squared_error(y_test_dur, y_pred_dur)):.2f}")
             else:
                 print("Тестовая выборка для длительности пуста.")
-    except Exception as e:
-        print(f"ОШИБКА при обучении модели регрессии длительности: {e}")
-        duration_model = None
+        except Exception as e:
+            print(f"ОШИБКА при обучении модели регрессии длительности: {e}")
+            duration_model = None
 
 
     # --- 7. Обучение классификатора приоритета (с числовыми метками) ---
     print("\n--- Обучение классификатора приоритета ---")
-    # Убедимся, что y_train_pri и y_test_pri содержат числовые метки (0, 1, 2)
-    # priority_labels_all уже должен содержать числа из generate_dataset.py
-
-    # Проверка и преобразование, если вдруг метки строковые (для обратной совместимости или ошибок)
-    # Но по плану они уже должны быть числовыми
-    # temp_priority_labels = []
-    # for p_label in priority_labels_all:
-    #     if isinstance(p_label, str): # На случай, если старый формат данных как-то попал
-    #         mapping = {"low": 0, "medium": 1, "high": 2}
-    #         temp_priority_labels.append(mapping.get(p_label.lower(), 1)) # default to medium if unknown
-    #     else:
-    #         temp_priority_labels.append(p_label) # Предполагаем, что это уже число
-    # priority_labels_to_use = temp_priority_labels
-    priority_labels_to_use = priority_labels_all # Используем напрямую, т.к. generate_dataset обновлен
+    priority_labels_to_use = priority_labels_all
 
     X_train_pri, X_test_pri, y_train_pri, y_test_pri = train_test_split(
         task_texts_all, priority_labels_to_use, test_size=0.2, random_state=42,
@@ -274,38 +265,57 @@ else:
     )
 
     priority_pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2)),
-        ('clf', LinearSVC(random_state=42, C=0.1, dual="auto")) # LinearSVC хорошо работает с числовыми метками
+        ('tfidf', TfidfVectorizer()),
+        ('clf', LinearSVC(random_state=42, dual="auto", max_iter=2000)) # Увеличим max_iter для LinearSVC
     ])
 
-    # priority_parameters = {
-    #     'tfidf__max_df': (0.75, 1.0),
-    #     'clf__C': (0.1, 1, 10)
-    # }
-    # priority_gs_clf = GridSearchCV(priority_pipeline, priority_parameters, cv=3, n_jobs=-1, verbose=1)
-    # priority_gs_clf.fit(X_train_pri, y_train_pri)
-    # priority_model = priority_gs_clf.best_estimator_
-    # print(f"Лучшие параметры для приоритета: {priority_gs_clf.best_params_}")
-    try:
-        if not X_train_pri:
-            print("ОШИБКА (Приоритет): Обучающая выборка пуста.")
-            priority_model = None
-        else:
-            priority_model = priority_pipeline
-            priority_model.fit(X_train_pri, y_train_pri)
-            print("Классификатор приоритета обучен.")
+    priority_parameters = {
+        'tfidf__ngram_range': [(1, 1), (1, 2)], # Сокращено
+        'tfidf__min_df': [3, 5], # Сокращено
+        'tfidf__max_df': [0.75, 0.95], # Сокращено
+        'clf__C': [0.1, 1, 10] # Сокращено
+    }
+
+    priority_model = None
+    if not X_train_pri:
+        print("ОШИБКА (Приоритет): Обучающая выборка пуста.")
+    else:
+        print("Запуск GridSearchCV для классификатора приоритета...")
+        # Используем f1_weighted, так как классы могут быть несбалансированы, cv=2 (уменьшено для скорости)
+        priority_gs_clf = GridSearchCV(priority_pipeline, priority_parameters, cv=2, # cv изменено на 2
+                                     n_jobs=-1, verbose=1, scoring='f1_weighted')
+        try:
+            priority_gs_clf.fit(X_train_pri, y_train_pri)
+            priority_model = priority_gs_clf.best_estimator_
+            print(f"Лучшие параметры для приоритета: {priority_gs_clf.best_params_}")
+            print(f"Лучший F1-weighted (кросс-валидация): {priority_gs_clf.best_score_:.2f}")
+
             if X_test_pri:
                 y_pred_pri = priority_model.predict(X_test_pri)
-                print("\nОтчет по классификации приоритета (на тестовой выборке):")
-                # Убедимся, что y_test_pri и y_pred_pri имеют одинаковый тип для classification_report
-                # и что метки соответствуют ожидаемым (0, 1, 2)
+                print("\nОтчет по классификации приоритета (на тестовой выборке с лучшими параметрами):")
                 labels_pri = sorted(list(set(y_test_pri) | set(y_pred_pri)))
                 print(classification_report(y_test_pri, y_pred_pri, labels=labels_pri, zero_division=0))
             else:
                 print("Тестовая выборка для приоритета пуста.")
-    except Exception as e:
-        print(f"ОШИБКА при обучении классификатора приоритета: {e}")
-        priority_model = None
+        except Exception as e:
+            print(f"ОШИБКА при GridSearchCV или оценке классификатора приоритета: {e}")
+            print("Попытка обучения классификатора приоритета с параметрами по умолчанию...")
+            try:
+                default_priority_pipeline = Pipeline([
+                    ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2)),
+                    ('clf', LinearSVC(random_state=42, C=0.1, dual="auto", max_iter=2000))
+                ])
+                default_priority_pipeline.fit(X_train_pri, y_train_pri)
+                priority_model = default_priority_pipeline
+                print("Классификатор приоритета с параметрами по умолчанию обучен.")
+                if X_test_pri:
+                    y_pred_pri_default = priority_model.predict(X_test_pri)
+                    print("\nОтчет по классификации приоритета (на тестовой выборке, модель по умолчанию):")
+                    labels_pri_default = sorted(list(set(y_test_pri) | set(y_pred_pri_default)))
+                    print(classification_report(y_test_pri, y_pred_pri_default, labels=labels_pri_default, zero_division=0))
+            except Exception as e_default:
+                print(f"ОШИБКА при обучении классификатора приоритета с параметрами по умолчанию: {e_default}")
+                priority_model = None
 
 
 # --- Сохранение всех моделей ---
