@@ -4,13 +4,24 @@ import nltk
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression, Ridge
+from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
-from sklearn.ensemble import RandomForestRegressor
+# from sklearn.ensemble import RandomForestRegressor # Заменим на LGBMRegressor
+import lightgbm as lgb # Импортируем LightGBM
 from sklearn.metrics import classification_report, mean_squared_error, mean_absolute_error
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import FunctionTransformer
 import joblib
 import numpy as np
+import pymorphy2 # для лемматизации
+
+# --- Инициализация лемматизатора ---
+morph = pymorphy2.MorphAnalyzer()
+
+def lemmatize_text(text):
+    words = text.split() # Простое разделение по пробелам, можно улучшить токенизацией nltk
+    lemmatized_words = [morph.parse(word)[0].normal_form for word in words]
+    return " ".join(lemmatized_words)
 
 # --- Загрузка ресурсов NLTK ---
 def download_nltk_resource(resource_name, resource_path_to_check):
@@ -182,164 +193,172 @@ else:
         print(f"ОШИБКА (NER) при обучении или предсказании модели: {e}")
 
 # --- 5. Подготовка данных для классификаторов длительности и приоритета ---
-task_features_for_duration = [] # Будет содержать [текст_задачи, has_explicit_duration_phrase]
-duration_labels_all = [] # Будет содержать числовые значения минут
-task_texts_for_priority = [] # Отдельный список текстов для приоритета, т.к. он не использует доп. фичу
-priority_labels_all = [] # Будет содержать числовые значения приоритета (0, 1, 2)
+task_features_for_duration = [] # Будет содержать [лемматизированный_текст_задачи, has_explicit_duration_phrase, длина_текста_задачи]
+duration_labels_all = []
+task_texts_for_priority_lemmatized = [] # Лемматизированные тексты для приоритета
+priority_labels_all = []
 
 
 for item in dataset: # Используем весь датасет для сбора текстов задач
     for entity in item['entities']:
         if entity['label'] == 'TASK': # Убедимся, что это задача
-            task_texts_for_priority.append(entity['text'])
-            # Используем напрямую числовое значение приоритета
+            original_text = entity['text']
+            lemmatized_text = lemmatize_text(original_text)
+            text_length = len(original_text.split()) # Длина текста в словах
+
+            task_texts_for_priority_lemmatized.append(lemmatized_text)
             priority_labels_all.append(entity['priority'])
 
-            # Для модели длительности собираем текст и новый признак
             has_explicit_duration = 1 if entity.get('has_explicit_duration_phrase', False) else 0
-            task_features_for_duration.append([entity['text'], has_explicit_duration])
-            # Используем напрямую числовое значение длительности
+            task_features_for_duration.append([lemmatized_text, has_explicit_duration, text_length])
             duration_labels_all.append(entity['duration_minutes'])
 
 
 print(f"\nСобрано {len(task_features_for_duration)} задач для обучения модели длительности.")
-print(f"Собрано {len(task_texts_for_priority)} задач для обучения модели приоритета.")
+print(f"Собрано {len(task_texts_for_priority_lemmatized)} задач для обучения модели приоритета.")
 
 if not task_features_for_duration:
     print("ОШИБКА: Не найдено ни одной задачи в датасете для обучения модели длительности.")
-    # В этом случае дальнейшее обучение моделей бессмысленно
 else:
     # --- 6. Обучение модели регрессии длительности ---
     from sklearn.compose import ColumnTransformer
-    from sklearn.ensemble import GradientBoostingRegressor
-    # from sklearn.preprocessing import StandardScaler # Пока не используем, т.к. признак бинарный
+    # from sklearn.preprocessing import StandardScaler # Может понадобиться для text_length, если разброс большой
+    from sklearn.preprocessing import MinMaxScaler
+
 
     print("\n--- Обучение модели регрессии длительности ---")
-    # Stratify не используется для регрессии в train_test_split напрямую с непрерывными значениями y
-    # task_features_for_duration уже содержит списки [текст, признак]
     X_train_dur_features, X_test_dur_features, y_train_dur, y_test_dur = train_test_split(
         task_features_for_duration, duration_labels_all, test_size=0.2, random_state=42
     )
 
     # Препроцессор для ColumnTransformer
-    # Первый элемент в task_features_for_duration[i] - текст (индекс 0)
-    # Второй элемент - has_explicit_duration_phrase (индекс 1)
-    preprocessor = ColumnTransformer(
+    # Элемент 0: лемматизированный текст
+    # Элемент 1: has_explicit_duration_phrase (бинарный)
+    # Элемент 2: text_length (числовой)
+    duration_preprocessor = ColumnTransformer(
         transformers=[
-            ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2), 0), # Применить TF-IDF к первому элементу (текст)
-            ('explicit_time_feat', 'passthrough', [1]) # Передать второй элемент (признак) как есть
+            ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=3), 0), # к лемматизированному тексту
+            ('explicit_time_feat', 'passthrough', [1]), # бинарный признак как есть
+            ('text_length_feat', MinMaxScaler(), [2]) # числовой признак длины текста, масштабируем
         ],
-        remainder='drop' # Игнорировать другие столбцы, если они появятся
+        remainder='drop'
     )
 
     duration_pipeline = Pipeline([
-        ('preprocessor', preprocessor),
-        ('reg', GradientBoostingRegressor(random_state=42))
+        ('preprocessor', duration_preprocessor),
+        ('reg', lgb.LGBMRegressor(random_state=42, verbose=-1)) # Используем LGBMRegressor
     ])
 
+    # Расширенная сетка параметров для LGBMRegressor
     duration_parameters = {
-        'preprocessor__tfidf__ngram_range': [(1, 1), (1, 2)],
-        'preprocessor__tfidf__min_df': [3, 5],
-        'reg__n_estimators': [100, 150], # Сокращенный грид для скорости
-        'reg__learning_rate': [0.05, 0.1],
-        'reg__max_depth': [3, 5]
+        'preprocessor__tfidf__ngram_range': [(1, 1), (1, 2), (1,3)],
+        'preprocessor__tfidf__min_df': [3, 5, 7],
+        'reg__n_estimators': [100, 200, 300],
+        'reg__learning_rate': [0.01, 0.05, 0.1],
+        'reg__num_leaves': [20, 31, 40], # Типичные значения для LGBM
+        'reg__max_depth': [-1, 5, 10], # -1 означает без ограничений
+        'reg__colsample_bytree': [0.7, 0.8, 1.0],
+        'reg__subsample': [0.7, 0.8, 1.0],
     }
 
     duration_model = None
-    # Проверяем X_train_dur_features вместо X_train_dur
     if not X_train_dur_features:
         print("ОШИБКА (Длительность): Обучающая выборка пуста.")
     else:
-        print("Запуск GridSearchCV для модели регрессии длительности...")
-        duration_gs_reg = GridSearchCV(duration_pipeline, duration_parameters, cv=3, # Используем cv=3
+        print("Запуск GridSearchCV для модели регрессии длительности (LGBM)...")
+        # Увеличим cv до 3, если позволит время, можно и 5. Начнем с 3.
+        duration_gs_reg = GridSearchCV(duration_pipeline, duration_parameters, cv=3,
                                        n_jobs=-1, verbose=1, scoring='neg_mean_absolute_error')
         try:
-            # Передаем X_train_dur_features и y_train_dur
             duration_gs_reg.fit(X_train_dur_features, y_train_dur)
             duration_model = duration_gs_reg.best_estimator_
-            print(f"Лучшие параметры для регрессии длительности: {duration_gs_reg.best_params_}")
-            print(f"Лучший MAE (кросс-валидация): {-duration_gs_reg.best_score_:.2f}")
+            print(f"Лучшие параметры для регрессии длительности (LGBM): {duration_gs_reg.best_params_}")
+            print(f"Лучший MAE (кросс-валидация, LGBM): {-duration_gs_reg.best_score_:.2f}")
 
-            # Предсказание на X_test_dur_features
             if X_test_dur_features:
                 y_pred_dur = duration_model.predict(X_test_dur_features)
-                print("\nОценка регрессии длительности (на тестовой выборке):")
+                print("\nОценка регрессии длительности (LGBM, на тестовой выборке):")
                 print(f"  Mean Squared Error (MSE): {mean_squared_error(y_test_dur, y_pred_dur):.2f}")
                 print(f"  Mean Absolute Error (MAE): {mean_absolute_error(y_test_dur, y_pred_dur):.2f}")
                 print(f"  Root Mean Squared Error (RMSE): {np.sqrt(mean_squared_error(y_test_dur, y_pred_dur)):.2f}")
             else:
                 print("Тестовая выборка для длительности пуста.")
         except Exception as e:
-            print(f"ОШИБКА при обучении модели регрессии длительности: {e}")
+            print(f"ОШИБКА при обучении модели регрессии длительности (LGBM): {e}")
             duration_model = None
 
 
     # --- 7. Обучение классификатора приоритета (с числовыми метками) ---
     print("\n--- Обучение классификатора приоритета ---")
-    priority_labels_to_use = priority_labels_all # Уже содержит только метки приоритета
-
-    # Используем task_texts_for_priority для обучения классификатора приоритета
-    if not task_texts_for_priority:
+    # Используем task_texts_for_priority_lemmatized
+    if not task_texts_for_priority_lemmatized:
         print("ОШИБКА (Приоритет): Нет текстов задач для обучения.")
-        priority_model = None # Явно устанавливаем в None
+        priority_model = None
     else:
         X_train_pri, X_test_pri, y_train_pri, y_test_pri = train_test_split(
-            task_texts_for_priority, priority_labels_to_use, test_size=0.2, random_state=42,
-            stratify=priority_labels_to_use if len(set(priority_labels_to_use)) > 1 else None
+            task_texts_for_priority_lemmatized, priority_labels_all, test_size=0.2, random_state=42,
+            stratify=priority_labels_all if len(set(priority_labels_all)) > 1 else None
         )
 
+        # Пайплайн для классификации приоритета с лемматизацией (уже применена к данным)
+        # и LogisticRegression с class_weight='balanced'
         priority_pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer()),
-        ('clf', LinearSVC(random_state=42, dual="auto", max_iter=2000)) # Увеличим max_iter для LinearSVC
-    ])
+            ('tfidf', TfidfVectorizer()),
+            # LogisticRegression с class_weight='balanced' и увеличенным max_iter
+            ('clf', LogisticRegression(random_state=42, class_weight='balanced', solver='liblinear', max_iter=1000))
+        ])
 
-    priority_parameters = {
-        'tfidf__ngram_range': [(1, 1), (1, 2)], # Сокращено
-        'tfidf__min_df': [3, 5], # Сокращено
-        'tfidf__max_df': [0.75, 0.95], # Сокращено
-        'clf__C': [0.1, 1, 10] # Сокращено
-    }
+        # Расширенная сетка параметров для LogisticRegression
+        priority_parameters = {
+            'tfidf__ngram_range': [(1, 1), (1, 2), (1,3)],
+            'tfidf__min_df': [3, 5, 7],
+            'tfidf__max_df': [0.7, 0.85, 0.95],
+            'clf__C': [0.01, 0.1, 1, 10, 100],
+            'clf__penalty': ['l1', 'l2'] # liblinear поддерживает l1 и l2
+        }
 
-    priority_model = None
-    if not X_train_pri:
-        print("ОШИБКА (Приоритет): Обучающая выборка пуста.")
-    else:
-        print("Запуск GridSearchCV для классификатора приоритета...")
-        # Используем f1_weighted, так как классы могут быть несбалансированы, cv=2 (уменьшено для скорости)
-        priority_gs_clf = GridSearchCV(priority_pipeline, priority_parameters, cv=2, # cv изменено на 2
-                                     n_jobs=-1, verbose=1, scoring='f1_weighted')
-        try:
-            priority_gs_clf.fit(X_train_pri, y_train_pri)
-            priority_model = priority_gs_clf.best_estimator_
-            print(f"Лучшие параметры для приоритета: {priority_gs_clf.best_params_}")
-            print(f"Лучший F1-weighted (кросс-валидация): {priority_gs_clf.best_score_:.2f}")
-
-            if X_test_pri:
-                y_pred_pri = priority_model.predict(X_test_pri)
-                print("\nОтчет по классификации приоритета (на тестовой выборке с лучшими параметрами):")
-                labels_pri = sorted(list(set(y_test_pri) | set(y_pred_pri)))
-                print(classification_report(y_test_pri, y_pred_pri, labels=labels_pri, zero_division=0))
-            else:
-                print("Тестовая выборка для приоритета пуста.")
-        except Exception as e:
-            print(f"ОШИБКА при GridSearchCV или оценке классификатора приоритета: {e}")
-            print("Попытка обучения классификатора приоритета с параметрами по умолчанию...")
+        priority_model = None
+        if not X_train_pri:
+            print("ОШИБКА (Приоритет): Обучающая выборка пуста.")
+        else:
+            print("Запуск GridSearchCV для классификатора приоритета (LogisticRegression)...")
+            # Увеличим cv до 3 (или 5)
+            priority_gs_clf = GridSearchCV(priority_pipeline, priority_parameters, cv=3,
+                                         n_jobs=-1, verbose=1, scoring='f1_weighted')
             try:
-                default_priority_pipeline = Pipeline([
-                    ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2)),
-                    ('clf', LinearSVC(random_state=42, C=0.1, dual="auto", max_iter=2000))
-                ])
-                default_priority_pipeline.fit(X_train_pri, y_train_pri)
-                priority_model = default_priority_pipeline
-                print("Классификатор приоритета с параметрами по умолчанию обучен.")
+                priority_gs_clf.fit(X_train_pri, y_train_pri)
+                priority_model = priority_gs_clf.best_estimator_
+                print(f"Лучшие параметры для приоритета (LogisticRegression): {priority_gs_clf.best_params_}")
+                print(f"Лучший F1-weighted (кросс-валидация, LogReg): {priority_gs_clf.best_score_:.2f}")
+
                 if X_test_pri:
-                    y_pred_pri_default = priority_model.predict(X_test_pri)
-                    print("\nОтчет по классификации приоритета (на тестовой выборке, модель по умолчанию):")
-                    labels_pri_default = sorted(list(set(y_test_pri) | set(y_pred_pri_default)))
-                    print(classification_report(y_test_pri, y_pred_pri_default, labels=labels_pri_default, zero_division=0))
-            except Exception as e_default:
-                print(f"ОШИБКА при обучении классификатора приоритета с параметрами по умолчанию: {e_default}")
-                priority_model = None
+                    y_pred_pri = priority_model.predict(X_test_pri)
+                    print("\nОтчет по классификации приоритета (LogReg, на тестовой выборке с лучшими параметрами):")
+                    labels_pri = sorted(list(set(y_test_pri) | set(y_pred_pri)))
+                    print(classification_report(y_test_pri, y_pred_pri, labels=labels_pri, zero_division=0))
+                else:
+                    print("Тестовая выборка для приоритета пуста.")
+            except Exception as e:
+                print(f"ОШИБКА при GridSearchCV или оценке классификатора приоритета (LogReg): {e}")
+                # Попытка с более простой моделью или параметрами, если основная не удалась
+                # (Эта часть может быть упрощена или удалена, если основная модель стабильна)
+                print("Попытка обучения классификатора приоритета (LogReg) с параметрами по умолчанию (упрощенными)...")
+                try:
+                    default_priority_pipeline = Pipeline([
+                        ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=5)),
+                        ('clf', LogisticRegression(random_state=42, class_weight='balanced', solver='liblinear', C=1.0, max_iter=500))
+                    ])
+                    default_priority_pipeline.fit(X_train_pri, y_train_pri)
+                    priority_model = default_priority_pipeline
+                    print("Классификатор приоритета (LogReg) с параметрами по умолчанию обучен.")
+                    if X_test_pri:
+                        y_pred_pri_default = priority_model.predict(X_test_pri)
+                        print("\nОтчет по классификации приоритета (LogReg, на тестовой выборке, модель по умолчанию):")
+                        labels_pri_default = sorted(list(set(y_test_pri) | set(y_pred_pri_default)))
+                        print(classification_report(y_test_pri, y_pred_pri_default, labels=labels_pri_default, zero_division=0))
+                except Exception as e_default:
+                    print(f"ОШИБКА при обучении классификатора приоритета (LogReg) с параметрами по умолчанию: {e_default}")
+                    priority_model = None
 
 
 # --- Сохранение всех моделей ---
