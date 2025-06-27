@@ -187,16 +187,6 @@ ner_model = None      # Глобальная переменная для NER м�
 duration_model = None # Глобальная переменная для модели длительности
 priority_model = None # Глобальная переменная для модели приоритета
 
-# Карта для преобразования предсказанных категорий длительности в минуты
-DURATION_CATEGORY_TO_MINUTES = {
-    "0-15 min": 15,
-    "16-30 min": 30,
-    "31-60 min": 60,
-    "61-120 min": 90,
-    ">120 min": 180,
-    "default": 60
-}
-
 # --- Загрузка NLTK ресурсов ---
 from nltk.tokenize.util import align_tokens
 
@@ -362,30 +352,46 @@ def iob_tags_to_extracted_tasks(raw_text: str, tokens_info_list: list[dict], pre
 #     ...
 
 def predict_duration_ml(task_text: str) -> int:
-    """Предсказывает длительность задачи с помощью ML модели или возвращает дефолт."""
+    """Предсказывает длительность задачи (в минутах) с помощью ML модели или возвращает дефолт."""
+    default_duration = 60  # минуты
     if not duration_model:
-        logger.info(f"Duration model not loaded for '{task_text}'. Using default duration (60 min).")
-        # Фолбэк к старой логике или просто дефолт
-        # Для простоты пока только дефолт, если модель не загружена
-        return DURATION_CATEGORY_TO_MINUTES["default"]
+        logger.info(f"Duration model not loaded for '{task_text}'. Using default duration ({default_duration} min).")
+        return default_duration
     try:
-        predicted_category = duration_model.predict([task_text])[0]
-        return DURATION_CATEGORY_TO_MINUTES.get(predicted_category, DURATION_CATEGORY_TO_MINUTES["default"])
+        # Предполагаем, что модель регрессии возвращает число (минуты)
+        predicted_duration = duration_model.predict([task_text])[0]
+
+        # Валидация и преобразование в int
+        if isinstance(predicted_duration, (int, float)) and predicted_duration > 0:
+            return int(round(predicted_duration))
+        else:
+            logger.warning(f"Predicted duration for '{task_text}' is not a positive number: {predicted_duration}. Using default.")
+            return default_duration
     except Exception as e:
         logger.error(f"Error predicting duration for '{task_text}': {e}. Using default.")
-        return DURATION_CATEGORY_TO_MINUTES["default"]
+        return default_duration
 
 def predict_priority_ml(task_text: str) -> str:
     """Предсказывает приоритет задачи с помощью ML модели или возвращает дефолт."""
     if not priority_model:
         logger.info(f"Priority model not loaded for '{task_text}'. Using default priority (medium).")
-        # Фолбэк к старой логике или просто дефолт
         return "medium"
     try:
-        predicted_priority = priority_model.predict([task_text])[0]
-        return predicted_priority
+        # Модель возвращает 0 (low), 1 (medium), 2 (high)
+        predicted_value = priority_model.predict([task_text])[0]
+
+        if predicted_value == 2:
+            return "high"
+        elif predicted_value == 1:
+            return "medium"
+        elif predicted_value == 0:
+            return "low"
+        else:
+            logger.warning(f"Unexpected priority value for '{task_text}': {predicted_value}. Using default (medium).")
+            return "medium"
+
     except Exception as e:
-        logger.error(f"Error predicting priority for '{task_text}': {e}. Using default.")
+        logger.error(f"Error predicting priority for '{task_text}': {e}. Using default (medium).")
         return "medium"
 
 # --- Основная функция обработки текста с ML ---
