@@ -358,7 +358,7 @@ if attempt_limit <= 0:
     print(f"Предупреждение: Достигнут лимит попыток генерации. Сгенерировано {generated_count} из {NUM_EXAMPLES} примеров.")
 
 # Сохранение
-output_file_path = 'freeform_task_dataset.json'
+output_file_path = 'ml/freeform_task_dataset.json'
 with open(output_file_path, 'w', encoding='utf-8') as f:
     json.dump(dataset, f, ensure_ascii=False, indent=2)
 
