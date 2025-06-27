@@ -1,7 +1,6 @@
 import json
 import os
 import warnings
-from sklearn.exceptions import UserWarning
 # Adjusted for RandomForest, though it's a general good practice if features are named by preprocessor
 warnings.filterwarnings("ignore", category=UserWarning, message="X does not have valid feature names, but RandomForestRegressor was fitted with feature names")
 import nltk
@@ -17,10 +16,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 import joblib
 import numpy as np
-import pymorphy2 # для лемматизации
+import pymorphy3 # для лемматизации
 
 # --- Инициализация лемматизатора ---
-morph = pymorphy2.MorphAnalyzer()
+morph = pymorphy3.MorphAnalyzer()
 
 def lemmatize_text(text):
     words = text.split() # Простое разделение по пробелам, можно улучшить токенизацией nltk
@@ -199,6 +198,7 @@ else:
 # --- 5. Подготовка данных для классификаторов длительности и приоритета ---
 task_features_for_duration = [] # Будет содержать [лемматизированный_текст_задачи, has_explicit_duration_phrase, длина_текста_задачи]
 duration_labels_all = []
+duration_phrases_original_all = [] # Список для хранения оригинальных фраз длительности
 task_texts_for_priority_lemmatized = [] # Лемматизированные тексты для приоритета
 priority_labels_all = []
 
@@ -214,8 +214,10 @@ for item in dataset: # Используем весь датасет для сб�
             priority_labels_all.append(entity['priority'])
 
             has_explicit_duration = 1 if entity.get('has_explicit_duration_phrase', False) else 0
-            task_features_for_duration.append([lemmatized_text, has_explicit_duration, text_length])
+            explicit_duration_parsed = entity.get('explicit_duration_parsed_minutes', 0) # Get the new field, default to 0
+            task_features_for_duration.append([lemmatized_text, has_explicit_duration, text_length, explicit_duration_parsed])
             duration_labels_all.append(entity['duration_minutes'])
+            duration_phrases_original_all.append(entity.get('duration_phrase_original', ''))
 
 
 print(f"\nСобрано {len(task_features_for_duration)} задач для обучения модели длительности.")
@@ -231,19 +233,25 @@ else:
 
 
     print("\n--- Обучение модели регрессии длительности ---")
-    X_train_dur_features, X_test_dur_features, y_train_dur, y_test_dur = train_test_split(
-        task_features_for_duration, duration_labels_all, test_size=0.2, random_state=42
+    # Добавляем duration_phrases_original_all в разделение
+    X_train_dur_features, X_test_dur_features, \
+    y_train_dur, y_test_dur, \
+    X_train_original_phrases, X_test_original_phrases = train_test_split(
+        task_features_for_duration, duration_labels_all, duration_phrases_original_all,
+        test_size=0.2, random_state=42
     )
 
     # Препроцессор для ColumnTransformer
     # Элемент 0: лемматизированный текст
     # Элемент 1: has_explicit_duration_phrase (бинарный)
     # Элемент 2: text_length (числовой)
+    # Элемент 3: explicit_duration_parsed_minutes (числовой)
     duration_preprocessor = ColumnTransformer(
         transformers=[
             ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=3), 0), # к лемматизированному тексту
-            ('explicit_time_feat', 'passthrough', [1]), # бинарный признак как есть
-            ('text_length_feat', MinMaxScaler(), [2]) # числовой признак длины текста, масштабируем
+            ('explicit_time_flag_feat', 'passthrough', [1]),      # бинарный признак флага как есть
+            ('text_length_feat', MinMaxScaler(), [2]),            # числовой признак длины текста, масштабируем
+            ('parsed_duration_feat', MinMaxScaler(), [3])       # новый числовой признак явной длительности, масштабируем
         ],
         remainder='drop'
     )
@@ -254,13 +262,15 @@ else:
     ])
 
     # Обновленная сетка параметров для RandomForestRegressor
+    # No changes needed here for now, unless new features interact poorly with existing hyperparams
     duration_parameters = {
-        'preprocessor__tfidf__ngram_range': [(1, 1), (1, 2)], # Сократим для ускорения, если нужно
+        'preprocessor__tfidf__ngram_range': [(1, 1), (1, 2)],
         'preprocessor__tfidf__min_df': [3, 5],
-        'reg__n_estimators': [100, 200], # Количество деревьев
-        'reg__max_depth': [None, 10, 20],    # Максимальная глубина деревьев
-        'reg__min_samples_split': [2, 5], # Минимальное количество образцов для разделения узла
-        'reg__min_samples_leaf': [1, 2]     # Минимальное количество образцов в листовом узле
+        # 'preprocessor__parsed_duration_feat__scaler': [MinMaxScaler(), StandardScaler(), 'passthrough'], # Example if we wanted to tune scaler for new feat
+        'reg__n_estimators': [100, 200],
+        'reg__max_depth': [None, 10, 20],
+        'reg__min_samples_split': [2, 5],
+        'reg__min_samples_leaf': [1, 2]
     }
 
     duration_model = None
@@ -283,8 +293,31 @@ else:
                 print(f"  Mean Squared Error (MSE): {mean_squared_error(y_test_dur, y_pred_dur):.2f}")
                 print(f"  Mean Absolute Error (MAE): {mean_absolute_error(y_test_dur, y_pred_dur):.2f}")
                 print(f"  Root Mean Squared Error (RMSE): {np.sqrt(mean_squared_error(y_test_dur, y_pred_dur)):.2f}")
+
+                # --- Анализ предсказаний модели длительности ---
+                if X_test_dur_features and y_test_dur and X_test_original_phrases: # Ensure all necessary lists are available
+                    print("\n--- Анализ предсказаний модели длительности (первые N тестовых примеров) ---")
+                    num_duration_samples_to_check = min(10, len(X_test_dur_features)) # Print up to 10 samples
+
+                    for i in range(num_duration_samples_to_check):
+                        original_feature_values = X_test_dur_features[i] # This is [lemmatized_text, has_explicit_duration_phrase, text_length]
+                        true_duration = y_test_dur[i]
+                        original_phrase = X_test_original_phrases[i]
+                        # The model's predict method was already called on the whole X_test_dur_features to get y_pred_dur
+                        predicted_duration = y_pred_dur[i]
+
+                        print(f"\n  Пример {i+1}:")
+                        print(f"    Лемматизированный текст: '{original_feature_values[0]}'")
+                        print(f"    Флаг явной длительности (has_explicit_duration_phrase): {original_feature_values[1]}")
+                        print(f"    Длина текста (исходная, до обработки ColumnTransformer): {original_feature_values[2]}") # This is text_length before scaling
+                        print(f"    Распарсенная явная длительность (минуты, 0 если нет): {original_feature_values[3]}") # New parsed duration feature
+                        print(f"    Оригинальная фраза длительности: '{original_phrase}'")
+                        print(f"    Эталонная длительность: {true_duration} минут")
+                        print(f"    Предсказанная длительность: {predicted_duration:.2f} минут")
+                        print(f"    Абсолютная ошибка: {abs(true_duration - predicted_duration):.2f} минут")
+                        print("-" * 30)
             else:
-                print("Тестовая выборка для длительности пуста.")
+                print("Тестовая выборка для длительности пуста (или отсутствуют оригинальные фразы для анализа).")
         except Exception as e:
             print(f"ОШИБКА при обучении модели регрессии длительности (RandomForestRegressor): {e}")
             duration_model = None
