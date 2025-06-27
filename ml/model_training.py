@@ -1,5 +1,6 @@
 import json
 import os
+import warnings # Add this line
 import nltk
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction import DictVectorizer
