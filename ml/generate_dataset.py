@@ -367,7 +367,12 @@ def generate_task_item():
     ]
     
     # Вероятность явного указания времени (например, 80%)
-    has_explicit_duration_phrase = False
+    # has_explicit_duration_phrase will be determined after duration_phrase is set.
+    # explicit_duration_parsed_minutes will store the directly parsed numeric value from the phrase.
+
+    duration_phrase = "" # Initialize
+    actual_duration_minutes = 0 # Initialize
+
     if random.random() < 0.80: # Увеличена вероятность явного указания времени
         duration_phrase_template, duration_minutes_from_phrase = random.choice(time_options)
 
@@ -402,10 +407,30 @@ def generate_task_item():
                  min_val = max(15, actual_duration_minutes - 30)
                  max_val = actual_duration_minutes + 30
                  actual_duration_minutes = random.randint(min_val // 5, max_val // 5) * 5
-    else:
+    else: # No explicit duration phrase chosen from time_options initially
         duration_phrase = ""
         actual_duration_minutes = get_realistic_duration(action_template, action_text_concrete)
-        # has_explicit_duration_phrase remains False
+        # has_explicit_duration_phrase will be set based on whether duration_phrase is empty or not later
+
+    # Determine has_explicit_duration_phrase based on the final duration_phrase
+    has_explicit_duration_phrase = bool(duration_phrase.strip())
+
+    # Parse the final duration_phrase to get explicit_duration_parsed_minutes
+    explicit_duration_parsed_minutes = parse_duration_phrase_to_minutes(duration_phrase)
+
+    # If actual_duration_minutes is 0 (e.g. from a failed get_realistic_duration or vague phrase with no fallback),
+    # and we successfully parsed a number, use the parsed number as actual_duration.
+    # This helps align actual_duration_minutes with what's numerically in the phrase if parsing was successful.
+    if actual_duration_minutes == 0 and explicit_duration_parsed_minutes > 0:
+        actual_duration_minutes = explicit_duration_parsed_minutes
+    elif explicit_duration_parsed_minutes > 0 and actual_duration_minutes != explicit_duration_parsed_minutes:
+        # This case indicates the generator's logic for 'actual_duration_minutes' (e.g. from time_options tuple)
+        # might differ from the direct parsing of the phrase. For consistency, we could prioritize
+        # the parsed value if available, or ensure the generation logic is perfectly aligned.
+        # For now, let's assume actual_duration_minutes from generation logic is the ground truth for the label,
+        # and explicit_duration_parsed_minutes is a feature.
+        pass
+
 
     # Фразы приоритета
     priority_phrases = ["", "это очень важно", "нужно сделать срочно", "это не горит", "можно сделать потом",
@@ -425,7 +450,87 @@ def generate_task_item():
     if not action_text_concrete.strip():
         action_text_concrete = "какое-то дело" # Запасной вариант
 
-    return action_text_concrete, duration_phrase, actual_duration_minutes, priority, explicit_priority_phrase, has_explicit_duration_phrase
+    return action_text_concrete, duration_phrase, actual_duration_minutes, priority, explicit_priority_phrase, has_explicit_duration_phrase, explicit_duration_parsed_minutes
+
+
+def parse_duration_phrase_to_minutes(phrase_text):
+    """
+    Tries to parse a duration phrase (e.g., "2 часа", "30 минут", "1ч30м") into minutes.
+    Returns minutes as int, or 0 if parsing fails or phrase is vague.
+    """
+    # --- DEBUG PRINT ---
+    # print(f"parse_duration_phrase_to_minutes attempting to parse: '{phrase_text}'")
+    # --- END DEBUG PRINT ---
+
+    if not phrase_text or not isinstance(phrase_text, str):
+        # if phrase_text: print(f"Parser returning 0 due to type: '{phrase_text}'")
+        return 0
+
+    text = phrase_text.lower().strip()
+    import re
+
+    if not text: # If original phrase was just spaces
+        # print(f"Parser returning 0 due to empty after strip: '{phrase_text}'")
+        return 0
+
+    # Pattern 1: Xч Yм (e.g., "1ч30м") - Most specific, exact match
+    match_1 = re.fullmatch(r'(\d+(?:[.,]\d+)?)\s*ч\s*(\d+)\s*м', text)
+    if match_1:
+        try:
+            h = float(match_1.group(1).replace(',', '.'))
+            m = int(match_1.group(2))
+            return int(h * 60) + m
+        except ValueError: return 0
+
+    # Pattern 2: X час Y минут (and variants, number first for hour) - Exact match
+    match_2 = re.fullmatch(r'(\d+(?:[.,]\d+)?)\s*(?:час(?:а|ов)?|ч\.?)\s+(\d+)\s*(?:мин(?:ут|уты|ы)?|м\.?)', text)
+    if match_2:
+        try:
+            h = float(match_2.group(1).replace(',', '.'))
+            m = int(match_2.group(2))
+            return int(h * 60) + m
+        except ValueError: return 0
+
+    # Pattern 3a: X.Y часов or X часов (number first) - Exact match
+    match_3a = re.fullmatch(r'(\d+(?:[.,]\d+)?)\s*(?:час(?:а|ов)?|ч\.?)', text)
+    if match_3a:
+        try:
+            h = float(match_3a.group(1).replace(',', '.'))
+            return int(h * 60)
+        except ValueError: return 0
+
+    # Pattern 3b: часов X (unit first) - Exact match
+    match_3b = re.fullmatch(r'(?:час(?:а|ов)?|ч\.?)\s*(\d+(?:[.,]\d+)?)', text)
+    if match_3b:
+        try:
+            h = float(match_3b.group(1).replace(',', '.'))
+            return int(h * 60)
+        except ValueError: return 0
+
+    # Pattern 4a: Y минут (number first) - Exact match
+    match_4a = re.fullmatch(r'(\d+)\s*(?:мин(?:ут|уты|ы)?|м\.?)', text)
+    if match_4a:
+        try:
+            m = int(match_4a.group(1))
+            return m
+        except ValueError: return 0
+
+    # Pattern 4b: минут Y (unit first) - Exact match
+    match_4b = re.fullmatch(r'(?:мин(?:ут|уты|ы)?|м\.?)\s*(\d+)', text)
+    if match_4b:
+        try:
+            m = int(match_4b.group(1))
+            return m
+        except ValueError: return 0
+
+    # Pattern 5: Specific word phrases (exact matches for simple cases)
+    if text == "полчаса": return 30
+    if text == "полтора часа": return 90
+    if text == "час": return 60 # Only if it's the entire phrase "час"
+
+    # If no specific numeric pattern matched, return 0.
+    # Vague phrases or unhandled numeric words will result in 0 for this feature.
+    return 0
 
 
 def generate_freeform_sentence():
@@ -471,7 +576,7 @@ def generate_freeform_sentence():
     current_pos = len(full_text)
 
     for i in range(num_tasks):
-        action_text_concrete, duration_ph, duration_min, task_priority, priority_ph, has_expl_dur_ph = generate_task_item()
+        action_text_concrete, duration_ph, duration_min, task_priority, priority_ph, has_expl_dur_ph, expl_dur_parsed_min = generate_task_item()
         
         # Выбираем шаблон для текущей задачи
         template = random.choice(sentence_templates)
@@ -535,7 +640,8 @@ def generate_freeform_sentence():
                     "priority": task_priority,
                     "duration_minutes": duration_min,
                     "duration_phrase_original": duration_ph,
-                    "has_explicit_duration_phrase": has_expl_dur_ph
+                    "has_explicit_duration_phrase": has_expl_dur_ph,
+                    "explicit_duration_parsed_minutes": expl_dur_parsed_min
                 })
 
         current_pos += len(current_task_full_phrase)

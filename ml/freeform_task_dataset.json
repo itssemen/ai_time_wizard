@@ -1,0 +1,5144 @@
+[
+  {
+    "text": "Вот что я должен сделать: минут 75 хочу потратить на придумать идею для стартапа; почистить холодильник посвятить этому где-то!; заняться йогой минут 30 не забудь, это важно.",
+    "entities": [
+      {
+        "text": "придумать идею для стартапа",
+        "start": 53,
+        "end": 80,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 75,
+        "duration_phrase_original": "минут 75",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 75
+      },
+      {
+        "text": "почистить холодильник",
+        "start": 82,
+        "end": 103,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "посвятить этому где-то",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "заняться йогой",
+        "start": 130,
+        "end": 144,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "минут 30",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      }
+    ]
+  },
+  {
+    "text": "Итак, что у нас тут: принять лекарства плюс к этому Нужно провести ревью кода коллеги, также И обновить документацию по ERP-системе можно сделать потом.. После этого Еще одна вещь: выучить новые слова на немецком; Не забыть бы про поиграть в шахматы.. Потом минут 5 хочу потратить на провести one-on-one с {кем}!",
+    "entities": [
+      {
+        "text": "принять лекарства",
+        "start": 21,
+        "end": 38,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 125,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "провести ревью кода коллеги",
+        "start": 58,
+        "end": 85,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "обновить документацию по ERP-системе",
+        "start": 95,
+        "end": 131,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 100,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "выучить новые слова на немецком",
+        "start": 181,
+        "end": 212,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 30,
+        "duration_phrase_original": "примерно 30 мин.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "поиграть в шахматы",
+        "start": 231,
+        "end": 249,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 240,
+        "duration_phrase_original": "4 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 240
+      },
+      {
+        "text": "провести one-on-one с {кем}",
+        "start": 284,
+        "end": 311,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      }
+    ]
+  },
+  {
+    "text": "Сфокусируюсь на: Если успею, то попрактиковаться в публичных выступлений 180 минут. Затем Также скинуть файл подруге 1 час, также 15 мин хочу потратить на отдохнуть немного, кроме того проанализировать прошлые ошибки займет примерно это очень важно.",
+    "entities": [
+      {
+        "text": "попрактиковаться в публичных выступлений",
+        "start": 32,
+        "end": 72,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 180,
+        "duration_phrase_original": "180 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      },
+      {
+        "text": "скинуть файл подруге",
+        "start": 96,
+        "end": 116,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1 час",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "отдохнуть немного",
+        "start": 155,
+        "end": 172,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "проанализировать прошлые ошибки",
+        "start": 185,
+        "end": 216,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 35,
+        "duration_phrase_original": "займет примерно",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Собираюсь сделать минут 25 на сделать упражнения для рук второстепенная задача. Затем Надо изучить работу с Docker, если останется время, займет минут 15. Далее, Не забыть: придумать идею для социальной инициативы. После этого обновить конфигурацию минут 40 критически важно.",
+    "entities": [
+      {
+        "text": "сделать упражнения для рук",
+        "start": 30,
+        "end": 56,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 25,
+        "duration_phrase_original": "минут 25",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 25
+      },
+      {
+        "text": "изучить работу с Docker",
+        "start": 91,
+        "end": 114,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "придумать идею для социальной инициативы",
+        "start": 173,
+        "end": 213,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "обновить конфигурацию",
+        "start": 227,
+        "end": 248,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 40,
+        "duration_phrase_original": "минут 40",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 40
+      }
+    ]
+  },
+  {
+    "text": "Необходимо выполнить: В планах также изучить язык программирования Go, Обязательно купить билеты на самолет 1.5 часа. Потом можно не спешить с этим, подать документы в госуслуги 4 часа, также Не забыть бы про сделать упражнения для плеч.; Потом можно написать пост для соцсетей. и Кстати, еще обсудить результаты спринта с командой постарайся успеть.",
+    "entities": [
+      {
+        "text": "изучить язык программирования Go",
+        "start": 37,
+        "end": 69,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 95,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "купить билеты на самолет",
+        "start": 83,
+        "end": 107,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "подать документы в госуслуги",
+        "start": 149,
+        "end": 177,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 240,
+        "duration_phrase_original": "4 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 240
+      },
+      {
+        "text": "сделать упражнения для плеч",
+        "start": 209,
+        "end": 236,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "минут 90",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "написать пост для соцсетей",
+        "start": 251,
+        "end": 277,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 180,
+        "duration_phrase_original": "3 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      },
+      {
+        "text": "обсудить результаты спринта с командой",
+        "start": 294,
+        "end": 332,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 95,
+        "duration_phrase_original": "пару часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Хочу успеть Надо бы поставить цели на следующий год. Далее, Кстати, еще почитать профессиональную литературу научно-популярную второстепенная задача, В планах также спланировать карьеру.",
+    "entities": [
+      {
+        "text": "поставить цели на следующий год",
+        "start": 20,
+        "end": 51,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "почитать профессиональную литературу научно-популярную",
+        "start": 72,
+        "end": 126,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "спланировать карьеру",
+        "start": 165,
+        "end": 185,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "минут 90",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Планы: Кстати, еще удалить билеты по качеству. плюс к этому участвовать в совещании о стратегии развития?. Затем Если успею, то приготовить пирог на пару-тройку часов, кроме того Также приготовить десерт на пару-тройку часов, кроме того Потом можно daily митинг плюс к этому записаться к тренеру минут 40!",
+    "entities": [
+      {
+        "text": "удалить билеты по качеству",
+        "start": 19,
+        "end": 45,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "90 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "участвовать в совещании о стратегии развития",
+        "start": 61,
+        "end": 105,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 40,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "приготовить пирог",
+        "start": 130,
+        "end": 147,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 110,
+        "duration_phrase_original": "на пару-тройку часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "приготовить десерт",
+        "start": 187,
+        "end": 205,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 210,
+        "duration_phrase_original": "на пару-тройку часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "daily митинг",
+        "start": 251,
+        "end": 263,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "записаться к тренеру",
+        "start": 277,
+        "end": 297,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 40,
+        "duration_phrase_original": "минут 40",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 40
+      }
+    ]
+  },
+  {
+    "text": "На повестке дня: купить продукты можно не спешить с этим три часа. Затем ответить на письмо {от кого} можно не спешить с этим займет примерно, кроме того посвятить этому где-то на быстро ответить коллеге отложи на потом, И посетить встречу выпускников минут 30.. А еще Если успею, то получить список задач минут 5 плюс к этому Нужно сделать упражнения для рук.",
+    "entities": [
+      {
+        "text": "купить продукты",
+        "start": 17,
+        "end": 32,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 180,
+        "duration_phrase_original": "три часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "ответить на письмо {от кого}",
+        "start": 73,
+        "end": 101,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 40,
+        "duration_phrase_original": "займет примерно",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "быстро ответить коллеге",
+        "start": 180,
+        "end": 203,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 150,
+        "duration_phrase_original": "посвятить этому где-то",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "посетить встречу выпускников",
+        "start": 223,
+        "end": 251,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 30,
+        "duration_phrase_original": "минут 30",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "получить список задач",
+        "start": 284,
+        "end": 305,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      },
+      {
+        "text": "сделать упражнения для рук",
+        "start": 333,
+        "end": 359,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 240,
+        "duration_phrase_original": "около 4 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Собираюсь сделать Надо бы настроить конфигурацию. Затем Не забыть: уточнить детали по {чему} и Если успею, то починить машину 15 мин.",
+    "entities": [
+      {
+        "text": "настроить конфигурацию",
+        "start": 26,
+        "end": 48,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "уточнить детали по {чему}",
+        "start": 67,
+        "end": 92,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 40,
+        "duration_phrase_original": "минут 40",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 40
+      },
+      {
+        "text": "починить машину",
+        "start": 110,
+        "end": 125,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      }
+    ]
+  },
+  {
+    "text": "Первым делом, И сочинить бит займет примерно. и Нужно придумать идею для мобильного приложения!",
+    "entities": [
+      {
+        "text": "сочинить бит",
+        "start": 16,
+        "end": 28,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 80,
+        "duration_phrase_original": "займет примерно",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "придумать идею для мобильного приложения",
+        "start": 54,
+        "end": 94,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Хочу успеть минут 90 хочу потратить на проанализировать данные маркетинговые. После этого Если успею, то помыть посуду 4 часа. А еще около 4 часов хочу потратить на почитать книгу любовный роман плюс к этому В планах также протестировать исследование?. А еще Нужно быстро ответить брату, кроме того подумать над своих целях обязательно выполни 1ч30м!",
+    "entities": [
+      {
+        "text": "проанализировать данные маркетинговые",
+        "start": 39,
+        "end": 76,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "минут 90",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "помыть посуду",
+        "start": 105,
+        "end": 118,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 240,
+        "duration_phrase_original": "4 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 240
+      },
+      {
+        "text": "почитать книгу любовный роман",
+        "start": 165,
+        "end": 194,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 240,
+        "duration_phrase_original": "около 4 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "протестировать исследование",
+        "start": 223,
+        "end": 250,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 50,
+        "duration_phrase_original": "минут 50",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 50
+      },
+      {
+        "text": "быстро ответить брату",
+        "start": 266,
+        "end": 287,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 90,
+        "duration_phrase_original": "минут 90",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "подумать над своих целях",
+        "start": 300,
+        "end": 324,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1ч30м",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Список дел: 1 час хочу потратить на поработать над проектом благотворительным, Не забыть: прибраться на кухне и В планах также провести встречу с командой. После этого Кстати, еще навести порядок на столе. После этого минут 5 хочу потратить на заказать бургеры, подготовить отчет по маркетинговой кампании 2.5 часа!",
+    "entities": [
+      {
+        "text": "поработать над проектом благотворительным",
+        "start": 36,
+        "end": 77,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1 час",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "прибраться на кухне",
+        "start": 90,
+        "end": 109,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "провести встречу с командой",
+        "start": 127,
+        "end": 154,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "часа полтора",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "навести порядок на столе",
+        "start": 180,
+        "end": 204,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 150,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "заказать бургеры",
+        "start": 244,
+        "end": 260,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      },
+      {
+        "text": "подготовить отчет по маркетинговой кампании",
+        "start": 262,
+        "end": 305,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 150,
+        "duration_phrase_original": "2.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 150
+      }
+    ]
+  },
+  {
+    "text": "Собираюсь сделать И починить машину немного времени на., кроме того Если успею, то навести порядок на столе. Далее, проанализировать тенденции рынка около 3 часов плюс к этому Займусь стендап четыре часа.",
+    "entities": [
+      {
+        "text": "починить машину",
+        "start": 20,
+        "end": 35,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 30,
+        "duration_phrase_original": "немного времени на",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "навести порядок на столе",
+        "start": 83,
+        "end": 107,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 110,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "проанализировать тенденции рынка",
+        "start": 116,
+        "end": 148,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 180,
+        "duration_phrase_original": "около 3 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "стендап",
+        "start": 184,
+        "end": 191,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 240,
+        "duration_phrase_original": "четыре часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Сфокусируюсь на: В планах также сделать уборку в комнате, принять лекарства буквально 50 минут можно не спешить с этим; Займусь подумать над своих целях минут 20!",
+    "entities": [
+      {
+        "text": "сделать уборку в комнате",
+        "start": 32,
+        "end": 56,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 240,
+        "duration_phrase_original": "четыре часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "принять лекарства",
+        "start": 58,
+        "end": 75,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 50,
+        "duration_phrase_original": "буквально 50 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подумать над своих целях",
+        "start": 128,
+        "end": 152,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      }
+    ]
+  },
+  {
+    "text": "Собираюсь сделать минут 30 хочу потратить на отдохнуть немного, кроме того стендап. Затем Нужно сделать свечу своими руками плюс к этому Не забыть бы про провести one-on-one с {кем}.",
+    "entities": [
+      {
+        "text": "отдохнуть немного",
+        "start": 45,
+        "end": 62,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "минут 30",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "стендап",
+        "start": 75,
+        "end": 82,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      },
+      {
+        "text": "сделать свечу своими руками",
+        "start": 96,
+        "end": 123,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 220,
+        "duration_phrase_original": "на пару-тройку часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "провести one-on-one с {кем}",
+        "start": 154,
+        "end": 181,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      }
+    ]
+  },
+  {
+    "text": "Планы: В планах также придумать идею для нового продукта, 2.5 часа на обдумать стратегию достижения цели!",
+    "entities": [
+      {
+        "text": "придумать идею для нового продукта",
+        "start": 22,
+        "end": 56,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 180,
+        "duration_phrase_original": "3 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      },
+      {
+        "text": "обдумать стратегию достижения цели",
+        "start": 70,
+        "end": 104,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 150,
+        "duration_phrase_original": "2.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 150
+      }
+    ]
+  },
+  {
+    "text": "Надо не забыть Потом можно послушать аудиокнигу. После этого обязательно выполни, провести встречу с клиентом плюс к этому Надо выучить новые слова на французском,, займет минут 25. Далее, Обязательно проверить метрики в коворкинге шесть часов!",
+    "entities": [
+      {
+        "text": "послушать аудиокнигу",
+        "start": 27,
+        "end": 47,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1 час",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "провести встречу с клиентом",
+        "start": 82,
+        "end": 109,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 115,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "выучить новые слова на французском",
+        "start": 128,
+        "end": 162,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 25,
+        "duration_phrase_original": "минут 25",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 25
+      },
+      {
+        "text": "проверить метрики в коворкинге",
+        "start": 201,
+        "end": 231,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Надо не забыть Обязательно спланировать карьеру три часа!",
+    "entities": [
+      {
+        "text": "спланировать карьеру",
+        "start": 27,
+        "end": 47,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 180,
+        "duration_phrase_original": "три часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Собираюсь сделать пропылесосить в гостиной не к спеху 45м,, исправить доставку для интересным 90 мин и проанализировать данные пользовательские сделай как можно скорее. Потом Обязательно обновить документацию по внутреннему порталу 180 минут. Потом это очень важно, сделать уборку в комнате примерно 5 мин.",
+    "entities": [
+      {
+        "text": "пропылесосить в гостиной",
+        "start": 18,
+        "end": 42,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 45,
+        "duration_phrase_original": "45м",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      },
+      {
+        "text": "исправить доставку для интересным",
+        "start": 61,
+        "end": 94,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 90,
+        "duration_phrase_original": "90 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "проанализировать данные пользовательские",
+        "start": 104,
+        "end": 144,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 245,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "обновить документацию по внутреннему порталу",
+        "start": 188,
+        "end": 232,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 180,
+        "duration_phrase_original": "180 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      },
+      {
+        "text": "сделать уборку в комнате",
+        "start": 267,
+        "end": 291,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 5,
+        "duration_phrase_original": "примерно 5 мин.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "На повестке дня: Займусь поспать полтора часов 180 минут. После этого Еще одна вещь: поиграть в настолку можно не спешить с этим. После этого Не забыть: сделать уборку в в кладовке; Нужно загрузить стирку.",
+    "entities": [
+      {
+        "text": "поспать полтора часов",
+        "start": 25,
+        "end": 46,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 180,
+        "duration_phrase_original": "180 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      },
+      {
+        "text": "поиграть в настолку",
+        "start": 85,
+        "end": 104,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 55,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "сделать уборку в в кладовке",
+        "start": 153,
+        "end": 180,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 240,
+        "duration_phrase_original": "4 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 240
+      },
+      {
+        "text": "загрузить стирку",
+        "start": 188,
+        "end": 204,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 240,
+        "duration_phrase_original": "4 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 240
+      }
+    ]
+  },
+  {
+    "text": "Запланировал себе поплавать в бассейне пять часов отложи на потом!",
+    "entities": [
+      {
+        "text": "поплавать в бассейне",
+        "start": 18,
+        "end": 38,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 300,
+        "duration_phrase_original": "пять часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "На повестке дня: Не забыть: уточнить детали по {чему}. А еще Кстати, еще обдумать стратегию инвестирования.",
+    "entities": [
+      {
+        "text": "уточнить детали по {чему}",
+        "start": 28,
+        "end": 53,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 10,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "обдумать стратегию инвестирования",
+        "start": 73,
+        "end": 106,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 10,
+        "duration_phrase_original": "минут 10",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 10
+      }
+    ]
+  },
+  {
+    "text": "Надо не забыть написать аналитику короткое письмо минут 5. Потом Займусь разобрать электронику минут 25 плюс к этому В планах также подумать над проблеме выбора?, также сделать упражнения по английскому языку минут 50 плюс к этому ответить на письмо {от кого} 1ч это очень важно; И daily митинг минут 50. плюс к этому Надо бы поспать немного часов.",
+    "entities": [
+      {
+        "text": "написать аналитику короткое письмо",
+        "start": 15,
+        "end": 49,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      },
+      {
+        "text": "разобрать электронику",
+        "start": 73,
+        "end": 94,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 25,
+        "duration_phrase_original": "минут 25",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 25
+      },
+      {
+        "text": "подумать над проблеме выбора",
+        "start": 132,
+        "end": 160,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "сделать упражнения по английскому языку",
+        "start": 170,
+        "end": 209,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 50,
+        "duration_phrase_original": "минут 50",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 50
+      },
+      {
+        "text": "ответить на письмо {от кого}",
+        "start": 232,
+        "end": 260,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "daily митинг",
+        "start": 283,
+        "end": 295,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 50,
+        "duration_phrase_original": "минут 50",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 50
+      },
+      {
+        "text": "поспать немного часов",
+        "start": 327,
+        "end": 348,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      }
+    ]
+  },
+  {
+    "text": "Надо не забыть Нужно записаться к юристу!, также, скачать сервер в дороге минут 5.",
+    "entities": [
+      {
+        "text": "записаться к юристу",
+        "start": 21,
+        "end": 40,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 30,
+        "duration_phrase_original": "на полчасика",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "скачать сервер в дороге",
+        "start": 52,
+        "end": 75,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      }
+    ]
+  },
+  {
+    "text": "Сегодня в программе: составить план релиза. После этого В планах также участвовать в совещании по итогам квартала!. Потом В планах также попрактиковаться в тайм-менеджмента!",
+    "entities": [
+      {
+        "text": "составить план релиза",
+        "start": 21,
+        "end": 42,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 55,
+        "duration_phrase_original": "минут 55",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 55
+      },
+      {
+        "text": "участвовать в совещании по итогам квартала",
+        "start": 71,
+        "end": 113,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      },
+      {
+        "text": "попрактиковаться в тайм-менеджмента",
+        "start": 138,
+        "end": 173,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "минут 90",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Так, поехали: придумать идею для мобильного приложения 2 часа; Надо бы посмотреть лекцию по политологии, также помыть пол в комнате. После этого поработать над проектом интересным посвятить этому где-то. Затем Не забыть бы про развесить белье., Потом можно рассортировать документы. А еще заняться йогой!",
+    "entities": [
+      {
+        "text": "придумать идею для мобильного приложения",
+        "start": 14,
+        "end": 54,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "посмотреть лекцию по политологии",
+        "start": 71,
+        "end": 103,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 120,
+        "duration_phrase_original": "120 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "помыть пол в комнате",
+        "start": 111,
+        "end": 131,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "поработать над проектом интересным",
+        "start": 145,
+        "end": 179,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "посвятить этому где-то",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "развесить белье",
+        "start": 227,
+        "end": 242,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "рассортировать документы",
+        "start": 257,
+        "end": 281,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 95,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "заняться йогой",
+        "start": 289,
+        "end": 303,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "на полчасика",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Собираюсь сделать Еще одна вещь: подготовить презентацию по результатам проекта это не горит. Далее, Не забыть бы про заказать готовую еду из ресторана.. Далее, поплавать в бассейне можно не спешить с этим. После этого принять лекарства!",
+    "entities": [
+      {
+        "text": "подготовить презентацию по результатам проекта",
+        "start": 33,
+        "end": 79,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1 час",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "заказать готовую еду из ресторана",
+        "start": 118,
+        "end": 151,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 100,
+        "duration_phrase_original": "займет примерно",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "поплавать в бассейне",
+        "start": 161,
+        "end": 181,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 120,
+        "duration_phrase_original": "два часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "принять лекарства",
+        "start": 219,
+        "end": 236,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 95,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Сегодня в программе: Кстати, еще отправить календарь по встрече. А еще почитать профессиональную литературу по психологии часик отложи на потом, кроме того Нужно поспать 8 часов. Потом Надо навести порядок на столе, обязательно выполни, займет.",
+    "entities": [
+      {
+        "text": "отправить календарь по встрече",
+        "start": 33,
+        "end": 63,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 180,
+        "duration_phrase_original": "три часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "почитать профессиональную литературу по психологии",
+        "start": 71,
+        "end": 121,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 60,
+        "duration_phrase_original": "часик",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "поспать 8 часов",
+        "start": 162,
+        "end": 177,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "навести порядок на столе",
+        "start": 190,
+        "end": 214,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 150,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "На повестке дня: Надо бы провести исследование эффективности процесса. плюс к этому Надо почитать профессиональную литературу биографию, можно не спешить с этим, займет минут 45.",
+    "entities": [
+      {
+        "text": "провести исследование эффективности процесса",
+        "start": 25,
+        "end": 69,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 150,
+        "duration_phrase_original": "2.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 150
+      },
+      {
+        "text": "почитать профессиональную литературу биографию",
+        "start": 90,
+        "end": 136,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 45,
+        "duration_phrase_original": "минут 45",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      }
+    ]
+  },
+  {
+    "text": "Сфокусируюсь на: пока не трогай, подготовить код в Excel примерно 30 мин. и придумать идею для социальной инициативы 120 минут и Если успею, то спланировать инвестиции?. Затем Надо записать видео о путешествии, не забудь, это важно, займет минут 55!",
+    "entities": [
+      {
+        "text": "подготовить код в Excel",
+        "start": 33,
+        "end": 56,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 30,
+        "duration_phrase_original": "примерно 30 мин.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "придумать идею для социальной инициативы",
+        "start": 76,
+        "end": 116,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "120 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "спланировать инвестиции",
+        "start": 144,
+        "end": 167,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 75,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "записать видео о путешествии",
+        "start": 182,
+        "end": 210,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 55,
+        "duration_phrase_original": "минут 55",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 55
+      }
+    ]
+  },
+  {
+    "text": "Мой план на день: хочу потратить на планерка по развития платформы, И обдумать стратегию личного бренда минут 55 можно сделать потом.. Потом И сочинить бит минут 5.. А еще Обязательно написать статью о финансах буквально 45 минут. Затем Надо бы провести исследование эффективности процесса!",
+    "entities": [
+      {
+        "text": "планерка по развития платформы",
+        "start": 36,
+        "end": 66,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 55,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "обдумать стратегию личного бренда",
+        "start": 70,
+        "end": 103,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 55,
+        "duration_phrase_original": "минут 55",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 55
+      },
+      {
+        "text": "сочинить бит",
+        "start": 143,
+        "end": 155,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      },
+      {
+        "text": "написать статью о финансах",
+        "start": 184,
+        "end": 210,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 45,
+        "duration_phrase_original": "буквально 45 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "провести исследование эффективности процесса",
+        "start": 245,
+        "end": 289,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      }
+    ]
+  },
+  {
+    "text": "Мои дела: В планах также принять лекарства. Далее, В планах также подготовить отчет по квартального отчета. А еще Обязательно обсудить возникшие проблемы с командой, Нужно уточнить детали по {чему}. Затем Не забыть бы про проанализировать свои финансы.. Затем daily митинг 45м!",
+    "entities": [
+      {
+        "text": "принять лекарства",
+        "start": 25,
+        "end": 42,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 120,
+        "duration_phrase_original": "два часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подготовить отчет по квартального отчета",
+        "start": 66,
+        "end": 106,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 40,
+        "duration_phrase_original": "минут 40",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 40
+      },
+      {
+        "text": "обсудить возникшие проблемы с командой",
+        "start": 126,
+        "end": 164,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "уточнить детали по {чему}",
+        "start": 172,
+        "end": 197,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 180,
+        "duration_phrase_original": "где-то 3 ч.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "проанализировать свои финансы",
+        "start": 222,
+        "end": 251,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "минут 30",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "daily митинг",
+        "start": 260,
+        "end": 272,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 45,
+        "duration_phrase_original": "45м",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      }
+    ]
+  },
+  {
+    "text": "Первым делом, Займусь сделать игрушку своими руками; купить продукты 3.5 часа пока не трогай. Потом поздравить {кого} с 23 февраля минут 55!",
+    "entities": [
+      {
+        "text": "сделать игрушку своими руками",
+        "start": 22,
+        "end": 51,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "купить продукты",
+        "start": 53,
+        "end": 68,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 210,
+        "duration_phrase_original": "3.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 210
+      },
+      {
+        "text": "поздравить {кого} с 23 февраля",
+        "start": 100,
+        "end": 130,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 55,
+        "duration_phrase_original": "минут 55",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 55
+      }
+    ]
+  },
+  {
+    "text": "Итак, что у нас тут: Еще одна вещь: выбрать бронь в CRM. А еще почитать профессиональную литературу биографию это приоритетно плюс к этому Не забыть: придумать идею для стартапа. А еще Не забыть бы про сделать картину своими руками., кроме того Также сделать зарядку 3.5 часа! и 90 мин хочу потратить на провести встречу с руководителем!",
+    "entities": [
+      {
+        "text": "выбрать бронь в CRM",
+        "start": 36,
+        "end": 55,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 165,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "почитать профессиональную литературу биографию",
+        "start": 63,
+        "end": 109,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "придумать идею для стартапа",
+        "start": 150,
+        "end": 177,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 45,
+        "duration_phrase_original": "минут 45",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      },
+      {
+        "text": "сделать картину своими руками",
+        "start": 202,
+        "end": 231,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 235,
+        "duration_phrase_original": "на пару-тройку часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "сделать зарядку",
+        "start": 251,
+        "end": 266,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 210,
+        "duration_phrase_original": "3.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 210
+      },
+      {
+        "text": "провести встречу с руководителем",
+        "start": 305,
+        "end": 337,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "90 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Мои дела: И обновить документацию по системе логирования минут 20. плюс к этому И сделать уборку в на балконе пару часов это приоритетно. плюс к этому посмотреть лекцию по философии и записать видео о обзоре продукта минут 25, Обязательно отладить скрипт посвятить этому где-то. После этого обсудить план по оплате. Потом часа полтора хочу потратить на поставить цели на квартал!",
+    "entities": [
+      {
+        "text": "обновить документацию по системе логирования",
+        "start": 12,
+        "end": 56,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      },
+      {
+        "text": "сделать уборку в на балконе",
+        "start": 82,
+        "end": 109,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 115,
+        "duration_phrase_original": "пару часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "посмотреть лекцию по философии",
+        "start": 151,
+        "end": 181,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 120,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "записать видео о обзоре продукта",
+        "start": 184,
+        "end": 216,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 25,
+        "duration_phrase_original": "минут 25",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 25
+      },
+      {
+        "text": "отладить скрипт",
+        "start": 239,
+        "end": 254,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "посвятить этому где-то",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "обсудить план по оплате",
+        "start": 291,
+        "end": 314,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "поставить цели на квартал",
+        "start": 353,
+        "end": 378,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "часа полтора",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Надо не забыть И вытереть пыль не забудь, это важно. плюс к этому Потом можно послушать новый альбом!; разобрать книги 5 часов, также Нужно посетить родительское собрание плюс к этому Если успею, то попрактиковаться в публичных выступлений два часа и быстро ответить другу. и Еще одна вещь: приготовить обед постарайся успеть.",
+    "entities": [
+      {
+        "text": "вытереть пыль",
+        "start": 17,
+        "end": 30,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "послушать новый альбом",
+        "start": 78,
+        "end": 100,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "разобрать книги",
+        "start": 104,
+        "end": 119,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 300,
+        "duration_phrase_original": "5 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 300
+      },
+      {
+        "text": "посетить родительское собрание",
+        "start": 141,
+        "end": 171,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 75,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "попрактиковаться в публичных выступлений",
+        "start": 200,
+        "end": 240,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "два часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "быстро ответить другу",
+        "start": 252,
+        "end": 273,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 10,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "приготовить обед",
+        "start": 293,
+        "end": 309,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 90,
+        "duration_phrase_original": "полтора часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Надо не забыть отложи на потом, заняться йогой шесть часов, Также составить план переезда часа полтора, Кстати, еще подать документы в налоговую второстепенная задача!",
+    "entities": [
+      {
+        "text": "заняться йогой",
+        "start": 32,
+        "end": 46,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "составить план переезда",
+        "start": 66,
+        "end": 89,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "часа полтора",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подать документы в налоговую",
+        "start": 116,
+        "end": 144,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 45,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Задачи на сегодня: Не забыть бы про пропылесосить комнате. плюс к этому Не забыть: поздравить {кого} с 23 февраля.. А еще И провести ревью кода фрилансера 2ч.. Потом Надо бы подумать над проблеме выбора.",
+    "entities": [
+      {
+        "text": "пропылесосить комнате",
+        "start": 36,
+        "end": 57,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1ч30м",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "поздравить {кого} с 23 февраля",
+        "start": 83,
+        "end": 113,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "часа полтора",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "провести ревью кода фрилансера",
+        "start": 125,
+        "end": 155,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "подумать над проблеме выбора",
+        "start": 175,
+        "end": 203,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "120 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      }
+    ]
+  },
+  {
+    "text": "Вот что я должен сделать: обязательно выполни, сделать уборку в в кладовке плюс к этому Потом можно сходить в магазин за молоком. После этого Если успею, то выучить новые слова на французском, кроме того починить машину критически важно 3.5 часа, 1ч хочу потратить на посетить врача дерматологу.",
+    "entities": [
+      {
+        "text": "сделать уборку в в кладовке",
+        "start": 47,
+        "end": 74,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 115,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "сходить в магазин за молоком",
+        "start": 100,
+        "end": 128,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "выучить новые слова на французском",
+        "start": 157,
+        "end": 191,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 200,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "починить машину",
+        "start": 204,
+        "end": 219,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 210,
+        "duration_phrase_original": "3.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 210
+      },
+      {
+        "text": "посетить врача дерматологу",
+        "start": 268,
+        "end": 294,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      }
+    ]
+  },
+  {
+    "text": "Нужно быстренько: Кстати, еще поздравить {кого} с профессиональным праздником подождет до завтра!",
+    "entities": [
+      {
+        "text": "поздравить {кого} с профессиональным праздником",
+        "start": 30,
+        "end": 77,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 210,
+        "duration_phrase_original": "3.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 210
+      }
+    ]
+  },
+  {
+    "text": "Надо не забыть сделать уборку в комнате не к спеху!",
+    "entities": [
+      {
+        "text": "сделать уборку в комнате",
+        "start": 15,
+        "end": 39,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 45,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Планы: сходить в библиотеку пока не трогай, В планах также быстро протестировать ошибки, также Кстати, еще daily митинг. Далее, Надо помедитировать, постарайся успеть, займет на полчасика!",
+    "entities": [
+      {
+        "text": "сходить в библиотеку",
+        "start": 7,
+        "end": 27,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "быстро протестировать ошибки",
+        "start": 59,
+        "end": 87,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 120,
+        "duration_phrase_original": "пару часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "daily митинг",
+        "start": 107,
+        "end": 119,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      },
+      {
+        "text": "помедитировать",
+        "start": 133,
+        "end": 147,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 30,
+        "duration_phrase_original": "на полчасика",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Мои дела: Обязательно организовать файлы на сервере, кроме того Потом можно подумать над своих целях.",
+    "entities": [
+      {
+        "text": "организовать файлы на сервере",
+        "start": 22,
+        "end": 51,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 65,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подумать над своих целях",
+        "start": 76,
+        "end": 100,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Список дел: Надо скинуть файл партнеру,, займет 1ч; Кстати, еще приготовить обед. После этого Не забыть: сохранить метрики?, также Надо бы посетить врача терапевту. Потом заняться хобби ({каким_хобби}) 0.5 часа второстепенная задача. Затем И быстро ответить клиенту минут 25 если останется время.",
+    "entities": [
+      {
+        "text": "скинуть файл партнеру",
+        "start": 17,
+        "end": 38,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "приготовить обед",
+        "start": 64,
+        "end": 80,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 55,
+        "duration_phrase_original": "минут 55",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 55
+      },
+      {
+        "text": "сохранить метрики",
+        "start": 105,
+        "end": 122,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 150,
+        "duration_phrase_original": "2.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 150
+      },
+      {
+        "text": "посетить врача терапевту",
+        "start": 140,
+        "end": 164,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 30,
+        "duration_phrase_original": "0.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "заняться хобби ({каким_хобби})",
+        "start": 172,
+        "end": 202,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 30,
+        "duration_phrase_original": "0.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "быстро ответить клиенту",
+        "start": 243,
+        "end": 266,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 25,
+        "duration_phrase_original": "минут 25",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 25
+      }
+    ]
+  },
+  {
+    "text": "На повестке дня: Если успею, то пропылесосить в кладовке минут 20, кроме того Надо пойти на тренировку в парк, критически важно, займет на полчасика. Потом Нужно сочинить бит. Затем В планах также оплатить интернет!",
+    "entities": [
+      {
+        "text": "пропылесосить в кладовке",
+        "start": 32,
+        "end": 56,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      },
+      {
+        "text": "пойти на тренировку в парк",
+        "start": 83,
+        "end": 109,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "на полчасика",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "сочинить бит",
+        "start": 162,
+        "end": 174,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 40,
+        "duration_phrase_original": "немного времени на",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "оплатить интернет",
+        "start": 197,
+        "end": 214,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 300,
+        "duration_phrase_original": "5 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 300
+      }
+    ]
+  },
+  {
+    "text": "Хочу успеть стендап, Надо спланировать карьеру, можно сделать потом, займет пять часов, также И поставить цели на пятилетку пять часов первостепенно., кроме того Займусь быстро скачать календарь минут 15, Также поработать над проектом интересным 2 часа!",
+    "entities": [
+      {
+        "text": "стендап",
+        "start": 12,
+        "end": 19,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 15,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "спланировать карьеру",
+        "start": 26,
+        "end": 46,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 300,
+        "duration_phrase_original": "пять часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "поставить цели на пятилетку",
+        "start": 96,
+        "end": 123,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 300,
+        "duration_phrase_original": "пять часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "быстро скачать календарь",
+        "start": 170,
+        "end": 194,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "поработать над проектом интересным",
+        "start": 211,
+        "end": 245,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      }
+    ]
+  },
+  {
+    "text": "Задачи на сегодня: полить цветы. А еще быстро ответить разработчику. Затем Не забыть бы про подумать над принятии решения.",
+    "entities": [
+      {
+        "text": "полить цветы",
+        "start": 19,
+        "end": 31,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 40,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "быстро ответить разработчику",
+        "start": 39,
+        "end": 67,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 0,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подумать над принятии решения",
+        "start": 92,
+        "end": 121,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 45,
+        "duration_phrase_original": "минут 45",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      }
+    ]
+  },
+  {
+    "text": "Необходимо выполнить: Не забыть бы про развесить белье.; подготовить отчет по маркетинговой кампании минут 15 обязательно выполни. А еще записать видео о интервью минут 25; Надо почитать книгу классику,, займет; Обязательно пропылесосить на чердаке. После этого Также поработать над проектом важным 15 мин, кроме того Не забыть: сочинить аранжировку!",
+    "entities": [
+      {
+        "text": "развесить белье",
+        "start": 39,
+        "end": 54,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "подготовить отчет по маркетинговой кампании",
+        "start": 57,
+        "end": 100,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "записать видео о интервью",
+        "start": 137,
+        "end": 162,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 25,
+        "duration_phrase_original": "минут 25",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 25
+      },
+      {
+        "text": "почитать книгу классику",
+        "start": 178,
+        "end": 201,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 105,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "пропылесосить на чердаке",
+        "start": 224,
+        "end": 248,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 100,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "поработать над проектом важным",
+        "start": 268,
+        "end": 298,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "сочинить аранжировку",
+        "start": 329,
+        "end": 349,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Список дел: проанализировать прошлые ошибки не забудь, это важно, кроме того это очень важно, протереть стол часик, кроме того Надо планерка по Alpha,, займет 1.5 часа.",
+    "entities": [
+      {
+        "text": "проанализировать прошлые ошибки",
+        "start": 12,
+        "end": 43,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 180,
+        "duration_phrase_original": "три часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "протереть стол",
+        "start": 94,
+        "end": 108,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 50,
+        "duration_phrase_original": "часик",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "планерка по Alpha",
+        "start": 132,
+        "end": 149,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Мои дела: четыре часа хочу потратить на быстро проверить базу данных, Кстати, еще стендап обязательно выполни, кроме того Нужно быстро организовать базу данных, также Не забыть бы про скинуть файл разработчику.. Затем И отдохнуть немного сделай это в первую очередь.",
+    "entities": [
+      {
+        "text": "быстро проверить базу данных",
+        "start": 40,
+        "end": 68,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 240,
+        "duration_phrase_original": "четыре часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "стендап",
+        "start": 82,
+        "end": 89,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "быстро организовать базу данных",
+        "start": 128,
+        "end": 159,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 150,
+        "duration_phrase_original": "2.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 150
+      },
+      {
+        "text": "скинуть файл разработчику",
+        "start": 184,
+        "end": 209,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 90,
+        "duration_phrase_original": "90 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "отдохнуть немного",
+        "start": 220,
+        "end": 237,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 120,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Планы: Обязательно быстро ответить бухгалтеру 1 час и Обязательно участвовать в совещании по итогам квартала четыре часа. После этого Если успею, то участвовать в совещании по итогам квартала часа полтора.",
+    "entities": [
+      {
+        "text": "быстро ответить бухгалтеру",
+        "start": 19,
+        "end": 45,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1 час",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "участвовать в совещании по итогам квартала",
+        "start": 66,
+        "end": 108,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 240,
+        "duration_phrase_original": "четыре часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "участвовать в совещании по итогам квартала",
+        "start": 149,
+        "end": 191,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "часа полтора",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Планы: В планах также пойти на тренировку в парк плюс к этому минут 10 хочу потратить на обдумать стратегию развития бизнеса, также три часа на навести порядок на столе пока не трогай!",
+    "entities": [
+      {
+        "text": "пойти на тренировку в парк",
+        "start": 22,
+        "end": 48,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 40,
+        "duration_phrase_original": "буквально 40 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "обдумать стратегию развития бизнеса",
+        "start": 89,
+        "end": 124,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 10,
+        "duration_phrase_original": "минут 10",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 10
+      },
+      {
+        "text": "навести порядок на столе",
+        "start": 144,
+        "end": 168,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 180,
+        "duration_phrase_original": "три часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "На повестке дня: спланировать карьеру буквально 20 минут нужно сделать срочно. Потом полчаса хочу потратить на стендап. Потом В планах также разработать дизайн для персонажа, кроме того Нужно починить кран. Затем пару часов на пробежка на интервальную можно сделать потом.; прибраться на кухне, выбрать ремонт.",
+    "entities": [
+      {
+        "text": "спланировать карьеру",
+        "start": 17,
+        "end": 37,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 20,
+        "duration_phrase_original": "буквально 20 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "стендап",
+        "start": 111,
+        "end": 118,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "полчаса",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "разработать дизайн для персонажа",
+        "start": 141,
+        "end": 173,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 60,
+        "duration_phrase_original": "где-то 1 ч.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "починить кран",
+        "start": 192,
+        "end": 205,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 60,
+        "duration_phrase_original": "примерно 60 мин.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "пробежка на интервальную",
+        "start": 227,
+        "end": 251,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 145,
+        "duration_phrase_original": "пару часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "прибраться на кухне",
+        "start": 275,
+        "end": 294,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "выбрать ремонт",
+        "start": 296,
+        "end": 310,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      }
+    ]
+  },
+  {
+    "text": "Мой план на день: сделать упражнения для рук плюс к этому помедитировать плюс к этому Надо бы посмотреть фильм документальный плюс к этому Если успею, то написать статью о финансах. После этого, сделать упражнения по программированию, кроме того Нужно купить продукты, кроме того Нужно погулять по городу!",
+    "entities": [
+      {
+        "text": "сделать упражнения для рук",
+        "start": 18,
+        "end": 44,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "полчаса",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "помедитировать",
+        "start": 58,
+        "end": 72,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 45,
+        "duration_phrase_original": "минут 45",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      },
+      {
+        "text": "посмотреть фильм документальный",
+        "start": 94,
+        "end": 125,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 50,
+        "duration_phrase_original": "минут 50",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 50
+      },
+      {
+        "text": "написать статью о финансах",
+        "start": 154,
+        "end": 180,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 270,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "сделать упражнения по программированию",
+        "start": 196,
+        "end": 234,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 55,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "купить продукты",
+        "start": 253,
+        "end": 268,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 30,
+        "duration_phrase_original": "на полчасика",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "погулять по городу",
+        "start": 287,
+        "end": 305,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 210,
+        "duration_phrase_original": "3.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 210
+      }
+    ]
+  },
+  {
+    "text": "Задачи на сегодня: минут 45 хочу потратить на написать статью о путешествиях и Если успею, то написать письмо 120 минут плюс к этому пойти на тренировку в спортзал отложи на потом. После этого стендап подождет до завтра минут 45?. Далее, это не горит, заняться хобби ({каким_хобби}) 90 мин!",
+    "entities": [
+      {
+        "text": "написать статью о путешествиях",
+        "start": 46,
+        "end": 76,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 45,
+        "duration_phrase_original": "минут 45",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      },
+      {
+        "text": "написать письмо",
+        "start": 94,
+        "end": 109,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "120 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "пойти на тренировку в спортзал",
+        "start": 133,
+        "end": 163,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 90,
+        "duration_phrase_original": "90 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "стендап",
+        "start": 193,
+        "end": 200,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 45,
+        "duration_phrase_original": "минут 45",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      },
+      {
+        "text": "заняться хобби ({каким_хобби})",
+        "start": 253,
+        "end": 283,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "90 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Нужно быстренько: Обязательно пробежка на полумарафон минут 30, также минут 15 на почитать профессиональную литературу художественную это не горит.. Далее, Не забыть бы про переслать информацию брату от {кого}. и подать документы в визовый центр постарайся успеть, минут 15 на развесить белье критически важно.",
+    "entities": [
+      {
+        "text": "пробежка на полумарафон",
+        "start": 30,
+        "end": 53,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 30,
+        "duration_phrase_original": "минут 30",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "почитать профессиональную литературу художественную",
+        "start": 82,
+        "end": 133,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "переслать информацию брату от {кого}",
+        "start": 174,
+        "end": 210,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 5,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подать документы в визовый центр",
+        "start": 214,
+        "end": 246,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 60,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "развесить белье",
+        "start": 278,
+        "end": 293,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      }
+    ]
+  },
+  {
+    "text": "Мои дела: В планах также организовать файлы на внешнем диске?; Также обсудить требования заказчика с командой 2.5 часа. Затем Не забыть: пройти онлайн-курс по маркетинга в соцсетях. Далее, Кстати, еще приготовить обед это приоритетно. Далее, пойти на тренировку в дом и Кстати, еще помедитировать если останется время!",
+    "entities": [
+      {
+        "text": "организовать файлы на внешнем диске",
+        "start": 25,
+        "end": 60,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "обсудить требования заказчика с командой",
+        "start": 70,
+        "end": 110,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 150,
+        "duration_phrase_original": "2.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 150
+      },
+      {
+        "text": "пройти онлайн-курс по маркетинга в соцсетях",
+        "start": 138,
+        "end": 181,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "приготовить обед",
+        "start": 202,
+        "end": 218,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "полтора часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "пойти на тренировку в дом",
+        "start": 243,
+        "end": 268,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 75,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "помедитировать",
+        "start": 283,
+        "end": 297,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      }
+    ]
+  },
+  {
+    "text": "Сегодня мне нужно Надо бы купить билеты на спектакль!",
+    "entities": [
+      {
+        "text": "купить билеты на спектакль",
+        "start": 26,
+        "end": 52,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "около 0,5 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Так, поехали: это прям горит, создать веб-сайт на GitHub полчаса. А еще начать уборку по проекту; пробежка на обычную дистанцию!",
+    "entities": [
+      {
+        "text": "создать веб-сайт на GitHub",
+        "start": 30,
+        "end": 56,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "полчаса",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "начать уборку по проекту",
+        "start": 72,
+        "end": 96,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 300,
+        "duration_phrase_original": "пять часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "пробежка на обычную дистанцию",
+        "start": 98,
+        "end": 127,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Список дел: рассортировать документы. Потом Нужно проверить почту!. Далее, Кстати, еще навести порядок на столе это очень важно!",
+    "entities": [
+      {
+        "text": "рассортировать документы",
+        "start": 12,
+        "end": 36,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 55,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "проверить почту",
+        "start": 50,
+        "end": 65,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 5,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "навести порядок на столе",
+        "start": 88,
+        "end": 112,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "90 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Так, поехали: Надо написать код для тестов,, займет. А еще Также погулять за городом полчаса плюс к этому Займусь сделать упражнения по английскому языку пять часов, также почитать профессиональную литературу художественную минут 75!. Затем провести one-on-one с {кем} минут 20. Потом созвониться с кандидатом по обновлений сделай это в первую очередь!",
+    "entities": [
+      {
+        "text": "написать код для тестов",
+        "start": 19,
+        "end": 42,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 80,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "погулять за городом",
+        "start": 65,
+        "end": 84,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "полчаса",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "сделать упражнения по английскому языку",
+        "start": 114,
+        "end": 153,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 300,
+        "duration_phrase_original": "пять часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "почитать профессиональную литературу художественную",
+        "start": 172,
+        "end": 223,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 75,
+        "duration_phrase_original": "минут 75",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 75
+      },
+      {
+        "text": "провести one-on-one с {кем}",
+        "start": 242,
+        "end": 269,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      },
+      {
+        "text": "созвониться с кандидатом по обновлений",
+        "start": 286,
+        "end": 324,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 40,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Нужно быстренько: Не забыть: провести one-on-one с {кем} и Надо позвонить начальнику, не к спеху, займет., также Кстати, еще подать документы в госуслуги второстепенная задача и участвовать в совещании по новому проекту; Потом можно записаться к косметологу. А еще Надо бы отвезти вещи в в сервис!",
+    "entities": [
+      {
+        "text": "провести one-on-one с {кем}",
+        "start": 29,
+        "end": 56,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1ч30м",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "позвонить начальнику",
+        "start": 64,
+        "end": 84,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 20,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подать документы в госуслуги",
+        "start": 126,
+        "end": 154,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 25,
+        "duration_phrase_original": "минут 25",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 25
+      },
+      {
+        "text": "участвовать в совещании по новому проекту",
+        "start": 179,
+        "end": 220,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "записаться к косметологу",
+        "start": 234,
+        "end": 258,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 20,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "отвезти вещи в в сервис",
+        "start": 274,
+        "end": 297,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 5,
+        "duration_phrase_original": "минут 5",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 5
+      }
+    ]
+  },
+  {
+    "text": "На повестке дня: Не забыть бы про участвовать в совещании по новому проекту.. Потом, подготовить конфигурацию для текущим. Затем провести ревью кода своего старого.. Потом на ответить на письмо {от кого} подождет до завтра плюс к этому Кстати, еще позвонить бухгалтеру это не горит!. Затем Еще одна вещь: завершить материалы!. Затем Нужно записать видео о обзоре продукта.",
+    "entities": [
+      {
+        "text": "участвовать в совещании по новому проекту",
+        "start": 34,
+        "end": 75,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 45,
+        "duration_phrase_original": "45м",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      },
+      {
+        "text": "подготовить конфигурацию для текущим",
+        "start": 86,
+        "end": 122,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 85,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "провести ревью кода своего старого",
+        "start": 130,
+        "end": 164,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "ответить на письмо {от кого}",
+        "start": 177,
+        "end": 205,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 20,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "позвонить бухгалтеру",
+        "start": 250,
+        "end": 270,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1ч30м",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "завершить материалы",
+        "start": 308,
+        "end": 327,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1 час",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "записать видео о обзоре продукта",
+        "start": 343,
+        "end": 375,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 150,
+        "duration_phrase_original": "около 2,5 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Мой план на день: Надо бы почитать профессиональную литературу по специальности. Потом Надо бы заняться йогой; В планах также организовать файлы на NAS.",
+    "entities": [
+      {
+        "text": "почитать профессиональную литературу по специальности",
+        "start": 26,
+        "end": 79,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "посвятить этому где-то",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "заняться йогой",
+        "start": 95,
+        "end": 109,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 75,
+        "duration_phrase_original": "буквально 75 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "организовать файлы на NAS",
+        "start": 126,
+        "end": 151,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 300,
+        "duration_phrase_original": "пять часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Список дел: Надо бы придумать идею для творческого проекта, также написать сообщение маме по встрече минут 55? плюс к этому Не забыть бы про провести встречу с кандидатом.. Затем загрузить документы по проекту; И создать дизайн для сложным не к спеху.. Затем Надо бы послушать любимую музыку. Потом Надо бы быстро ответить дизайнеру!",
+    "entities": [
+      {
+        "text": "придумать идею для творческого проекта",
+        "start": 20,
+        "end": 58,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 40,
+        "duration_phrase_original": "буквально 40 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "написать сообщение маме по встрече",
+        "start": 66,
+        "end": 100,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 55,
+        "duration_phrase_original": "минут 55",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 55
+      },
+      {
+        "text": "провести встречу с кандидатом",
+        "start": 142,
+        "end": 171,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      },
+      {
+        "text": "загрузить документы по проекту",
+        "start": 180,
+        "end": 210,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 300,
+        "duration_phrase_original": "пять часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "создать дизайн для сложным",
+        "start": 214,
+        "end": 240,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 140,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "послушать любимую музыку",
+        "start": 268,
+        "end": 292,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 90,
+        "duration_phrase_original": "90 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "быстро ответить дизайнеру",
+        "start": 308,
+        "end": 333,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Планы: починить телефон три часа. Далее, Займусь согласовать счета по доставке. Затем Займусь написать статью о продуктивности 2 часа, изучить технику быстрого чтения четыре часа!",
+    "entities": [
+      {
+        "text": "починить телефон",
+        "start": 7,
+        "end": 23,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 180,
+        "duration_phrase_original": "три часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "согласовать счета по доставке",
+        "start": 49,
+        "end": 78,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 135,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "написать статью о продуктивности",
+        "start": 94,
+        "end": 126,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "изучить технику быстрого чтения",
+        "start": 135,
+        "end": 166,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 240,
+        "duration_phrase_original": "четыре часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Задачи на сегодня: составить план свадьбы? плюс к этому Потом можно развесить белье. Потом Надо разработать дизайн для логотипа, это очень важно, займет шесть часов, кроме того И поздравить {кого} с 23 февраля шесть часов первостепенно.",
+    "entities": [
+      {
+        "text": "составить план свадьбы",
+        "start": 19,
+        "end": 41,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 285,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "развесить белье",
+        "start": 69,
+        "end": 84,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 60,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "разработать дизайн для логотипа",
+        "start": 97,
+        "end": 128,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "поздравить {кого} с 23 февраля",
+        "start": 180,
+        "end": 210,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Мои дела: Займусь посетить врача эндокринологу минут 25 плюс к этому Не забыть бы про заняться хобби ({каким_хобби}).. Потом Еще одна вещь: провести one-on-one с {кем} нужно сделать срочно!",
+    "entities": [
+      {
+        "text": "посетить врача эндокринологу",
+        "start": 18,
+        "end": 46,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 25,
+        "duration_phrase_original": "минут 25",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 25
+      },
+      {
+        "text": "заняться хобби ({каким_хобби})",
+        "start": 86,
+        "end": 116,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 10,
+        "duration_phrase_original": "минут 10",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 10
+      },
+      {
+        "text": "провести one-on-one с {кем}",
+        "start": 140,
+        "end": 167,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1ч30м",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Мои дела: помедитировать; Надо принять лекарства, отложи на потом, займет 2ч. А еще Потом можно начать сервер в Asana. А еще провести исследование пользовательского поведения и, созвониться с партнерами по стратегии часа полтора, также daily митинг. Затем установить календарь по проекту полтора часа.",
+    "entities": [
+      {
+        "text": "помедитировать",
+        "start": 10,
+        "end": 24,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 75,
+        "duration_phrase_original": "часик",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "принять лекарства",
+        "start": 31,
+        "end": 48,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "начать сервер в Asana",
+        "start": 96,
+        "end": 117,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "0.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "провести исследование пользовательского поведения",
+        "start": 125,
+        "end": 174,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 295,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "созвониться с партнерами по стратегии",
+        "start": 179,
+        "end": 216,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "часа полтора",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "daily митинг",
+        "start": 237,
+        "end": 249,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 20,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "установить календарь по проекту",
+        "start": 257,
+        "end": 288,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "полтора часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Вот что я должен сделать: В планах также обдумать стратегию продвижения продукта плюс к этому В планах также пробежка на интервальную. Потом Обязательно разработать дизайн для рекламного баннера на часок-другой. А еще организовать файлы на NAS не забудь, это важно. Далее, Надо пойти на тренировку в фитнес-клуб, обязательно выполни, займет 2 часа!",
+    "entities": [
+      {
+        "text": "обдумать стратегию продвижения продукта",
+        "start": 41,
+        "end": 80,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "пробежка на интервальную",
+        "start": 109,
+        "end": 133,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 35,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "разработать дизайн для рекламного баннера",
+        "start": 153,
+        "end": 194,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 115,
+        "duration_phrase_original": "на часок-другой",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "организовать файлы на NAS",
+        "start": 218,
+        "end": 243,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 65,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "пойти на тренировку в фитнес-клуб",
+        "start": 278,
+        "end": 311,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      }
+    ]
+  },
+  {
+    "text": "Задачи на сегодня: Нужно посмотреть вебинар о инвестициях. Далее, сделать упражнения для спины. плюс к этому В планах также подумать над новых возможностях.. Затем критически важно, проанализировать отчет по качеству плюс к этому Займусь изучить методологию Agile 2ч.",
+    "entities": [
+      {
+        "text": "посмотреть вебинар о инвестициях",
+        "start": 25,
+        "end": 57,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 240,
+        "duration_phrase_original": "около 4 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "сделать упражнения для спины",
+        "start": 66,
+        "end": 94,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 300,
+        "duration_phrase_original": "пять часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подумать над новых возможностях",
+        "start": 125,
+        "end": 156,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 30,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "проанализировать отчет по качеству",
+        "start": 184,
+        "end": 218,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 145,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "изучить методологию Agile",
+        "start": 240,
+        "end": 265,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      }
+    ]
+  },
+  {
+    "text": "На повестке дня: минут 30 на участвовать в совещании по итогам квартала подождет до завтра плюс к этому Не забыть бы про стендап.. После этого Если успею, то почитать профессиональную литературу биографию 1.5 часа, также Если успею, то разработать дизайн для рекламного баннера, также Займусь подумать над смысле жизни 2 часа плюс к этому подготовить отчет по анализа конкурентов.",
+    "entities": [
+      {
+        "text": "участвовать в совещании по итогам квартала",
+        "start": 29,
+        "end": 71,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 30,
+        "duration_phrase_original": "минут 30",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "стендап",
+        "start": 121,
+        "end": 128,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "почитать профессиональную литературу биографию",
+        "start": 158,
+        "end": 204,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "разработать дизайн для рекламного баннера",
+        "start": 236,
+        "end": 277,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 300,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подумать над смысле жизни",
+        "start": 293,
+        "end": 318,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "подготовить отчет по анализа конкурентов",
+        "start": 339,
+        "end": 379,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 180,
+        "duration_phrase_original": "3 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      }
+    ]
+  },
+  {
+    "text": "Хочу успеть Еще одна вещь: участвовать в совещании по новому проекту это не горит; Не забыть бы про пробежка на интервальную., также Не забыть: сделать свечу своими руками. А еще Займусь быстро изучить счета минут 25. А еще Еще одна вещь: помедитировать. А еще сделать упражнения по логике на пару-тройку часов. А еще Надо навести порядок на столе,, займет 1.5 часа!",
+    "entities": [
+      {
+        "text": "участвовать в совещании по новому проекту",
+        "start": 27,
+        "end": 68,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "пробежка на интервальную",
+        "start": 100,
+        "end": 124,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "сделать свечу своими руками",
+        "start": 144,
+        "end": 171,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 150,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "быстро изучить счета",
+        "start": 187,
+        "end": 207,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 25,
+        "duration_phrase_original": "минут 25",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 25
+      },
+      {
+        "text": "помедитировать",
+        "start": 239,
+        "end": 253,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 165,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "сделать упражнения по логике",
+        "start": 261,
+        "end": 289,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 240,
+        "duration_phrase_original": "на пару-тройку часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "навести порядок на столе",
+        "start": 323,
+        "end": 347,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Планы: проанализировать риски где-то 3 ч. и подать документы в госуслуги.",
+    "entities": [
+      {
+        "text": "проанализировать риски",
+        "start": 7,
+        "end": 29,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 180,
+        "duration_phrase_original": "где-то 3 ч.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подать документы в госуслуги",
+        "start": 44,
+        "end": 72,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 40,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Первым делом, Надо бы обсудить новые идеи с командой; И изучить уборку по отчету 4 часа не к спеху.; И изучить технику быстрого чтения 1ч критически важно. плюс к этому Не забыть: написать код для API. и Надо бы поздравить {кого} с годовщиной и Потом можно помыть пол в в гараже; Обязательно созвониться с подрядчиком по текущих задач минут 45!",
+    "entities": [
+      {
+        "text": "обсудить новые идеи с командой",
+        "start": 22,
+        "end": 52,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 180,
+        "duration_phrase_original": "180 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      },
+      {
+        "text": "изучить уборку по отчету",
+        "start": 56,
+        "end": 80,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 240,
+        "duration_phrase_original": "4 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 240
+      },
+      {
+        "text": "изучить технику быстрого чтения",
+        "start": 103,
+        "end": 134,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "написать код для API",
+        "start": 180,
+        "end": 200,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 140,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "поздравить {кого} с годовщиной",
+        "start": 213,
+        "end": 243,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 10,
+        "duration_phrase_original": "примерно 10 мин.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "помыть пол в в гараже",
+        "start": 258,
+        "end": 279,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 75,
+        "duration_phrase_original": "минут 75",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 75
+      },
+      {
+        "text": "созвониться с подрядчиком по текущих задач",
+        "start": 293,
+        "end": 335,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 45,
+        "duration_phrase_original": "минут 45",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      }
+    ]
+  },
+  {
+    "text": "Собираюсь сделать Обязательно пробежка на полумарафон буквально 20 минут. Далее, И подать документы в банк минут 75 это приоритетно.",
+    "entities": [
+      {
+        "text": "пробежка на полумарафон",
+        "start": 30,
+        "end": 53,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 20,
+        "duration_phrase_original": "буквально 20 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "подать документы в банк",
+        "start": 83,
+        "end": 106,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 75,
+        "duration_phrase_original": "минут 75",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 75
+      }
+    ]
+  },
+  {
+    "text": "Сегодня мне нужно проанализировать тенденции рынка?. После этого Еще одна вещь: почистить микроволновку это приоритетно!, также хочу потратить на написать менеджеру проекта короткое письмо.",
+    "entities": [
+      {
+        "text": "проанализировать тенденции рынка",
+        "start": 18,
+        "end": 50,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "почистить микроволновку",
+        "start": 81,
+        "end": 104,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 120,
+        "duration_phrase_original": "120 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "написать менеджеру проекта короткое письмо",
+        "start": 148,
+        "end": 190,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 10,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "На повестке дня: daily митинг это очень важно. А еще Обязательно оплатить интернет полтора часа. Далее, 3 часа хочу потратить на попрактиковаться в быстрого счета.",
+    "entities": [
+      {
+        "text": "daily митинг",
+        "start": 17,
+        "end": 29,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "оплатить интернет",
+        "start": 65,
+        "end": 82,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "полтора часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "попрактиковаться в быстрого счета",
+        "start": 129,
+        "end": 162,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 180,
+        "duration_phrase_original": "3 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      }
+    ]
+  },
+  {
+    "text": "Мой план на день: Также подготовить презентацию для инвесторов 5 часов; Если успею, то обдумать стратегию достижения цели минут 15, кроме того Если успею, то провести встречу с партнерами 4 часа.",
+    "entities": [
+      {
+        "text": "подготовить презентацию для инвесторов",
+        "start": 24,
+        "end": 62,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 300,
+        "duration_phrase_original": "5 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 300
+      },
+      {
+        "text": "обдумать стратегию достижения цели",
+        "start": 87,
+        "end": 121,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "провести встречу с партнерами",
+        "start": 158,
+        "end": 187,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 240,
+        "duration_phrase_original": "4 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 240
+      }
+    ]
+  },
+  {
+    "text": "Планы: Еще одна вещь: проанализировать тенденции рынка и минут 10 на изучить иностранный язык сделай это в первую очередь, Кстати, еще записаться к парикмахеру это не горит!",
+    "entities": [
+      {
+        "text": "проанализировать тенденции рынка",
+        "start": 22,
+        "end": 54,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 75,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "изучить иностранный язык",
+        "start": 69,
+        "end": 93,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 10,
+        "duration_phrase_original": "минут 10",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 10
+      },
+      {
+        "text": "записаться к парикмахеру",
+        "start": 135,
+        "end": 159,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "посвятить этому где-то",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Задачи на сегодня: Не забыть: оплатить налоги!",
+    "entities": [
+      {
+        "text": "оплатить налоги",
+        "start": 30,
+        "end": 45,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 300,
+        "duration_phrase_original": "5 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 300
+      }
+    ]
+  },
+  {
+    "text": "Так, поехали: Надо уточнить детали по {чему},, займет полтора часа. После этого Обязательно быстро создать счета 3 часа!",
+    "entities": [
+      {
+        "text": "уточнить детали по {чему}",
+        "start": 19,
+        "end": 44,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "полтора часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "быстро создать счета",
+        "start": 92,
+        "end": 112,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 180,
+        "duration_phrase_original": "3 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      }
+    ]
+  },
+  {
+    "text": "Задачи на сегодня: Потом можно посмотреть фильм мультфильм. Далее, Еще одна вещь: завершить код это прям горит плюс к этому Нужно написать сообщение поставщику по доставке., также Не забыть бы про проанализировать тенденции рынка.",
+    "entities": [
+      {
+        "text": "посмотреть фильм мультфильм",
+        "start": 31,
+        "end": 58,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "завершить код",
+        "start": 82,
+        "end": 95,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 95,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "написать сообщение поставщику по доставке",
+        "start": 130,
+        "end": 171,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 10,
+        "duration_phrase_original": "буквально 10 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "проанализировать тенденции рынка",
+        "start": 198,
+        "end": 230,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 90,
+        "duration_phrase_original": "часа полтора",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Сегодня в программе: Нужно заказать продукты на дом!",
+    "entities": [
+      {
+        "text": "заказать продукты на дом",
+        "start": 27,
+        "end": 51,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 45,
+        "duration_phrase_original": "минут 45",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      }
+    ]
+  },
+  {
+    "text": "Запланировал себе Еще одна вещь: купить продукты это приоритетно. Потом Не забыть: посмотреть вебинар о трендах в IT и Кстати, еще подать документы в госуслуги подождет до завтра, также Не забыть бы про удалить систему для исследовательским.",
+    "entities": [
+      {
+        "text": "купить продукты",
+        "start": 33,
+        "end": 48,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 45,
+        "duration_phrase_original": "минут 45",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 45
+      },
+      {
+        "text": "посмотреть вебинар о трендах в IT",
+        "start": 83,
+        "end": 116,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 180,
+        "duration_phrase_original": "180 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      },
+      {
+        "text": "подать документы в госуслуги",
+        "start": 131,
+        "end": 159,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "удалить систему для исследовательским",
+        "start": 203,
+        "end": 240,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 25,
+        "duration_phrase_original": "минут 25",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 25
+      }
+    ]
+  },
+  {
+    "text": "Планы: написать менеджеру проекта короткое письмо критически важно три часа. Потом придумать идею для мобильного приложения.",
+    "entities": [
+      {
+        "text": "написать менеджеру проекта короткое письмо",
+        "start": 7,
+        "end": 49,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 180,
+        "duration_phrase_original": "три часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "придумать идею для мобильного приложения",
+        "start": 83,
+        "end": 123,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 45,
+        "duration_phrase_original": "буквально 45 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Мой план на день:, выучить новые слова на испанском минут 10.. Потом Если успею, то созвониться с кандидатом по поставки примерно 60 мин.. Затем Обязательно посетить врача неврологу., также Займусь записаться к юристу полтора часа!",
+    "entities": [
+      {
+        "text": "выучить новые слова на испанском",
+        "start": 20,
+        "end": 52,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 10,
+        "duration_phrase_original": "минут 10",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 10
+      },
+      {
+        "text": "созвониться с кандидатом по поставки",
+        "start": 86,
+        "end": 122,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "примерно 60 мин.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "посетить врача неврологу",
+        "start": 159,
+        "end": 183,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 30,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "записаться к юристу",
+        "start": 201,
+        "end": 220,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 90,
+        "duration_phrase_original": "полтора часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      }
+    ]
+  },
+  {
+    "text": "Мои дела: помедитировать. Далее, хочу потратить на полить цветы. После этого созвониться с инвестором по поставки, кроме того Надо бы пробежка на интервальную.",
+    "entities": [
+      {
+        "text": "помедитировать",
+        "start": 10,
+        "end": 24,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "полить цветы",
+        "start": 51,
+        "end": 63,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 45,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "созвониться с инвестором по поставки",
+        "start": 77,
+        "end": 113,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 110,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "пробежка на интервальную",
+        "start": 134,
+        "end": 158,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 30,
+        "duration_phrase_original": "немного времени на",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Так, поехали: Нужно согласовать прототип с {кем}, кроме того Не забыть бы про провести исследование эффективности процесса.. Затем решить рабочую задачу рутинную и Нужно купить продукты!",
+    "entities": [
+      {
+        "text": "согласовать прототип с {кем}",
+        "start": 20,
+        "end": 48,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "провести исследование эффективности процесса",
+        "start": 78,
+        "end": 122,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 300,
+        "duration_phrase_original": "пять часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "решить рабочую задачу рутинную",
+        "start": 131,
+        "end": 161,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 185,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "купить продукты",
+        "start": 170,
+        "end": 185,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 40,
+        "duration_phrase_original": "минут 40",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 40
+      }
+    ]
+  },
+  {
+    "text": "Так, поехали: Потом можно обдумать стратегию достижения цели. плюс к этому, ответить на письмо {от кого} 15 мин. Затем на полчасика хочу потратить на daily митинг. Далее, проверить почту это прям горит буквально 90 минут.",
+    "entities": [
+      {
+        "text": "обдумать стратегию достижения цели",
+        "start": 26,
+        "end": 60,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      },
+      {
+        "text": "ответить на письмо {от кого}",
+        "start": 78,
+        "end": 106,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "daily митинг",
+        "start": 152,
+        "end": 164,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 30,
+        "duration_phrase_original": "на полчасика",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "проверить почту",
+        "start": 173,
+        "end": 188,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "буквально 90 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Сегодня в программе: Обязательно посетить врача эндокринологу займет примерно, Надо посмотреть лекцию по экономике,, займет 15 мин? плюс к этому посетить врача терапевту.. А еще Не забыть: обновить документацию по API!. Далее, Также обновить документацию по внутреннему порталу 2ч, кроме того Если успею, то поплавать в бассейне 4 часа.",
+    "entities": [
+      {
+        "text": "посетить врача эндокринологу",
+        "start": 33,
+        "end": 61,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 70,
+        "duration_phrase_original": "займет примерно",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "посмотреть лекцию по экономике",
+        "start": 84,
+        "end": 114,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 15,
+        "duration_phrase_original": "15 мин",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "посетить врача терапевту",
+        "start": 146,
+        "end": 170,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 40,
+        "duration_phrase_original": "минут 40",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 40
+      },
+      {
+        "text": "обновить документацию по API",
+        "start": 191,
+        "end": 219,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 30,
+        "duration_phrase_original": "0.5 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "обновить документацию по внутреннему порталу",
+        "start": 236,
+        "end": 280,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2ч",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "поплавать в бассейне",
+        "start": 311,
+        "end": 331,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 240,
+        "duration_phrase_original": "4 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 240
+      }
+    ]
+  },
+  {
+    "text": "Собираюсь сделать минут 90 хочу потратить на ответить на письмо {от кого}, также хочу потратить на обновить документацию по платежной системе. Далее, Займусь пойти на тренировку в дом четыре часа. А еще Еще одна вещь: сделать упражнения по математике; поставить цели на пятилетку критически важно. После этого И проверить базу данных в Figma минут 75. плюс к этому Займусь записаться к стоматологу 120 минут!",
+    "entities": [
+      {
+        "text": "ответить на письмо {от кого}",
+        "start": 45,
+        "end": 73,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "минут 90",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "обновить документацию по платежной системе",
+        "start": 99,
+        "end": 141,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 95,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "пойти на тренировку в дом",
+        "start": 158,
+        "end": 183,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 240,
+        "duration_phrase_original": "четыре часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "сделать упражнения по математике",
+        "start": 218,
+        "end": 250,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 30,
+        "duration_phrase_original": "минут 30",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 30
+      },
+      {
+        "text": "поставить цели на пятилетку",
+        "start": 252,
+        "end": 279,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 50,
+        "duration_phrase_original": "минут 50",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 50
+      },
+      {
+        "text": "проверить базу данных в Figma",
+        "start": 312,
+        "end": 341,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 75,
+        "duration_phrase_original": "минут 75",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 75
+      },
+      {
+        "text": "записаться к стоматологу",
+        "start": 373,
+        "end": 397,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "120 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      }
+    ]
+  },
+  {
+    "text": "Первым делом, два часа хочу потратить на навести порядок на столе. А еще минут 20 хочу потратить на уточнить детали по {чему}. плюс к этому 1 час хочу потратить на отвезти заказ в в сервис?. Далее, порисовать эскиз пока не трогай минут 15 плюс к этому стендап 1ч30м, кроме того Если успею, то записать видео о обучающем материале пять часов. После этого В планах также помыть пол в квартире.",
+    "entities": [
+      {
+        "text": "навести порядок на столе",
+        "start": 41,
+        "end": 65,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "два часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "уточнить детали по {чему}",
+        "start": 100,
+        "end": 125,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      },
+      {
+        "text": "отвезти заказ в в сервис",
+        "start": 165,
+        "end": 189,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1 час",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      },
+      {
+        "text": "порисовать эскиз",
+        "start": 200,
+        "end": 216,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "стендап",
+        "start": 254,
+        "end": 261,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 90,
+        "duration_phrase_original": "1ч30м",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 90
+      },
+      {
+        "text": "записать видео о обучающем материале",
+        "start": 295,
+        "end": 331,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 300,
+        "duration_phrase_original": "пять часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "помыть пол в квартире",
+        "start": 371,
+        "end": 392,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 120,
+        "duration_phrase_original": "120 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      }
+    ]
+  },
+  {
+    "text": "Планы: Обязательно рассортировать документы 120 минут. Далее, Не забыть бы про посетить врача неврологу. и обдумать стратегию личного бренда минут 55, на полчасика на сделать упражнения для ног, также Потом можно написать сообщение подруге по проекту.. После этого на проанализировать тенденции рынка.",
+    "entities": [
+      {
+        "text": "рассортировать документы",
+        "start": 19,
+        "end": 43,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 120,
+        "duration_phrase_original": "120 минут",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "посетить врача неврологу",
+        "start": 79,
+        "end": 103,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "обдумать стратегию личного бренда",
+        "start": 107,
+        "end": 140,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 55,
+        "duration_phrase_original": "минут 55",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 55
+      },
+      {
+        "text": "сделать упражнения для ног",
+        "start": 167,
+        "end": 193,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 30,
+        "duration_phrase_original": "на полчасика",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "написать сообщение подруге по проекту",
+        "start": 213,
+        "end": 250,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 120,
+        "duration_phrase_original": "два часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "проанализировать тенденции рынка",
+        "start": 269,
+        "end": 301,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 50,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Список дел: спланировать покупку и И почитать книгу детектив около 4 часов это очень важно.. Затем Еще одна вещь: развесить белье. Затем сделать уборку в в гараже минут 20. и это приоритетно, провести встречу с подрядчиком минут 15. А еще поиграть на пианино 1 час!",
+    "entities": [
+      {
+        "text": "спланировать покупку",
+        "start": 12,
+        "end": 32,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "почитать книгу детектив",
+        "start": 37,
+        "end": 60,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 240,
+        "duration_phrase_original": "около 4 часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "развесить белье",
+        "start": 114,
+        "end": 129,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 90,
+        "duration_phrase_original": "примерно 90 мин.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "сделать уборку в в гараже",
+        "start": 137,
+        "end": 162,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      },
+      {
+        "text": "провести встречу с подрядчиком",
+        "start": 193,
+        "end": 223,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 15,
+        "duration_phrase_original": "минут 15",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 15
+      },
+      {
+        "text": "поиграть на пианино",
+        "start": 240,
+        "end": 259,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1 час",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      }
+    ]
+  },
+  {
+    "text": "Хочу успеть проанализировать тенденции рынка. А еще Еще одна вещь: планерка по Alpha это очень важно, Потом можно выучить новые слова на китайском и Обязательно сделать упражнения по логике минут 10, кроме того стендап 1 час.",
+    "entities": [
+      {
+        "text": "проанализировать тенденции рынка",
+        "start": 12,
+        "end": 44,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 115,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "планерка по Alpha",
+        "start": 67,
+        "end": 84,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 55,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "выучить новые слова на китайском",
+        "start": 114,
+        "end": 146,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 120,
+        "duration_phrase_original": "2 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 120
+      },
+      {
+        "text": "сделать упражнения по логике",
+        "start": 161,
+        "end": 189,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 10,
+        "duration_phrase_original": "минут 10",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 10
+      },
+      {
+        "text": "стендап",
+        "start": 211,
+        "end": 218,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 60,
+        "duration_phrase_original": "1 час",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 60
+      }
+    ]
+  },
+  {
+    "text": "Собираюсь сделать пробежка на короткую дистанцию и изучить методологию Agile шесть часов это приоритетно, немного времени на хочу потратить на почитать книгу комиксы; Если успею, то помедитировать!",
+    "entities": [
+      {
+        "text": "пробежка на короткую дистанцию",
+        "start": 18,
+        "end": 48,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 75,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "изучить методологию Agile",
+        "start": 51,
+        "end": 76,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 360,
+        "duration_phrase_original": "шесть часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "почитать книгу комиксы",
+        "start": 143,
+        "end": 165,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 20,
+        "duration_phrase_original": "немного времени на",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "помедитировать",
+        "start": 182,
+        "end": 196,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 85,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Первым делом, Также заказать бургеры. Потом Не забыть бы про выучить новые слова на китайском., также Не забыть бы про быстро исправить контент., также сочинить песню первостепенно 3 часа и Надо провести встречу с руководителем, первостепенно, займет пару часов. Далее, Займусь полить цветы!",
+    "entities": [
+      {
+        "text": "заказать бургеры",
+        "start": 20,
+        "end": 36,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 15,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "выучить новые слова на китайском",
+        "start": 61,
+        "end": 93,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 30,
+        "duration_phrase_original": "часик",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "быстро исправить контент",
+        "start": 119,
+        "end": 143,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 65,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "сочинить песню",
+        "start": 152,
+        "end": 166,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 180,
+        "duration_phrase_original": "3 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 180
+      },
+      {
+        "text": "провести встречу с руководителем",
+        "start": 195,
+        "end": 227,
+        "label": "TASK",
+        "priority": 1,
+        "duration_minutes": 125,
+        "duration_phrase_original": "пару часов",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      },
+      {
+        "text": "полить цветы",
+        "start": 278,
+        "end": 290,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 20,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Необходимо выполнить: Займусь заказать пиццу 4 часа. После этого Также оплатить интернет минут 20, также Не забыть: купить продукты.",
+    "entities": [
+      {
+        "text": "заказать пиццу",
+        "start": 30,
+        "end": 44,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 240,
+        "duration_phrase_original": "4 часа",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 240
+      },
+      {
+        "text": "оплатить интернет",
+        "start": 71,
+        "end": 88,
+        "label": "TASK",
+        "priority": 2,
+        "duration_minutes": 20,
+        "duration_phrase_original": "минут 20",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 20
+      },
+      {
+        "text": "купить продукты",
+        "start": 116,
+        "end": 131,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 60,
+        "duration_phrase_original": "где-то 1 ч.",
+        "has_explicit_duration_phrase": true,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  },
+  {
+    "text": "Так, поехали: Не забыть бы про посмотреть фильм документальный.",
+    "entities": [
+      {
+        "text": "посмотреть фильм документальный",
+        "start": 31,
+        "end": 62,
+        "label": "TASK",
+        "priority": 0,
+        "duration_minutes": 100,
+        "duration_phrase_original": "",
+        "has_explicit_duration_phrase": false,
+        "explicit_duration_parsed_minutes": 0
+      }
+    ]
+  }
+]
