@@ -1,6 +1,7 @@
 import json
 import os
 import warnings # Add this line
+warnings.filterwarnings("ignore", category=UserWarning, module="sklearn.utils.validation")
 import nltk
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction import DictVectorizer
