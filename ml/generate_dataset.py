@@ -308,6 +308,7 @@ def generate_task_item():
     ]
     
     # Вероятность явного указания времени (например, 75%)
+    has_explicit_duration_phrase = False
     if random.random() < 0.75: # Оставляем эту вероятность, но сами time_options стали разнообразнее
         duration_phrase_template, duration_minutes_from_phrase = random.choice(time_options)
 
@@ -317,25 +318,32 @@ def generate_task_item():
                 n_val = random.choice([5, 10, 15, 20, 25, 30, 40, 50])
                 actual_duration_minutes = n_val
                 duration_phrase = duration_phrase_template.format(N=n_val)
+                has_explicit_duration_phrase = True
             elif "часов" in duration_phrase_template:
                 n_val = random.choice([1, 2, 3, 1.5, 2.5])
                 actual_duration_minutes = int(n_val * 60)
                 duration_phrase = duration_phrase_template.format(N=n_val)
+                has_explicit_duration_phrase = True
             else: # на всякий случай, если шаблон другой
                 actual_duration_minutes = get_realistic_duration(action_template, action_text_concrete)
                 duration_phrase = ""
+                # has_explicit_duration_phrase remains False
         elif duration_minutes_from_phrase is None: # Если выбран вариант "без явного указания времени"
             actual_duration_minutes = get_realistic_duration(action_template, action_text_concrete)
             duration_phrase = "" # Убедимся, что фраза пустая
+            # has_explicit_duration_phrase remains False
         else:
             actual_duration_minutes = duration_minutes_from_phrase
             duration_phrase = duration_phrase_template
+            if duration_phrase.strip(): # Если фраза не пустая
+                has_explicit_duration_phrase = True
             # Небольшая вариативность для фраз типа "часик", "пару часов"
             if duration_phrase_template in ["часик", "пару часов", "на часок-другой"]:
                  actual_duration_minutes = random.randint(max(15, actual_duration_minutes - 20) // 5, (actual_duration_minutes + 20) // 5) * 5
     else:
         duration_phrase = ""
         actual_duration_minutes = get_realistic_duration(action_template, action_text_concrete)
+        # has_explicit_duration_phrase remains False
 
     # Фразы приоритета
     priority_phrases = ["", "это очень важно", "нужно сделать срочно", "это не горит", "можно сделать потом",
@@ -354,7 +362,7 @@ def generate_task_item():
     if not action_text_concrete.strip():
         action_text_concrete = "какое-то дело" # Запасной вариант
 
-    return action_text_concrete, duration_phrase, actual_duration_minutes, priority, explicit_priority_phrase
+    return action_text_concrete, duration_phrase, actual_duration_minutes, priority, explicit_priority_phrase, has_explicit_duration_phrase
 
 
 def generate_freeform_sentence():
@@ -400,7 +408,7 @@ def generate_freeform_sentence():
     current_pos = len(full_text)
 
     for i in range(num_tasks):
-        action_text_concrete, duration_ph, duration_min, task_priority, priority_ph = generate_task_item()
+        action_text_concrete, duration_ph, duration_min, task_priority, priority_ph, has_expl_dur_ph = generate_task_item()
         
         # Выбираем шаблон для текущей задачи
         template = random.choice(sentence_templates)
@@ -463,7 +471,8 @@ def generate_freeform_sentence():
                     "label": "TASK",
                     "priority": task_priority,
                     "duration_minutes": duration_min,
-                    "duration_phrase_original": duration_ph
+                    "duration_phrase_original": duration_ph,
+                    "has_explicit_duration_phrase": has_expl_dur_ph
                 })
 
         current_pos += len(current_task_full_phrase)

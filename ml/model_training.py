@@ -182,68 +182,87 @@ else:
         print(f"ОШИБКА (NER) при обучении или предсказании модели: {e}")
 
 # --- 5. Подготовка данных для классификаторов длительности и приоритета ---
-task_texts_all = []
+task_features_for_duration = [] # Будет содержать [текст_задачи, has_explicit_duration_phrase]
 duration_labels_all = [] # Будет содержать числовые значения минут
+task_texts_for_priority = [] # Отдельный список текстов для приоритета, т.к. он не использует доп. фичу
 priority_labels_all = [] # Будет содержать числовые значения приоритета (0, 1, 2)
+
 
 for item in dataset: # Используем весь датасет для сбора текстов задач
     for entity in item['entities']:
         if entity['label'] == 'TASK': # Убедимся, что это задача
-            task_texts_all.append(entity['text'])
-            # Используем напрямую числовое значение длительности
-            duration_labels_all.append(entity['duration_minutes'])
-            # Используем напрямую числовое значение приоритета (оно уже должно быть числом из generate_dataset.py)
+            task_texts_for_priority.append(entity['text'])
+            # Используем напрямую числовое значение приоритета
             priority_labels_all.append(entity['priority'])
 
-print(f"\nСобрано {len(task_texts_all)} задач для обучения моделей длительности/приоритета.")
+            # Для модели длительности собираем текст и новый признак
+            has_explicit_duration = 1 if entity.get('has_explicit_duration_phrase', False) else 0
+            task_features_for_duration.append([entity['text'], has_explicit_duration])
+            # Используем напрямую числовое значение длительности
+            duration_labels_all.append(entity['duration_minutes'])
 
-if not task_texts_all:
-    print("ОШИБКА: Не найдено ни одной задачи в датасете для обучения моделей длительности/приоритета.")
+
+print(f"\nСобрано {len(task_features_for_duration)} задач для обучения модели длительности.")
+print(f"Собрано {len(task_texts_for_priority)} задач для обучения модели приоритета.")
+
+if not task_features_for_duration:
+    print("ОШИБКА: Не найдено ни одной задачи в датасете для обучения модели длительности.")
     # В этом случае дальнейшее обучение моделей бессмысленно
 else:
     # --- 6. Обучение модели регрессии длительности ---
+    from sklearn.compose import ColumnTransformer
+    from sklearn.ensemble import GradientBoostingRegressor
+    # from sklearn.preprocessing import StandardScaler # Пока не используем, т.к. признак бинарный
+
     print("\n--- Обучение модели регрессии длительности ---")
     # Stratify не используется для регрессии в train_test_split напрямую с непрерывными значениями y
-    X_train_dur, X_test_dur, y_train_dur, y_test_dur = train_test_split(
-        task_texts_all, duration_labels_all, test_size=0.2, random_state=42
+    # task_features_for_duration уже содержит списки [текст, признак]
+    X_train_dur_features, X_test_dur_features, y_train_dur, y_test_dur = train_test_split(
+        task_features_for_duration, duration_labels_all, test_size=0.2, random_state=42
     )
 
-    # Пайплайн для удобства: TF-IDF + Регрессор
-    # Возвращаемся к дефолтным параметрам из-за тайм-аутов GridSearchCV
+    # Препроцессор для ColumnTransformer
+    # Первый элемент в task_features_for_duration[i] - текст (индекс 0)
+    # Второй элемент - has_explicit_duration_phrase (индекс 1)
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2), 0), # Применить TF-IDF к первому элементу (текст)
+            ('explicit_time_feat', 'passthrough', [1]) # Передать второй элемент (признак) как есть
+        ],
+        remainder='drop' # Игнорировать другие столбцы, если они появятся
+    )
+
     duration_pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2)),
-        ('reg', RandomForestRegressor(random_state=42, n_estimators=100))
+        ('preprocessor', preprocessor),
+        ('reg', GradientBoostingRegressor(random_state=42))
     ])
 
-    # # Параметры для GridSearchCV (закомментировано для скорости)
-    # duration_parameters = {
-    #     'tfidf__ngram_range': [(1, 1), (1, 2)],
-    #     'tfidf__min_df': [3, 5],
-    #     'tfidf__max_df': [0.75, 0.95],
-    #     'reg__n_estimators': [100, 150],
-    #     'reg__max_depth': [None, 20],
-    #     'reg__min_samples_split': [2, 5]
-    # }
+    duration_parameters = {
+        'preprocessor__tfidf__ngram_range': [(1, 1), (1, 2)],
+        'preprocessor__tfidf__min_df': [3, 5],
+        'reg__n_estimators': [100, 150], # Сокращенный грид для скорости
+        'reg__learning_rate': [0.05, 0.1],
+        'reg__max_depth': [3, 5]
+    }
 
     duration_model = None
-    if not X_train_dur:
+    # Проверяем X_train_dur_features вместо X_train_dur
+    if not X_train_dur_features:
         print("ОШИБКА (Длительность): Обучающая выборка пуста.")
     else:
-        # print("Запуск GridSearchCV для модели регрессии длительности...")
-        # duration_gs_reg = GridSearchCV(duration_pipeline, duration_parameters, cv=2,
-        #                                n_jobs=-1, verbose=1, scoring='neg_mean_absolute_error')
+        print("Запуск GridSearchCV для модели регрессии длительности...")
+        duration_gs_reg = GridSearchCV(duration_pipeline, duration_parameters, cv=3, # Используем cv=3
+                                       n_jobs=-1, verbose=1, scoring='neg_mean_absolute_error')
         try:
-            # duration_gs_reg.fit(X_train_dur, y_train_dur)
-            # duration_model = duration_gs_reg.best_estimator_
-            # print(f"Лучшие параметры для регрессии длительности: {duration_gs_reg.best_params_}")
-            # print(f"Лучший MAE (кросс-валидация): {-duration_gs_reg.best_score_:.2f}")
+            # Передаем X_train_dur_features и y_train_dur
+            duration_gs_reg.fit(X_train_dur_features, y_train_dur)
+            duration_model = duration_gs_reg.best_estimator_
+            print(f"Лучшие параметры для регрессии длительности: {duration_gs_reg.best_params_}")
+            print(f"Лучший MAE (кросс-валидация): {-duration_gs_reg.best_score_:.2f}")
 
-            duration_model = duration_pipeline
-            duration_model.fit(X_train_dur, y_train_dur)
-            print("Модель регрессии длительности обучена (с параметрами по умолчанию).")
-
-            if X_test_dur:
-                y_pred_dur = duration_model.predict(X_test_dur)
+            # Предсказание на X_test_dur_features
+            if X_test_dur_features:
+                y_pred_dur = duration_model.predict(X_test_dur_features)
                 print("\nОценка регрессии длительности (на тестовой выборке):")
                 print(f"  Mean Squared Error (MSE): {mean_squared_error(y_test_dur, y_pred_dur):.2f}")
                 print(f"  Mean Absolute Error (MAE): {mean_absolute_error(y_test_dur, y_pred_dur):.2f}")
@@ -257,14 +276,19 @@ else:
 
     # --- 7. Обучение классификатора приоритета (с числовыми метками) ---
     print("\n--- Обучение классификатора приоритета ---")
-    priority_labels_to_use = priority_labels_all
+    priority_labels_to_use = priority_labels_all # Уже содержит только метки приоритета
 
-    X_train_pri, X_test_pri, y_train_pri, y_test_pri = train_test_split(
-        task_texts_all, priority_labels_to_use, test_size=0.2, random_state=42,
-        stratify=priority_labels_to_use if len(set(priority_labels_to_use)) > 1 else None
-    )
+    # Используем task_texts_for_priority для обучения классификатора приоритета
+    if not task_texts_for_priority:
+        print("ОШИБКА (Приоритет): Нет текстов задач для обучения.")
+        priority_model = None # Явно устанавливаем в None
+    else:
+        X_train_pri, X_test_pri, y_train_pri, y_test_pri = train_test_split(
+            task_texts_for_priority, priority_labels_to_use, test_size=0.2, random_state=42,
+            stratify=priority_labels_to_use if len(set(priority_labels_to_use)) > 1 else None
+        )
 
-    priority_pipeline = Pipeline([
+        priority_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer()),
         ('clf', LinearSVC(random_state=42, dual="auto", max_iter=2000)) # Увеличим max_iter для LinearSVC
     ])
