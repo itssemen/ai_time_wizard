@@ -2,15 +2,16 @@ import json
 import os
 import warnings
 from sklearn.exceptions import UserWarning
-warnings.filterwarnings("ignore", category=UserWarning, message="X does not have valid feature names, but LGBMRegressor was fitted with feature names")
+# Adjusted for RandomForest, though it's a general good practice if features are named by preprocessor
+warnings.filterwarnings("ignore", category=UserWarning, message="X does not have valid feature names, but RandomForestRegressor was fitted with feature names")
 import nltk
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
-# from sklearn.ensemble import RandomForestRegressor # Заменим на LGBMRegressor
-import lightgbm as lgb # Импортируем LightGBM
+from sklearn.ensemble import RandomForestRegressor # Используем RandomForestRegressor
+# import lightgbm as lgb # Больше не используем LightGBM для длительности
 from sklearn.metrics import classification_report, mean_squared_error, mean_absolute_error
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
@@ -249,45 +250,43 @@ else:
 
     duration_pipeline = Pipeline([
         ('preprocessor', duration_preprocessor),
-        ('reg', lgb.LGBMRegressor(random_state=42, verbose=-1)) # Используем LGBMRegressor
+        ('reg', RandomForestRegressor(random_state=42)) # Используем RandomForestRegressor
     ])
 
-    # Расширенная сетка параметров для LGBMRegressor
+    # Обновленная сетка параметров для RandomForestRegressor
     duration_parameters = {
-        'preprocessor__tfidf__ngram_range': [(1, 1), (1, 2), (1,3)],
-        'preprocessor__tfidf__min_df': [3, 5, 7],
-        'reg__n_estimators': [100, 200, 300],
-        'reg__learning_rate': [0.01, 0.05, 0.1],
-        'reg__num_leaves': [20, 31, 40], # Типичные значения для LGBM
-        'reg__max_depth': [-1, 5, 10], # -1 означает без ограничений
-        'reg__colsample_bytree': [0.7, 0.8, 1.0],
-        'reg__subsample': [0.7, 0.8, 1.0],
+        'preprocessor__tfidf__ngram_range': [(1, 1), (1, 2)], # Сократим для ускорения, если нужно
+        'preprocessor__tfidf__min_df': [3, 5],
+        'reg__n_estimators': [100, 200], # Количество деревьев
+        'reg__max_depth': [None, 10, 20],    # Максимальная глубина деревьев
+        'reg__min_samples_split': [2, 5], # Минимальное количество образцов для разделения узла
+        'reg__min_samples_leaf': [1, 2]     # Минимальное количество образцов в листовом узле
     }
 
     duration_model = None
     if not X_train_dur_features:
         print("ОШИБКА (Длительность): Обучающая выборка пуста.")
     else:
-        print("Запуск GridSearchCV для модели регрессии длительности (LGBM)...")
+        print("Запуск GridSearchCV для модели регрессии длительности (RandomForestRegressor)...")
         # Увеличим cv до 3, если позволит время, можно и 5. Начнем с 3.
         duration_gs_reg = GridSearchCV(duration_pipeline, duration_parameters, cv=3,
                                        n_jobs=-1, verbose=1, scoring='neg_mean_absolute_error')
         try:
             duration_gs_reg.fit(X_train_dur_features, y_train_dur)
             duration_model = duration_gs_reg.best_estimator_
-            print(f"Лучшие параметры для регрессии длительности (LGBM): {duration_gs_reg.best_params_}")
-            print(f"Лучший MAE (кросс-валидация, LGBM): {-duration_gs_reg.best_score_:.2f}")
+            print(f"Лучшие параметры для регрессии длительности (RandomForestRegressor): {duration_gs_reg.best_params_}")
+            print(f"Лучший MAE (кросс-валидация, RandomForestRegressor): {-duration_gs_reg.best_score_:.2f}")
 
             if X_test_dur_features:
                 y_pred_dur = duration_model.predict(X_test_dur_features)
-                print("\nОценка регрессии длительности (LGBM, на тестовой выборке):")
+                print("\nОценка регрессии длительности (RandomForestRegressor, на тестовой выборке):")
                 print(f"  Mean Squared Error (MSE): {mean_squared_error(y_test_dur, y_pred_dur):.2f}")
                 print(f"  Mean Absolute Error (MAE): {mean_absolute_error(y_test_dur, y_pred_dur):.2f}")
                 print(f"  Root Mean Squared Error (RMSE): {np.sqrt(mean_squared_error(y_test_dur, y_pred_dur)):.2f}")
             else:
                 print("Тестовая выборка для длительности пуста.")
         except Exception as e:
-            print(f"ОШИБКА при обучении модели регрессии длительности (LGBM): {e}")
+            print(f"ОШИБКА при обучении модели регрессии длительности (RandomForestRegressor): {e}")
             duration_model = None
 
 
