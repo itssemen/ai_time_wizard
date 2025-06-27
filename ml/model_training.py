@@ -1,7 +1,8 @@
 import json
 import os
-import warnings # Add this line
-warnings.filterwarnings("ignore", category=UserWarning, module="sklearn.utils.validation")
+import warnings
+from sklearn.exceptions import UserWarning
+warnings.filterwarnings("ignore", category=UserWarning, message="X does not have valid feature names, but LGBMRegressor was fitted with feature names")
 import nltk
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction import DictVectorizer
