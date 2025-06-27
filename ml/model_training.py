@@ -4,9 +4,10 @@ import nltk
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, Ridge
 from sklearn.svm import LinearSVC
-from sklearn.metrics import classification_report
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import classification_report, mean_squared_error, mean_absolute_error
 from sklearn.pipeline import Pipeline
 import joblib
 import numpy as np
@@ -181,57 +182,53 @@ else:
 
 # --- 5. Подготовка данных для классификаторов длительности и приоритета ---
 task_texts_all = []
-duration_labels_all = []
-priority_labels_all = []
-
-def duration_to_category(minutes):
-    if minutes <= 0: return "0-15 min" # Обработка некорректных значений, если вдруг будут
-    if minutes <= 15: return "0-15 min"
-    if minutes <= 30: return "16-30 min"
-    if minutes <= 45: return "31-45 min"
-    if minutes <= 60: return "46-60 min"
-    if minutes <= 90: return "61-90 min"
-    if minutes <= 120: return "91-120 min"
-    if minutes <= 180: return "121-180 min"
-    if minutes <= 240: return "181-240 min"
-    return ">240 min"
+duration_labels_all = [] # Будет содержать числовые значения минут
+priority_labels_all = [] # Будет содержать числовые значения приоритета (0, 1, 2)
 
 for item in dataset: # Используем весь датасет для сбора текстов задач
     for entity in item['entities']:
         if entity['label'] == 'TASK': # Убедимся, что это задача
             task_texts_all.append(entity['text'])
-            duration_labels_all.append(duration_to_category(entity['duration_minutes']))
+            # Используем напрямую числовое значение длительности
+            duration_labels_all.append(entity['duration_minutes'])
+            # Используем напрямую числовое значение приоритета (оно уже должно быть числом из generate_dataset.py)
             priority_labels_all.append(entity['priority'])
 
-print(f"\nСобрано {len(task_texts_all)} задач для обучения классификаторов длительности/приоритета.")
+print(f"\nСобрано {len(task_texts_all)} задач для обучения моделей длительности/приоритета.")
 
 if not task_texts_all:
-    print("ОШИБКА: Не найдено ни одной задачи в датасете для обучения классификаторов длительности/приоритета.")
-    # В этом случае дальнейшее обучение классификаторов бессмысленно
+    print("ОШИБКА: Не найдено ни одной задачи в датасете для обучения моделей длительности/приоритета.")
+    # В этом случае дальнейшее обучение моделей бессмысленно
 else:
-    # --- 6. Обучение классификатора длительности ---
-    print("\n--- Обучение классификатора длительности ---")
+    # --- 6. Обучение модели регрессии длительности ---
+    print("\n--- Обучение модели регрессии длительности ---")
+    # Stratify не используется для регрессии в train_test_split напрямую с непрерывными значениями y
     X_train_dur, X_test_dur, y_train_dur, y_test_dur = train_test_split(
-        task_texts_all, duration_labels_all, test_size=0.2, random_state=42,
-        stratify=duration_labels_all if len(set(duration_labels_all)) > 1 else None
+        task_texts_all, duration_labels_all, test_size=0.2, random_state=42
     )
 
-    # Пайплайн для удобства: TF-IDF + Классификатор
-    # Попробуем LinearSVC, он часто хорошо работает на текстовых данных
+    # Пайплайн для удобства: TF-IDF + Регрессор
+    # Попробуем RandomForestRegressor
     duration_pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2)), # min_df=2 чтобы отсеять редкие слова
-        ('clf', LinearSVC(random_state=42, C=0.1, dual="auto")) # dual="auto" or False for newer sklearn
+        ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2)),
+        ('reg', RandomForestRegressor(random_state=42, n_estimators=100)) # n_estimators - пример
     ])
+    # Альтернативно можно использовать Ridge:
+    # duration_pipeline = Pipeline([
+    #     ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2)),
+    #     ('reg', Ridge(random_state=42, alpha=1.0)) # alpha - параметр регуляризации
+    # ])
 
-    # Параметры для GridSearchCV (опционально, но полезно)
+    # Параметры для GridSearchCV (опционально, но полезно для регрессоров тоже)
     # duration_parameters = {
     #     'tfidf__max_df': (0.75, 1.0),
-    #     'clf__C': (0.1, 1, 10)
+    #     'reg__n_estimators': (50, 100, 200) # для RandomForestRegressor
+    #     # 'reg__alpha': (0.1, 1.0, 10.0) # для Ridge
     # }
-    # duration_gs_clf = GridSearchCV(duration_pipeline, duration_parameters, cv=3, n_jobs=-1, verbose=1)
-    # duration_gs_clf.fit(X_train_dur, y_train_dur)
-    # duration_model = duration_gs_clf.best_estimator_
-    # print(f"Лучшие параметры для длительности: {duration_gs_clf.best_params_}")
+    # duration_gs_reg = GridSearchCV(duration_pipeline, duration_parameters, cv=3, n_jobs=-1, verbose=1, scoring='neg_mean_squared_error')
+    # duration_gs_reg.fit(X_train_dur, y_train_dur)
+    # duration_model = duration_gs_reg.best_estimator_
+    # print(f"Лучшие параметры для регрессии длительности: {duration_gs_reg.best_params_}")
 
     try:
         if not X_train_dur:
@@ -240,28 +237,45 @@ else:
         else:
             duration_model = duration_pipeline
             duration_model.fit(X_train_dur, y_train_dur)
-            print("Классификатор длительности обучен.")
+            print("Модель регрессии длительности обучена.")
             if X_test_dur:
                 y_pred_dur = duration_model.predict(X_test_dur)
-                print("\nОтчет по классификации длительности (на тестовой выборке):")
-                print(classification_report(y_test_dur, y_pred_dur, zero_division=0))
+                print("\nОценка регрессии длительности (на тестовой выборке):")
+                print(f"  Mean Squared Error (MSE): {mean_squared_error(y_test_dur, y_pred_dur):.2f}")
+                print(f"  Mean Absolute Error (MAE): {mean_absolute_error(y_test_dur, y_pred_dur):.2f}")
+                print(f"  Root Mean Squared Error (RMSE): {np.sqrt(mean_squared_error(y_test_dur, y_pred_dur)):.2f}")
             else:
                 print("Тестовая выборка для длительности пуста.")
     except Exception as e:
-        print(f"ОШИБКА при обучении классификатора длительности: {e}")
+        print(f"ОШИБКА при обучении модели регрессии длительности: {e}")
         duration_model = None
 
 
-    # --- 7. Обучение классификатора приоритета ---
+    # --- 7. Обучение классификатора приоритета (с числовыми метками) ---
     print("\n--- Обучение классификатора приоритета ---")
+    # Убедимся, что y_train_pri и y_test_pri содержат числовые метки (0, 1, 2)
+    # priority_labels_all уже должен содержать числа из generate_dataset.py
+
+    # Проверка и преобразование, если вдруг метки строковые (для обратной совместимости или ошибок)
+    # Но по плану они уже должны быть числовыми
+    # temp_priority_labels = []
+    # for p_label in priority_labels_all:
+    #     if isinstance(p_label, str): # На случай, если старый формат данных как-то попал
+    #         mapping = {"low": 0, "medium": 1, "high": 2}
+    #         temp_priority_labels.append(mapping.get(p_label.lower(), 1)) # default to medium if unknown
+    #     else:
+    #         temp_priority_labels.append(p_label) # Предполагаем, что это уже число
+    # priority_labels_to_use = temp_priority_labels
+    priority_labels_to_use = priority_labels_all # Используем напрямую, т.к. generate_dataset обновлен
+
     X_train_pri, X_test_pri, y_train_pri, y_test_pri = train_test_split(
-        task_texts_all, priority_labels_all, test_size=0.2, random_state=42,
-        stratify=priority_labels_all if len(set(priority_labels_all)) > 1 else None
+        task_texts_all, priority_labels_to_use, test_size=0.2, random_state=42,
+        stratify=priority_labels_to_use if len(set(priority_labels_to_use)) > 1 else None
     )
 
     priority_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=2)),
-        ('clf', LinearSVC(random_state=42, C=0.1, dual="auto"))
+        ('clf', LinearSVC(random_state=42, C=0.1, dual="auto")) # LinearSVC хорошо работает с числовыми метками
     ])
 
     # priority_parameters = {
@@ -283,7 +297,10 @@ else:
             if X_test_pri:
                 y_pred_pri = priority_model.predict(X_test_pri)
                 print("\nОтчет по классификации приоритета (на тестовой выборке):")
-                print(classification_report(y_test_pri, y_pred_pri, zero_division=0))
+                # Убедимся, что y_test_pri и y_pred_pri имеют одинаковый тип для classification_report
+                # и что метки соответствуют ожидаемым (0, 1, 2)
+                labels_pri = sorted(list(set(y_test_pri) | set(y_pred_pri)))
+                print(classification_report(y_test_pri, y_pred_pri, labels=labels_pri, zero_division=0))
             else:
                 print("Тестовая выборка для приоритета пуста.")
     except Exception as e:

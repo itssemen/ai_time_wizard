@@ -130,17 +130,18 @@ def get_realistic_duration(action_text_template, action_text_concrete):
 
 def determine_priority(action_text_template, action_text_concrete, explicit_priority_phrase=None):
     action_text_concrete_lower = action_text_concrete.lower()
+    # high: 2, medium: 1, low: 0
     if explicit_priority_phrase:
         phrase_lower = explicit_priority_phrase.lower()
         if any(k in phrase_lower for k in HIGH_PRIORITY_KEYWORDS):
-            return "high"
+            return 2 # high
         if any(k in phrase_lower for k in LOW_PRIORITY_KEYWORDS):
-            return "low"
+            return 0 # low
 
     if any(k in action_text_concrete_lower for k in HIGH_PRIORITY_KEYWORDS):
-        return "high"
+        return 2 # high
     if any(k in action_text_concrete_lower for k in LOW_PRIORITY_KEYWORDS):
-        return "low"
+        return 0 # low
     
     # Эвристики на основе категории задачи, если нет явных ключевых слов
     # (можно добавить, если TASK_CATEGORIES будут содержать информацию о типичном приоритете)
@@ -149,10 +150,10 @@ def determine_priority(action_text_template, action_text_concrete, explicit_prio
 
     # Пример простой логики на основе содержания задачи (можно оставить или улучшить)
     if any(kw in action_text_concrete_lower for kw in ["отчет", "презентац", "документ", "дедлайн", "срочная задача"]):
-        return "high"
+        return 2 # high
     if any(kw in action_text_concrete_lower for kw in ["посмотреть фильм", "почитать книгу", "погулять", "отдохнуть", "хобби"]):
-        return "low"
-    return "medium"
+        return 0 # low
+    return 1 # medium
 
 
 def generate_task_item():
