@@ -30,7 +30,7 @@ download_nltk_resource('punkt', 'tokenizers/punkt')
 
 # --- 1. Загрузка данных ---
 script_dir = os.path.dirname(os.path.abspath(__file__))
-data_file_path = os.path.join(script_dir, 'freeform_task_dataset.json')
+data_file_path = os.path.join(script_dir, 'ml/freeform_task_dataset.json')
 
 dataset = []
 try:
