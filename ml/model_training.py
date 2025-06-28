@@ -4,6 +4,8 @@ import warnings
 # Adjusted for RandomForest, though it's a general good practice if features are named by preprocessor
 warnings.filterwarnings("ignore", category=UserWarning, message="X does not have valid feature names, but RandomForestRegressor was fitted with feature names")
 import nltk
+import time
+from tqdm import tqdm
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -282,7 +284,12 @@ else:
         duration_gs_reg = GridSearchCV(duration_pipeline, duration_parameters, cv=3,
                                        n_jobs=-1, verbose=1, scoring='neg_mean_absolute_error')
         try:
-            duration_gs_reg.fit(X_train_dur_features, y_train_dur)
+            start_time = time.time()
+            with tqdm(total=len(X_train_dur_features), desc="Обучение модели длительности") as pbar:
+                duration_gs_reg.fit(X_train_dur_features, y_train_dur)
+                pbar.update(len(X_train_dur_features))
+            end_time = time.time()
+            print(f"Обучение модели длительности заняло: {end_time - start_time:.2f} секунд")
             duration_model = duration_gs_reg.best_estimator_
             print(f"Лучшие параметры для регрессии длительности (RandomForestRegressor): {duration_gs_reg.best_params_}")
             print(f"Лучший MAE (кросс-валидация, RandomForestRegressor): {-duration_gs_reg.best_score_:.2f}")
@@ -361,7 +368,12 @@ else:
             priority_gs_clf = GridSearchCV(priority_pipeline, priority_parameters, cv=3,
                                          n_jobs=-1, verbose=1, scoring='f1_weighted')
             try:
-                priority_gs_clf.fit(X_train_pri, y_train_pri)
+                start_time = time.time()
+                with tqdm(total=len(X_train_pri), desc="Обучение модели приоритета") as pbar:
+                    priority_gs_clf.fit(X_train_pri, y_train_pri)
+                    pbar.update(len(X_train_pri))
+                end_time = time.time()
+                print(f"Обучение модели приоритета заняло: {end_time - start_time:.2f} секунд")
                 priority_model = priority_gs_clf.best_estimator_
                 print(f"Лучшие параметры для приоритета (LogisticRegression): {priority_gs_clf.best_params_}")
                 print(f"Лучший F1-weighted (кросс-валидация, LogReg): {priority_gs_clf.best_score_:.2f}")
