@@ -219,29 +219,41 @@ def load_ml_models():
     global ner_vectorizer, ner_model, duration_model, priority_model
     all_models_loaded_successfully = True # Флаг для отслеживания успешности загрузки всех моделей
     try:
-        if not os.path.exists(NER_VECTORIZER_PATH):
-            logger.error(f"NER Vectorizer file not found at {NER_VECTORIZER_PATH}")
+        # --- NER Vectorizer ---
+        abs_ner_vectorizer_path = os.path.abspath(NER_VECTORIZER_PATH)
+        logger.info(f"Attempting to load NER Vectorizer from: {abs_ner_vectorizer_path}")
+        if not os.path.exists(NER_VECTORIZER_PATH): # Проверка может оставаться относительной, если сам путь строится от __file__
+            logger.error(f"NER Vectorizer file not found at resolved path: {abs_ner_vectorizer_path}")
             all_models_loaded_successfully = False
         else:
             ner_vectorizer = joblib.load(NER_VECTORIZER_PATH)
-            logger.info("NER Vectorizer loaded successfully.")
+            logger.info(f"NER Vectorizer loaded successfully from: {abs_ner_vectorizer_path}")
 
+        # --- NER Model ---
+        abs_ner_model_path = os.path.abspath(NER_MODEL_PATH)
+        logger.info(f"Attempting to load NER model from: {abs_ner_model_path}")
         if not os.path.exists(NER_MODEL_PATH):
-            logger.error(f"NER model file not found at {NER_MODEL_PATH}")
+            logger.error(f"NER model file not found at resolved path: {abs_ner_model_path}")
             all_models_loaded_successfully = False
         else:
             ner_model = joblib.load(NER_MODEL_PATH)
-            logger.info("NER model loaded successfully.")
+            logger.info(f"NER model loaded successfully from: {abs_ner_model_path}")
 
+        # --- Duration Model ---
+        abs_duration_model_path = os.path.abspath(DURATION_MODEL_PATH)
+        logger.info(f"Attempting to load Duration model from: {abs_duration_model_path}")
         if not os.path.exists(DURATION_MODEL_PATH):
-            logger.warning(f"Duration model file not found at {DURATION_MODEL_PATH}. Duration prediction will use fallback.")
+            logger.warning(f"Duration model file not found at resolved path: {abs_duration_model_path}. Duration prediction will use fallback.")
             duration_model = None
         else:
             duration_model = joblib.load(DURATION_MODEL_PATH)
-            logger.info("Duration model loaded successfully.")
+            logger.info(f"Duration model loaded successfully from: {abs_duration_model_path}")
 
+        # --- Priority Model ---
+        abs_priority_model_path = os.path.abspath(PRIORITY_MODEL_PATH)
+        logger.info(f"Attempting to load Priority model from: {abs_priority_model_path}")
         if not os.path.exists(PRIORITY_MODEL_PATH):
-            logger.warning(f"Priority model file not found at {PRIORITY_MODEL_PATH}. Priority prediction will use fallback.")
+            logger.warning(f"Priority model file not found at resolved path: {abs_priority_model_path}. Priority prediction will use fallback.")
             priority_model = None
         else:
             priority_model = joblib.load(PRIORITY_MODEL_PATH)
