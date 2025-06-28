@@ -168,6 +168,7 @@ import secrets
 import joblib
 import nltk
 import math
+import pymorphy3
 
 # --- Настройка логирования ---
 logging.basicConfig(level=logging.INFO)
@@ -187,6 +188,9 @@ ner_vectorizer = None # Глобальная переменная для NER в�
 ner_model = None      # Глобальная переменная для NER модели
 duration_model = None # Глобальная переменная для модели длительности
 priority_model = None # Глобальная переменная для модели приоритета
+
+# --- Инициализация лемматизатора ---
+morph = pymorphy3.MorphAnalyzer()
 
 # --- Загрузка NLTK ресурсов ---
 from nltk.tokenize.util import align_tokens
@@ -242,11 +246,12 @@ def load_ml_models():
         # --- Duration Model ---
         abs_duration_model_path = os.path.abspath(DURATION_MODEL_PATH)
         logger.info(f"Attempting to load Duration model from: {abs_duration_model_path}")
-        if not os.path.exists(DURATION_MODEL_PATH):
+
+        if not os.path.exists(abs_duration_model_path): # Используем абсолютный путь для проверки
             logger.warning(f"Duration model file not found at resolved path: {abs_duration_model_path}. Duration prediction will use fallback.")
             duration_model = None
         else:
-            duration_model = joblib.load(DURATION_MODEL_PATH)
+            duration_model = joblib.load(abs_duration_model_path) # Используем абсолютный путь для загрузки
             logger.info(f"Duration model loaded successfully from: {abs_duration_model_path}")
 
         # --- Priority Model ---
@@ -364,6 +369,27 @@ def iob_tags_to_extracted_tasks(raw_text: str, tokens_info_list: list[dict], pre
 # def get_task_priority(task_text: str) -> str:
 #     ...
 
+def lemmatize_text_for_model(text: str) -> str:
+    """Лемматизирует текст для подачи в ML модель."""
+    words = text.split()
+    lemmatized_words = [morph.parse(word)[0].normal_form for word in words]
+    return " ".join(lemmatized_words)
+
+def extract_duration_features(task_text: str) -> list:
+    """Извлекает признаки из текста задачи для модели предсказания длительности."""
+    lemmatized_text = lemmatize_text_for_model(task_text)
+    text_length = len(task_text.split()) # Длина оригинального текста в словах
+
+    # ВРЕМЕННЫЕ ЗАГЛУШКИ для признаков, требующих парсинга текста задачи.
+    # TODO: Реализовать логику извлечения явного указания времени (и фраз) из task_text,
+    # аналогично тому, как это делалось при генерации датасета freeform_task_dataset.json
+    # (см. поля 'has_explicit_duration_phrase' и 'explicit_duration_parsed_minutes').
+    # Пока используем значения по умолчанию (0), что может повлиять на точность.
+    has_explicit_duration = 0
+    explicit_duration_parsed_minutes = 0.0 # Модель ожидает float из-за MinMaxScaler в ColumnTransformer
+
+    return [lemmatized_text, has_explicit_duration, float(text_length), explicit_duration_parsed_minutes]
+
 def predict_duration_ml(task_text: str) -> tuple[int, bool]:
     """Предсказывает длительность задачи (в минутах) с помощью ML модели или возвращает дефолт."""
     default_duration = 60  # минуты
@@ -373,14 +399,21 @@ def predict_duration_ml(task_text: str) -> tuple[int, bool]:
         is_default = True
         return default_duration, is_default
     try:
-        # Предполагаем, что модель регрессии возвращает число (минуты)
-        predicted_duration = duration_model.predict([task_text])[0]
+        # 1. Извлечь признаки
+        features = extract_duration_features(task_text)
+
+        # 2. Передать извлеченные признаки в модель
+        # Модель (ColumnTransformer внутри пайплайна) ожидает 2D-массив [[f1, f2, f3, f4]],
+        # где каждый внутренний список - это одна задача.
+        # predict() возвращает массив предсказаний, берем [0] для единственной задачи.
+        predicted_duration = duration_model.predict([features])[0]
 
         # Валидация и преобразование в int
         if isinstance(predicted_duration, (int, float)) and predicted_duration > 0:
             return math.ceil(predicted_duration), is_default
         else:
-            logger.warning(f"Predicted duration for '{task_text}' is not a positive number: {predicted_duration}. Using default.")
+            # Добавим features в лог для отладки, если предсказание странное
+            logger.warning(f"Predicted duration for '{task_text}' (features: {features}) is not a positive number: {predicted_duration}. Using default.")
             is_default = True
             return default_duration, is_default
     except Exception as e:
