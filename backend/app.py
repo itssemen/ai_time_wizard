@@ -352,48 +352,57 @@ def iob_tags_to_extracted_tasks(raw_text: str, tokens_info_list: list[dict], pre
 # def get_task_priority(task_text: str) -> str:
 #     ...
 
-def predict_duration_ml(task_text: str) -> int:
+def predict_duration_ml(task_text: str) -> tuple[int, bool]:
     """Предсказывает длительность задачи (в минутах) с помощью ML модели или возвращает дефолт."""
     default_duration = 60  # минуты
+    is_default = False
     if not duration_model:
         logger.info(f"Duration model not loaded for '{task_text}'. Using default duration ({default_duration} min).")
-        return default_duration
+        is_default = True
+        return default_duration, is_default
     try:
         # Предполагаем, что модель регрессии возвращает число (минуты)
         predicted_duration = duration_model.predict([task_text])[0]
 
         # Валидация и преобразование в int
         if isinstance(predicted_duration, (int, float)) and predicted_duration > 0:
-            return math.ceil(predicted_duration)
+            return math.ceil(predicted_duration), is_default
         else:
             logger.warning(f"Predicted duration for '{task_text}' is not a positive number: {predicted_duration}. Using default.")
-            return default_duration
+            is_default = True
+            return default_duration, is_default
     except Exception as e:
         logger.error(f"Error predicting duration for '{task_text}': {e}. Using default.")
-        return default_duration
+        is_default = True
+        return default_duration, is_default
 
-def predict_priority_ml(task_text: str) -> str:
+def predict_priority_ml(task_text: str) -> tuple[str, bool]:
     """Предсказывает приоритет задачи с помощью ML модели или возвращает дефолт."""
+    default_priority = "medium"
+    is_default = False
     if not priority_model:
-        logger.info(f"Priority model not loaded for '{task_text}'. Using default priority (medium).")
-        return "medium"
+        logger.info(f"Priority model not loaded for '{task_text}'. Using default priority ({default_priority}).")
+        is_default = True
+        return default_priority, is_default
     try:
         # Модель возвращает 0 (low), 1 (medium), 2 (high)
         predicted_value = priority_model.predict([task_text])[0]
 
         if predicted_value == 2:
-            return "high"
+            return "high", is_default
         elif predicted_value == 1:
-            return "medium"
+            return "medium", is_default
         elif predicted_value == 0:
-            return "low"
+            return "low", is_default
         else:
-            logger.warning(f"Unexpected priority value for '{task_text}': {predicted_value}. Using default (medium).")
-            return "medium"
+            logger.warning(f"Unexpected priority value for '{task_text}': {predicted_value}. Using default ({default_priority}).")
+            is_default = True
+            return default_priority, is_default
 
     except Exception as e:
-        logger.error(f"Error predicting priority for '{task_text}': {e}. Using default (medium).")
-        return "medium"
+        logger.error(f"Error predicting priority for '{task_text}': {e}. Using default ({default_priority}).")
+        is_default = True
+        return default_priority, is_default
 
 # --- Основная функция обработки текста с ML ---
 def process_text_with_ml(raw_text: str) -> list[dict]:
@@ -419,34 +428,47 @@ def process_text_with_ml(raw_text: str) -> list[dict]:
         task_text_from_ner = raw_task['text']
         if not task_text_from_ner or len(task_text_from_ner.split()) < 1: continue
 
-        predicted_duration_minutes = predict_duration_ml(task_text_from_ner)
-        predicted_priority_str = predict_priority_ml(task_text_from_ner)
+        predicted_duration_minutes, duration_defaulted = predict_duration_ml(task_text_from_ner)
+        predicted_priority_str, priority_defaulted = predict_priority_ml(task_text_from_ner)
 
-        final_task_text = task_text_from_ner
+        final_task_text = f"{task_text_from_ner} ({predicted_priority_str})" # Add priority to task description
 
         processed_tasks.append({
             "text": final_task_text,
             "duration": predicted_duration_minutes,
             "priority": predicted_priority_str,
+            "duration_defaulted": duration_defaulted,
+            "priority_defaulted": priority_defaulted,
             "original_order": len(processed_tasks)
         })
 
     if not processed_tasks: return []
     priority_map = {"high": 0, "medium": 1, "low": 2}
+    # Sort by priority (high, medium, low), then by original order
     processed_tasks.sort(key=lambda x: (priority_map.get(x['priority'], 2), x['original_order']))
 
     schedule_items = []
-    current_time = datetime.now().replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+    current_time = datetime.now().replace(minute=0, second=0, microsecond=0) + timedelta(hours=1) # Start from the next hour
+
     for task_details in processed_tasks:
         start_time = current_time
         end_time = start_time + timedelta(minutes=task_details['duration'])
+        task_display_text = task_details['text']
+        # "default" suffix is handled by frontend now, but flags are available
+        # if task_details['duration_defaulted']:
+        #     task_display_text += " (duration default)" # Example, if needed later
+        # if task_details['priority_defaulted']:
+        #     task_display_text += " (priority default)" # Example, if needed later
+
         schedule_items.append({
-            "task": task_details['text'],
+            "task": task_display_text, # This now includes priority
             "time": f"{start_time.strftime('%H:%M')}-{end_time.strftime('%H:%M')}",
             "start": start_time.isoformat(),
-            "end": end_time.isoformat()
+            "end": end_time.isoformat(),
+            "duration_defaulted": task_details['duration_defaulted'],
+            "priority_defaulted": task_details['priority_defaulted']
         })
-        current_time = end_time + timedelta(minutes=15)
+        current_time = end_time + timedelta(minutes=15) # 15-minute buffer
     return schedule_items
 
 # --- Flask App and CalendarManager ---
