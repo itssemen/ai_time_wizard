@@ -167,6 +167,7 @@ import logging
 import secrets
 import joblib
 import nltk
+import math
 
 # --- Настройка логирования ---
 logging.basicConfig(level=logging.INFO)
@@ -363,7 +364,7 @@ def predict_duration_ml(task_text: str) -> int:
 
         # Валидация и преобразование в int
         if isinstance(predicted_duration, (int, float)) and predicted_duration > 0:
-            return int(round(predicted_duration))
+            return math.ceil(predicted_duration)
         else:
             logger.warning(f"Predicted duration for '{task_text}' is not a positive number: {predicted_duration}. Using default.")
             return default_duration
