@@ -513,7 +513,7 @@ def process_text_with_ml(raw_text: str) -> list[dict]:
             "duration_defaulted": task_details['duration_defaulted'],
             "priority_defaulted": task_details['priority_defaulted']
         })
-        current_time = end_time + timedelta(minutes=15) # 15-minute buffer
+        current_time = end_time # Убираем 15-минутный буфер
     return schedule_items
 
 # --- Flask App and CalendarManager ---
