@@ -6,6 +6,11 @@ import numpy as np
 from sklearn.metrics import classification_report, mean_squared_error, mean_absolute_error
 from sklearn.feature_extraction import DictVectorizer # Нужен для ner_vectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer # Нужен для пайплайнов
+import pymorphy3 # Добавлено для лемматизации
+import math # Добавлено для возможного использования
+
+# --- Инициализация лемматизатора ---
+morph = pymorphy3.MorphAnalyzer()
 
 # --- Конфигурация путей ---
 # Предполагаем, что скрипт может быть запущен из корня проекта или из папки ml/test_models
@@ -157,6 +162,29 @@ def iob_tags_to_entities(tokens_info_list, predicted_tags_list):
         })
     return entities
 
+# --- Вспомогательные функции для извлечения признаков (аналогично backend/app.py) ---
+def lemmatize_text_for_model(text: str) -> str:
+    """Лемматизирует текст для подачи в ML модель."""
+    words = text.split()
+    lemmatized_words = [morph.parse(word)[0].normal_form for word in words]
+    return " ".join(lemmatized_words)
+
+def extract_duration_features(task_text: str) -> list:
+    """Извлекает признаки из текста задачи для модели предсказания длительности."""
+    lemmatized_text = lemmatize_text_for_model(task_text)
+    text_length = len(task_text.split()) # Длина оригинального текста в словах
+
+    # ВАЖНО: В тестовом скрипте мы не имеем доступа к информации о явном указании времени,
+    # так как это требует более сложного парсинга текста задачи, который есть в generate_dataset.py
+    # или мог бы быть в более продвинутой версии этой функции.
+    # Для целей тестирования модели здесь, мы будем использовать значения по умолчанию (0),
+    # как это сделано в `backend/app.py` при отсутствии такой информации.
+    # Это означает, что мы тестируем предсказание модели на основе лемматизированного текста и длины.
+    has_explicit_duration = 0 # Заглушка, как в backend/app.py
+    explicit_duration_parsed_minutes = 0.0 # Заглушка, как в backend/app.py
+
+    return [lemmatized_text, has_explicit_duration, float(text_length), explicit_duration_parsed_minutes]
+
 # --- 3. Загрузка моделей ---
 def load_models():
     models = {}
@@ -277,8 +305,18 @@ def test_duration_model(duration_model, dataset):
         print("No 'TASK' entities found in the dataset for duration model testing.")
         return
 
+    # Подготовка признаков для модели длительности
+    features_for_duration_model = []
+    for task_text in task_texts:
+        features_for_duration_model.append(extract_duration_features(task_text))
+
+    if not features_for_duration_model:
+        print("No features extracted for duration model testing.")
+        return
+
     try:
-        pred_durations = duration_model.predict(task_texts)
+        # Модель ожидает 2D массив признаков
+        pred_durations = duration_model.predict(features_for_duration_model)
         print("\nDuration Model Evaluation (on all tasks from dataset):")
         print(f"  Mean Squared Error (MSE): {mean_squared_error(true_durations, pred_durations):.2f}")
         print(f"  Mean Absolute Error (MAE): {mean_absolute_error(true_durations, pred_durations):.2f}")
