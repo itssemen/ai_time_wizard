@@ -850,7 +850,7 @@ def generate_freeform_sentence():
     }
 
 # Генерация датасета
-NUM_EXAMPLES = 5000 # Увеличено количество примеров
+NUM_EXAMPLES = 100 # Увеличено количество примеров
 dataset = []
 generated_count = 0
 # Увеличим attempt_limit пропорционально, и добавим еще запас, т.к. генерация может быть сложнее
