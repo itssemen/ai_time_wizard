@@ -337,62 +337,64 @@ def test_priority_model(priority_model, dataset):
         return
 
     task_texts = []
-    true_priorities = [] # Ожидаются числовые метки (0, 1, 2)
+    true_priorities = [] # Теперь ожидаются строки: "low", "medium", "high"
 
     for item in dataset:
         for entity in item['entities']:
-            if entity['label'] == 'TASK':
+            if entity['label'] == 'TASK' and 'priority' in entity: # Убедимся, что ключ 'priority' существует
                 task_texts.append(entity['text'])
-                # Убедимся, что приоритет числовой, как ожидается моделью
                 priority_val = entity['priority']
-                if isinstance(priority_val, str): # На случай старых данных
-                    mapping = {"low": 0, "medium": 1, "high": 2}
-                    true_priorities.append(mapping.get(priority_val.lower(), 1))
+                # Ожидаем, что priority_val уже строка ("low", "medium", "high")
+                if isinstance(priority_val, str) and priority_val.lower() in ["low", "medium", "high"]:
+                    true_priorities.append(priority_val.lower())
                 else:
-                    true_priorities.append(priority_val)
+                    # Если значение неожиданное, пропускаем или логируем ошибку
+                    print(f"Warning: Unexpected priority value '{priority_val}' for task '{entity['text']}'. Skipping this task for priority test.")
+                    task_texts.pop() # Удаляем текст задачи, так как метка некорректна
+                    continue
 
 
     if not task_texts:
-        print("No 'TASK' entities found in the dataset for priority model testing.")
+        print("No 'TASK' entities with valid priorities found in the dataset for priority model testing.")
         return
 
     try:
-        pred_priorities_raw = priority_model.predict(task_texts)
+        # Модель LinearSVC должна напрямую предсказывать строки "low", "medium", "high"
+        pred_priorities = priority_model.predict(task_texts)
 
-        priority_map_to_int = {"low": 0, "medium": 1, "high": 2}
-        pred_priorities = []
-        for p_raw in pred_priorities_raw:
-            if isinstance(p_raw, (int, np.integer)):
-                pred_priorities.append(int(p_raw))
-            elif isinstance(p_raw, (str, np.str_)):
-                val = priority_map_to_int.get(str(p_raw).lower())
-                if val is not None:
-                    pred_priorities.append(val)
-                else:
-                    print(f"Warning: Unknown string priority value '{p_raw}' predicted. Defaulting to 1 (Medium).")
-                    pred_priorities.append(1) # Default or handle error
-            else: # Если тип неожиданный
-                print(f"Warning: Unexpected type for predicted priority '{p_raw}' (type: {type(p_raw)}). Defaulting to 1 (Medium).")
-                pred_priorities.append(1)
+        # Убедимся, что pred_priorities - это список строк
+        if not all(isinstance(p, str) for p in pred_priorities):
+            print("Warning: Predicted priorities are not all strings. This might indicate an issue.")
+            # Попытка привести к строке, если возможно, или обработать ошибку
+            pred_priorities = [str(p).lower() if isinstance(p, (str, int, float)) else "unknown" for p in pred_priorities]
 
 
         print("\nPriority Model Classification Report (on all tasks from dataset):")
-        labels_pri = sorted(list(set(true_priorities) | set(pred_priorities)))
-        if not labels_pri: # Если вдруг все предсказания были проблемными и список пуст
-            print("No valid priority labels available for classification report.")
-        else:
-            target_names_pri = [f"Priority {l}" for l in labels_pri]
-            print(classification_report(true_priorities, pred_priorities, labels=labels_pri, target_names=target_names_pri, zero_division=0))
+        # Метки для отчета - это уникальные значения из true_priorities и pred_priorities
+        # Порядок важен для отчета, обычно "low", "medium", "high"
+        defined_labels = ["low", "medium", "high"]
+        actual_labels_in_data = sorted(list(set(true_priorities) | set(pred_priorities)))
+
+        # Используем defined_labels, если все они присутствуют, иначе используем фактические
+        report_labels = [l for l in defined_labels if l in actual_labels_in_data]
+        if not report_labels: # Если вдруг ни одна из defined_labels не найдена
+            report_labels = actual_labels_in_data
+        if not report_labels:
+             print("No valid priority labels available for classification report.")
+             return
+
+        print(classification_report(true_priorities, pred_priorities, labels=report_labels, zero_division=0))
 
         print("\nPriority Model: Example predictions (first few tasks):")
-        priority_map_inv = {0: "Low", 1: "Medium", 2: "High"}
         for i in range(min(5, len(task_texts))):
-            true_p_text = priority_map_inv.get(true_priorities[i], "Unknown")
-            # pred_priorities[i] теперь должен быть int после преобразования
-            pred_p_text = priority_map_inv.get(pred_priorities[i], f"Unknown_Pred ({pred_priorities[i]})")
-            print(f"  Task: \"{task_texts[i]}\", True Priority: {true_p_text} ({true_priorities[i]}), Predicted Priority: {pred_p_text} ({pred_priorities[i]})")
+            # true_priorities[i] и pred_priorities[i] уже должны быть строками "low", "medium", "high"
+            true_p_text = true_priorities[i]
+            pred_p_text = pred_priorities[i] if i < len(pred_priorities) else "N/A" # Защита от несоответствия длин
+            print(f"  Task: \"{task_texts[i]}\", True Priority: {true_p_text}, Predicted Priority: {pred_p_text}")
     except Exception as e:
         print(f"Error during priority model prediction or evaluation: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 # --- Основной блок ---

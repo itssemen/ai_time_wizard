@@ -430,22 +430,20 @@ def predict_priority_ml(task_text: str) -> tuple[str, bool]:
         is_default = True
         return default_priority, is_default
     try:
-        # Модель возвращает 0 (low), 1 (medium), 2 (high)
-        predicted_value = priority_model.predict([task_text])[0]
+        # Модель LinearSVC должна напрямую предсказывать строки: "low", "medium", "high"
+        predicted_priority_str = priority_model.predict([task_text])[0]
 
-        if predicted_value == 2:
-            return "high", is_default
-        elif predicted_value == 1:
-            return "medium", is_default
-        elif predicted_value == 0:
-            return "low", is_default
+        if isinstance(predicted_priority_str, str) and predicted_priority_str.lower() in ["low", "medium", "high"]:
+            return predicted_priority_str.lower(), is_default
         else:
-            logger.warning(f"Unexpected priority value for '{task_text}': {predicted_value}. Using default ({default_priority}).")
+            logger.warning(f"Unexpected priority value or type from model for '{task_text}': '{predicted_priority_str}'. Using default ({default_priority}).")
             is_default = True
             return default_priority, is_default
 
     except Exception as e:
         logger.error(f"Error predicting priority for '{task_text}': {e}. Using default ({default_priority}).")
+        import traceback
+        logger.error(traceback.format_exc())
         is_default = True
         return default_priority, is_default
 
