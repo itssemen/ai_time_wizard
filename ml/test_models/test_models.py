@@ -308,7 +308,7 @@ def test_duration_model(duration_model, dataset):
     # Подготовка признаков для модели длительности
     features_for_duration_model = []
     for task_text in task_texts:
-        features_for_duration_model.append(extract_duration_features(task_text))
+        features_for_duration_model.append(extract_duration_features(task_text)) # Используем существующую функцию
 
     if not features_for_duration_model:
         print("No features extracted for duration model testing.")
