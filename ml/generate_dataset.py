@@ -392,21 +392,21 @@ def get_realistic_duration(action_text_template, action_text_concrete):
 
 def determine_priority(action_text_template, action_text_concrete, explicit_priority_phrase=None):
     action_text_concrete_lower = action_text_concrete.lower()
-    # high: 2, medium: 1, low: 0
+    # high: "high", medium: "medium", low: "low"
 
     # 1. Явные фразы приоритета
     if explicit_priority_phrase:
         phrase_lower = explicit_priority_phrase.lower()
         if any(k in phrase_lower for k in HIGH_PRIORITY_KEYWORDS):
-            return 2 # high
+            return "high"
         if any(k in phrase_lower for k in LOW_PRIORITY_KEYWORDS):
-            return 0 # low
+            return "low"
 
     # 2. Ключевые слова в самом тексте задачи
     if any(k in action_text_concrete_lower for k in HIGH_PRIORITY_KEYWORDS):
-        return 2 # high
+        return "high"
     if any(k in action_text_concrete_lower for k in LOW_PRIORITY_KEYWORDS):
-        return 0 # low
+        return "low"
 
     # 3. Эвристики на основе категории задачи
     category_name = None
@@ -418,41 +418,39 @@ def determine_priority(action_text_template, action_text_concrete, explicit_prio
     if category_name:
         if category_name in ["работа_проекты", "встречи_созвоны"]:
             # Для рабочих задач и встреч, если нет других указаний, шанс на высокий/средний приоритет выше
-            if random.random() < 0.4: return 2 # 40% шанс на высокий
-            if random.random() < 0.7: return 1 # Еще 30% (от оставшихся 60%) на средний (итого ~42% на средний)
+            if random.random() < 0.4: return "high"
+            if random.random() < 0.7: return "medium"
             # остальное на низкий (редко для таких категорий без явных слов)
         elif category_name in ["личные_дела_поручения", "спорт_здоровье", "творчество_создание", "планирование_анализ_будущего"]:
              # Эти категории могут быть как важными, так и не очень
-            if random.random() < 0.2: return 2 # 20% высокий
-            if random.random() < 0.6: return 1 # ~48% средний (0.8 * 0.6)
-            return 0 # остальное низкий
+            if random.random() < 0.2: return "high"
+            if random.random() < 0.6: return "medium"
+            return "low"
         elif category_name in ["отдых_хобби", "быт_еда", "уборка_организация"]:
             # Эти категории чаще имеют низкий или средний приоритет
-            if random.random() < 0.1: return 2 # 10% высокий (редко)
-            if random.random() < 0.5: return 1 # ~45% средний
-            return 0 # остальное низкий
+            if random.random() < 0.1: return "high" # Редко высокий
+            if random.random() < 0.5: return "medium"
+            return "low"
         elif category_name == "короткие_коммуникации":
             if any(kw in action_text_concrete_lower for kw in ["согласовать", "уточнить детали"]):
-                return random.choice([1,2]) # Средний или высокий
-            return random.choice([0,1]) # Низкий или средний
+                return random.choice(["medium", "high"])
+            return random.choice(["low", "medium"])
         elif category_name == "общие_задачи_с_новым_контекстом":
             # Здесь сложнее, зависит от конкретных слов. Дадим смещение к среднему.
             if any(kw in action_text_concrete_lower for kw in ["отчет", "презентац", "документ", "дедлайн", "срочная задача", "проект", "клиент", "утвердить", "верифицировать"]):
-                return random.choice([1,2])
+                return random.choice(["medium", "high"])
             if any(kw in action_text_concrete_lower for kw in ["тщательно", "детально"]): # слова, подразумевающие важность
-                return random.choice([1,2])
-            return random.choice([0, 1, 1]) # Смещение к среднему
+                return random.choice(["medium", "high"])
+            return random.choice(["low", "medium", "medium"]) # Смещение к среднему
         elif category_name == "поездки_транспорт":
             # Поездки могут быть важны (к врачу, на важную встречу) или нет (просто съездить)
-            # Можно добавить логику на основе плейсхолдеров, если они доступны здесь
             if any(kw in action_text_concrete_lower for kw in ["срочно", "важно", "к врачу", "на встречу"]):
-                return 2
-            return random.choice([0,1,1])
+                return "high"
+            return random.choice(["low", "medium", "medium"])
         elif category_name == "финансы_бюджет":
             if any(kw in action_text_concrete_lower for kw in ["бюджет", "расходы", "оплатить", "перевести"]): # Обычно это важно или средне
-                return random.choice([1,2])
-            return random.choice([0,1])
-
+                return random.choice(["medium", "high"])
+            return random.choice(["low", "medium"])
 
     # 4. Общие ключевые слова (если категория не помогла или для общих случаев)
     # Добавим больше ключевых слов для высокого и низкого приоритета
@@ -466,12 +464,12 @@ def determine_priority(action_text_template, action_text_concrete, explicit_prio
     ]
 
     if any(k in action_text_concrete_lower for k in high_priority_general_keywords):
-        return 2 # high
+        return "high"
     if any(k in action_text_concrete_lower for k in low_priority_general_keywords):
-        return 0 # low
+        return "low"
 
     # 5. По умолчанию, если ничего не подошло
-    return 1 # medium
+    return "medium"
 
 
 def generate_task_item():
@@ -869,8 +867,12 @@ while generated_count < NUM_EXAMPLES and attempt_limit > 0:
     # Проверим, что хотя бы одна задача имеет не средний (1) приоритет, если генерируется фраза приоритета
     # или что есть задачи с высоким и низким приоритетом в целом.
     # Лучше ориентироваться на разнообразие приоритетов в целом в примере.
-    priorities_in_example = {e['priority'] for e in example["entities"]}
-    has_varied_priorities = len(priorities_in_example) > 1 or (1 not in priorities_in_example and len(priorities_in_example) > 0)
+    priorities_in_example = {e['priority'] for e in example["entities"] if 'priority' in e} # Ensure 'priority' key exists
+    has_varied_priorities = False
+    if priorities_in_example: # Check if the set is not empty
+        # Check for more than one unique priority OR if the only priority is not "medium"
+        has_varied_priorities = len(priorities_in_example) > 1 or \
+                                ("medium" not in priorities_in_example and len(priorities_in_example) > 0)
 
 
     if example["entities"] and len(example["text"]) > 10 and has_explicit_duration_task and has_varied_priorities:

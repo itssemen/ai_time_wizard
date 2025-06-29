@@ -346,65 +346,68 @@ else:
         # и LogisticRegression с class_weight='balanced'
         priority_pipeline = Pipeline([
             ('tfidf', TfidfVectorizer()),
-            # LogisticRegression с class_weight='balanced' и увеличенным max_iter
-            ('clf', LogisticRegression(random_state=42, class_weight='balanced', solver='liblinear', max_iter=1000))
+            # Используем LinearSVC с class_weight='balanced' и увеличенным max_iter
+            ('clf', LinearSVC(random_state=42, class_weight='balanced', max_iter=10000, dual=True)) # dual=True (default) for hinge/squared_hinge with l2
         ])
 
-        # Расширенная сетка параметров для LogisticRegression
+        # Сетка параметров для LinearSVC
         priority_parameters = {
-            'tfidf__ngram_range': [(1, 1), (1, 2), (1,3)],
-            'tfidf__min_df': [3, 5, 7],
-            'tfidf__max_df': [0.7, 0.85, 0.95],
-            'clf__C': [0.01, 0.1, 1, 10, 100],
-            'clf__penalty': ['l1', 'l2'] # liblinear поддерживает l1 и l2
+            'tfidf__ngram_range': [(1, 1), (1, 2)],
+            'tfidf__min_df': [3, 5],
+            # 'tfidf__max_df': [0.7, 0.85, 0.95], # Можно добавить, если нужно
+            'clf__C': [0.1, 1, 10],
+            'clf__penalty': ['l2'], # LinearSVC с dual=True поддерживает l2
+            'clf__loss': ['hinge', 'squared_hinge'] # Стандартные потери для SVC
         }
 
         priority_model = None
         if not X_train_pri:
             print("ОШИБКА (Приоритет): Обучающая выборка пуста.")
         else:
-            print("Запуск GridSearchCV для классификатора приоритета (LogisticRegression)...")
-            # Увеличим cv до 3 (или 5)
+            print("Запуск GridSearchCV для классификатора приоритета (LinearSVC)...")
             priority_gs_clf = GridSearchCV(priority_pipeline, priority_parameters, cv=3,
                                          n_jobs=-1, verbose=1, scoring='f1_weighted')
             try:
                 start_time = time.time()
-                with tqdm(total=len(X_train_pri), desc="Обучение модели приоритета") as pbar:
+                with tqdm(total=len(X_train_pri), desc="Обучение модели приоритета (LinearSVC)") as pbar:
                     priority_gs_clf.fit(X_train_pri, y_train_pri)
                     pbar.update(len(X_train_pri))
                 end_time = time.time()
-                print(f"Обучение модели приоритета заняло: {end_time - start_time:.2f} секунд")
+                print(f"Обучение модели приоритета (LinearSVC) заняло: {end_time - start_time:.2f} секунд")
                 priority_model = priority_gs_clf.best_estimator_
-                print(f"Лучшие параметры для приоритета (LogisticRegression): {priority_gs_clf.best_params_}")
-                print(f"Лучший F1-weighted (кросс-валидация, LogReg): {priority_gs_clf.best_score_:.2f}")
+                print(f"Лучшие параметры для приоритета (LinearSVC): {priority_gs_clf.best_params_}")
+                print(f"Лучший F1-weighted (кросс-валидация, LinearSVC): {priority_gs_clf.best_score_:.2f}")
 
                 if X_test_pri:
                     y_pred_pri = priority_model.predict(X_test_pri)
-                    print("\nОтчет по классификации приоритета (LogReg, на тестовой выборке с лучшими параметрами):")
-                    labels_pri = sorted(list(set(y_test_pri) | set(y_pred_pri)))
+                    print("\nОтчет по классификации приоритета (LinearSVC, на тестовой выборке с лучшими параметрами):")
+                    # Метки теперь строки ("low", "medium", "high")
+                    labels_pri = sorted(list(set(y_train_pri))) # Используем метки из y_train_pri для порядка, если они все есть
+                    # или объединяем y_test_pri и y_pred_pri, если в тестовой могут быть не все классы
+                    # labels_pri = sorted(list(set(y_test_pri) | set(y_pred_pri)))
                     print(classification_report(y_test_pri, y_pred_pri, labels=labels_pri, zero_division=0))
                 else:
                     print("Тестовая выборка для приоритета пуста.")
             except Exception as e:
-                print(f"ОШИБКА при GridSearchCV или оценке классификатора приоритета (LogReg): {e}")
+                print(f"ОШИБКА при GridSearchCV или оценке классификатора приоритета (LinearSVC): {e}")
                 # Попытка с более простой моделью или параметрами, если основная не удалась
-                # (Эта часть может быть упрощена или удалена, если основная модель стабильна)
-                print("Попытка обучения классификатора приоритета (LogReg) с параметрами по умолчанию (упрощенными)...")
+                print("Попытка обучения классификатора приоритета (LinearSVC) с параметрами по умолчанию (упрощенными)...")
                 try:
                     default_priority_pipeline = Pipeline([
                         ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=5)),
-                        ('clf', LogisticRegression(random_state=42, class_weight='balanced', solver='liblinear', C=1.0, max_iter=500))
+                        ('clf', LinearSVC(random_state=42, class_weight='balanced', C=1.0, max_iter=5000, dual=True))
                     ])
                     default_priority_pipeline.fit(X_train_pri, y_train_pri)
                     priority_model = default_priority_pipeline
-                    print("Классификатор приоритета (LogReg) с параметрами по умолчанию обучен.")
+                    print("Классификатор приоритета (LinearSVC) с параметрами по умолчанию обучен.")
                     if X_test_pri:
                         y_pred_pri_default = priority_model.predict(X_test_pri)
-                        print("\nОтчет по классификации приоритета (LogReg, на тестовой выборке, модель по умолчанию):")
-                        labels_pri_default = sorted(list(set(y_test_pri) | set(y_pred_pri_default)))
+                        print("\nОтчет по классификации приоритета (LinearSVC, на тестовой выборке, модель по умолчанию):")
+                        labels_pri_default = sorted(list(set(y_train_pri))) # Аналогично
+                        # labels_pri_default = sorted(list(set(y_test_pri) | set(y_pred_pri_default)))
                         print(classification_report(y_test_pri, y_pred_pri_default, labels=labels_pri_default, zero_division=0))
                 except Exception as e_default:
-                    print(f"ОШИБКА при обучении классификатора приоритета (LogReg) с параметрами по умолчанию: {e_default}")
+                    print(f"ОШИБКА при обучении классификатора приоритета (LinearSVC) с параметрами по умолчанию: {e_default}")
                     priority_model = None
 
 
