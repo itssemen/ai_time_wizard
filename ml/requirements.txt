@@ -3,3 +3,4 @@ joblib
 nltk
 pymorphy2
 pymorphy3
+ 
