@@ -205,10 +205,6 @@ def iob_tags_to_extracted_tasks(raw_text: str, tokens_info_list: list[dict], pre
             entities.append({"text": raw_text[current_entity_start_char : last_token_end], "start_char": current_entity_start_char, "end_char": last_token_end})
     return entities
 
-
-
-
-
 def lemmatize_text_for_model(text: str) -> str:
 
     words = text.split()
@@ -219,10 +215,6 @@ def extract_duration_features(task_text: str) -> list:
 
     lemmatized_text = lemmatize_text_for_model(task_text)
     text_length = len(task_text.split())
-
-
-
-
 
     has_explicit_duration = 0
     explicit_duration_parsed_minutes = 0.0
@@ -240,13 +232,7 @@ def predict_duration_ml(task_text: str) -> tuple[int, bool]:
     try:
 
         features = extract_duration_features(task_text)
-
-
-
-
-
         predicted_duration = duration_model.predict([features])[0]
-
 
         if isinstance(predicted_duration, (int, float)) and predicted_duration > 0:
             return math.ceil(predicted_duration), is_default
@@ -336,11 +322,6 @@ def process_text_with_ml(raw_text: str) -> list[dict]:
         start_time = current_time
         end_time = start_time + timedelta(minutes=task_details['duration'])
         task_display_text = task_details['text']
-
-
-
-
-
         schedule_items.append({
             "task": task_display_text,
             "time": f"{start_time.strftime('%H:%M')}-{end_time.strftime('%H:%M')}",

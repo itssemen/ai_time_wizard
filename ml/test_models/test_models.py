@@ -173,11 +173,6 @@ def extract_duration_features(task_text: str) -> list:
     lemmatized_text = lemmatize_text_for_model(task_text)
     text_length = len(task_text.split())
 
-
-
-
-
-
     has_explicit_duration = 0
     explicit_duration_parsed_minutes = 0.0
 

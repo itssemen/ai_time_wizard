@@ -1,11 +1,6 @@
 import json
 import random
 
-
-
-
-
-# Дополнительные глаголы и контексты для разнообразия
 ADDITIONAL_ACTIONS_CONTEXTS = {
     "глаголы_общего_назначения": [
         "проверить", "подготовить", "организовать", "обновить", "завершить", "начать", "продолжить",
@@ -197,7 +192,6 @@ TASK_CATEGORIES = {
     }
 }
 
-# Заполнители для действий
 PLACEHOLDERS = {
     "кому": ["маме", "другу", "коллеге", "начальнику", "клиенту", "подруге", "брату", "партнеру", "поставщику", "HR", "бухгалтеру", "аналитику", "разработчику", "менеджеру проекта", "дизайнеру"],
     "от кого": ["банка", "партнера", "руководства", "клиента", "коллеги", "друга", "отдела маркетинга", "технической поддержки", "заказчика", "пользователя"],
@@ -271,12 +265,11 @@ PLACEHOLDERS = {
     "вопросом_размышления": ["смысле жизни", "будущем", "принятии решения", "своих целях", "новых возможностях", "проблеме выбора"],
     "период": ["неделю", "месяц", "квартал", "год", "пятилетку", "ближайшие пару дней", "следующий год"],
     "чего_стратегия": ["развития бизнеса", "личного бренда", "инвестирования", "достижения цели", "продвижения продукта", "обучения"],
-    # Добавляем плейсхолдеры для новой категории
+
     "глагол_общего_назначения": ADDITIONAL_ACTIONS_CONTEXTS["глаголы_общего_назначения"],
     "объект_действия_разный": ADDITIONAL_ACTIONS_CONTEXTS["объекты_действий_разные"],
     "контекст_места_инструмент": ADDITIONAL_ACTIONS_CONTEXTS["контексты_места_инструменты"],
 
-    # Плейсхолдеры для новых категорий и действий
     "событии_уведомления": ["завершении этапа", "изменении статуса", "предстоящем событии", "важном обновлении", "проблеме", "возможности"],
     "кого_питомец": ["кота", "собаку", "рыбок", "попугая", "хомяка"],
     "что_выбросить": ["старые вещи", "ненужные бумаги", "просроченные продукты", "сломанную технику", "мусор из корзины"],
@@ -336,7 +329,6 @@ LOW_PRIORITY_KEYWORDS = [
     "если останутся силы", "можно сделать на следующей неделе", "не критично"
 ]
 
-# Дополнительные ключевые слова для длительности, специфичные для категорий
 TASK_CATEGORIES["короткие_коммуникации"]["keywords_for_duration"].update({
     "быстро ответить": (2, 10), "уточнить": (5, 15)
 })
@@ -469,7 +461,7 @@ def determine_priority(action_text_template, action_text_concrete, explicit_prio
 
 
 def generate_task_item():
-    # Выбираем категорию с учетом весов для увеличения доли повседневных задач
+
     everyday_categories = [
         "ежедневные_ритуалы", "еженедельное_планирование_и_обзоры",
         "самообслуживание_и_здоровье_рутина", "короткие_коммуникации",
@@ -483,9 +475,7 @@ def generate_task_item():
     chosen_category = TASK_CATEGORIES[chosen_category_name]
     action_template = random.choice(chosen_category["actions"])
 
-    # Заполняем плейсхолдеры в шаблоне действия
     action_text_concrete = action_template
-    # Ищем все плейсхолдеры вида {key}
     placeholders_in_template = [ph[1:-1] for ph in action_template.split() if ph.startswith("{") and ph.endswith("}")]
 
     filled_placeholders = {}
@@ -495,11 +485,9 @@ def generate_task_item():
             action_text_concrete = action_text_concrete.replace("{" + ph_key + "}", chosen_value, 1)
             filled_placeholders[ph_key] = chosen_value
 
-    # Временные указания и соответствующие минуты, КРАТНЫЕ 5.
-    # Значения скорректированы для большей реалистичности.
     time_options = [
         ("часик", 60), ("пару часов", 120), ("полчаса", 30), ("часа полтора", 90), ("полтора часа", 90),
-        ("два часа", 120), ("три часа", 180), ("четыре часа", 240), # Убраны 5 и 6 часов как слишком специфичные для общих фраз
+        ("два часа", 120), ("три часа", 180), ("четыре часа", 240),
         ("минут 5", 5), ("минут 10", 10), ("минут 15", 15), ("минут 20", 20), ("минут 25", 25),
         ("минут 30", 30), ("минут 40", 40), ("минут 45", 45), ("минут 50", 50), ("минут 55", 55),
         ("минут 75", 75), ("минут 90", 90),
@@ -510,20 +498,16 @@ def generate_task_item():
         ("на полчасика", 30),
         ("на часок-другой", random.choice([60, 90, 120, 150])),
         ("на пару-тройку часов", random.choice([120, 150, 180, 210])),
-        ("немного времени на", random.choice([10, 15, 20, 25, 30])), # Более короткие "немного"
+        ("немного времени на", random.choice([10, 15, 20, 25, 30])),
         ("посвятить этому где-то", random.choice([30, 45, 60, 75, 90, 120])),
         ("займет примерно", random.choice([15, 20, 25, 30, 45, 60, 75, 90])),
-        ("буквально {N} минут", None), # N будет 5, 10, 15, 20, 25
-        ("около {N} часов", None),    # N будет 1, 1.5, 2, 2.5, 3
-        ("примерно {N} мин.", None),  # N будет кратно 5 до 60
-        ("где-то {N} ч.", None),      # N будет 0.5, 1, 1.5, 2
-        ("", None) # Вариант без явного указания времени
+        ("буквально {N} минут", None),
+        ("около {N} часов", None),
+        ("примерно {N} мин.", None),
+        ("где-то {N} ч.", None),
+        ("", None)
     ]
     
-
-
-
-
     duration_phrase = ""
     actual_duration_minutes = 0
     has_explicit_duration_phrase = False
@@ -569,24 +553,13 @@ def generate_task_item():
         duration_phrase = ""
         actual_duration_minutes = get_realistic_duration(action_template, action_text_concrete)
 
-
-
     has_explicit_duration_phrase = bool(duration_phrase.strip())
 
 
     explicit_duration_parsed_minutes = parse_duration_phrase_to_minutes(duration_phrase)
 
-
-
     if actual_duration_minutes == 0 and explicit_duration_parsed_minutes > 0:
         actual_duration_minutes = explicit_duration_parsed_minutes
-
-
-
-
-
-
-
 
     if actual_duration_minutes <= 0:
         actual_duration_minutes = 0
@@ -688,8 +661,6 @@ def parse_duration_phrase_to_minutes(phrase_text):
     if text == "полтора часа": return 90
     if text == "час": return 60
 
-
-
     return 0
 
 
@@ -699,13 +670,9 @@ def generate_freeform_sentence():
         "Вот что я должен сделать:", "Задачи на сегодня:", "Хочу успеть", "Собираюсь сделать",
         "Мои дела:", "Планы:", "Необходимо выполнить:", "Список дел:", "Так, поехали:",
         "На повестке дня:", "Сегодня в программе:", "Первым делом,",
-        "Итак, что у нас тут:", "Нужно быстренько:", "Сфокусируюсь на:" # Новые стартеры
+        "Итак, что у нас тут:", "Нужно быстренько:", "Сфокусируюсь на:"
     ]
     
-
-
-
-
     sentence_templates = [
         "{action} {duration_phrase} {priority_phrase}",
         "{action} {priority_phrase} {duration_phrase}",
@@ -757,20 +724,7 @@ def generate_freeform_sentence():
         
         full_text += current_task_full_phrase
 
-
-
         action_start_in_segment = -1
-
-
-
-
-
-
-
-
-
-
-
 
         search_text_lower = full_text[current_pos:].lower()
         action_to_find_lower = action_text_concrete.lower()
@@ -841,7 +795,7 @@ def generate_freeform_sentence():
     }
 
 
-NUM_EXAMPLES = 100
+NUM_EXAMPLES = 2500
 dataset = []
 generated_count = 0
 
@@ -850,15 +804,7 @@ attempt_limit = NUM_EXAMPLES * 5
 while generated_count < NUM_EXAMPLES and attempt_limit > 0:
     example = generate_freeform_sentence()
 
-
-
-
-
     has_explicit_duration_task = any(e.get('has_explicit_duration_phrase', False) for e in example["entities"])
-
-
-
-
 
     priorities_in_example = {e['priority'] for e in example["entities"] if 'priority' in e}
     has_varied_priorities = False
