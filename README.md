@@ -4,7 +4,7 @@
     Если вы клонировали репозиторий:
     ```bash
     git clone https://github.com/itssemen/ai_time_wizard
-    cd time_wizard
+    cd ai_time_wizard
     ```
 
 2.  **Настройка и запуск приложения:**
