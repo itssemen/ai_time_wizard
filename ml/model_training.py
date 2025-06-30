@@ -1,7 +1,7 @@
 import json
 import os
 import warnings
-# Adjusted for RandomForest, though it's a general good practice if features are named by preprocessor
+
 warnings.filterwarnings("ignore", category=UserWarning, message="X does not have valid feature names, but RandomForestRegressor was fitted with feature names")
 import nltk
 import time
@@ -11,24 +11,24 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
-from sklearn.ensemble import RandomForestRegressor # Используем RandomForestRegressor
-# import lightgbm as lgb # Больше не используем LightGBM для длительности
+from sklearn.ensemble import RandomForestRegressor
+# import lightgbm as lgb
 from sklearn.metrics import classification_report, mean_squared_error, mean_absolute_error
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 import joblib
 import numpy as np
-import pymorphy3 # для лемматизации
+import pymorphy3
 
-# --- Инициализация лемматизатора ---
+
 morph = pymorphy3.MorphAnalyzer()
 
 def lemmatize_text(text):
-    words = text.split() # Простое разделение по пробелам, можно улучшить токенизацией nltk
+    words = text.split()
     lemmatized_words = [morph.parse(word)[0].normal_form for word in words]
     return " ".join(lemmatized_words)
 
-# --- Загрузка ресурсов NLTK ---
+
 def download_nltk_resource(resource_name, resource_path_to_check):
     try:
         nltk.data.find(resource_path_to_check)
@@ -44,9 +44,9 @@ def download_nltk_resource(resource_name, resource_path_to_check):
 
 download_nltk_resource('punkt', 'tokenizers/punkt')
 
-# --- 1. Загрузка данных ---
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
-# Исправляем путь к файлу данных: он должен быть относительно script_dir, а не script_dir + 'ml/'
+
 data_file_path = os.path.join(script_dir, 'freeform_task_dataset.json')
 
 dataset = []
@@ -65,11 +65,11 @@ if not dataset:
     print("Датасет пуст. Завершение работы.")
     exit()
 
-# --- 2. Подготовка данных для NER (токенизация и IOB-тегирование) ---
+
 def get_tokens_with_char_spans(text):
     tokens = []
-    # Используем простой WhitespaceTokenizer, т.к. он сохраняет соответствие символов
-    # Для более сложных случаев можно использовать nltk.word_tokenize и align_tokens
+
+
     tokenizer = nltk.tokenize.WhitespaceTokenizer()
     for start, end in tokenizer.span_tokenize(text):
         token_text = text[start:end]
@@ -86,7 +86,7 @@ def create_iob_tags(text_tokens_with_spans, entities):
         for i, token in enumerate(text_tokens_with_spans):
             token_start = token['start']
             token_end = token['end']
-            # Проверка на пересечение токена и сущности
+
             if max(token_start, ent_start) < min(token_end, ent_end):
                 if first_token_in_entity:
                     tags[i] = f'B-{ent_label}'
@@ -97,11 +97,11 @@ def create_iob_tags(text_tokens_with_spans, entities):
 
 sents_tokens_text_for_ner = []
 sents_iob_tags_for_ner = []
-sents_tokens_info_for_ner = [] # Для отладки и анализа NER
+sents_tokens_info_for_ner = []
 
 for item in dataset:
     text = item['text']
-    entities = item['entities'] # Здесь entities содержат 'label': 'TASK'
+    entities = item['entities']
 
     tokens_with_spans = get_tokens_with_char_spans(text)
     if not tokens_with_spans:
@@ -116,19 +116,18 @@ for item in dataset:
 
 print(f"Обработано {len(sents_tokens_text_for_ner)} предложений для IOB-разметки (NER).")
 
-# --- 3. Разделение данных для NER ---
+
 X_train_sents_ner, X_test_sents_ner, \
 y_train_sents_ner, y_test_sents_ner, \
 X_train_sents_tokens_info_ner, X_test_sents_tokens_info_ner = train_test_split(
     sents_tokens_text_for_ner, sents_iob_tags_for_ner, sents_tokens_info_for_ner,
-    test_size=0.2, random_state=42, stratify=None # Stratify может быть проблематичен для списков списков
+    test_size=0.2, random_state=42, stratify=None
 )
 
 print(f"NER Обучающая выборка: {len(X_train_sents_ner)} предложений.")
 print(f"NER Тестовая выборка: {len(X_test_sents_ner)} предложений.")
 
 
-# --- 4. Векторизация и Обучение NER модели ---
 def word2features(sent, i):
     word = sent[i]
     features = {
@@ -143,7 +142,7 @@ def word2features(sent, i):
             'prev_word_isupper': prev_word.isupper(), 'prev_word_isdigit': prev_word.isdigit(),
         })
     else:
-        features['BOS'] = True # Начало предложения
+        features['BOS'] = True
     if i < len(sent)-1:
         next_word = sent[i+1]
         features.update({
@@ -151,7 +150,7 @@ def word2features(sent, i):
             'next_word_isupper': next_word.isupper(), 'next_word_isdigit': next_word.isdigit(),
         })
     else:
-        features['EOS'] = True # Конец предложения
+        features['EOS'] = True
     return features
 
 def sent2features(sent):
@@ -162,7 +161,7 @@ X_train_features_ner = [sent2features(s) for s in X_train_sents_ner]
 print("NER: Извлечение признаков из тестовой выборки...")
 X_test_features_ner = [sent2features(s) for s in X_test_sents_ner]
 
-# "Распрямляем" списки для обучения
+
 X_train_flat_ner = [item for sublist in X_train_features_ner for item in sublist]
 y_train_flat_ner = [item for sublist in y_train_sents_ner for item in sublist]
 X_test_flat_ner = [item for sublist in X_test_features_ner for item in sublist]
@@ -182,7 +181,7 @@ else:
     X_test_vectorized_ner = ner_vectorizer.transform(X_test_flat_ner)
 
     print("\nNER: Обучение модели LogisticRegression...")
-    # Можно добавить GridSearchCV для подбора C
+
     ner_model = LogisticRegression(solver='liblinear', multi_class='auto', random_state=42, C=0.1, max_iter=200)
     try:
         ner_model.fit(X_train_vectorized_ner, y_train_flat_ner)
@@ -197,26 +196,26 @@ else:
     except Exception as e:
         print(f"ОШИБКА (NER) при обучении или предсказании модели: {e}")
 
-# --- 5. Подготовка данных для классификаторов длительности и приоритета ---
-task_features_for_duration = [] # Будет содержать [лемматизированный_текст_задачи, has_explicit_duration_phrase, длина_текста_задачи]
+
+task_features_for_duration = []
 duration_labels_all = []
-duration_phrases_original_all = [] # Список для хранения оригинальных фраз длительности
-task_texts_for_priority_lemmatized = [] # Лемматизированные тексты для приоритета
+duration_phrases_original_all = []
+task_texts_for_priority_lemmatized = []
 priority_labels_all = []
 
 
-for item in dataset: # Используем весь датасет для сбора текстов задач
+for item in dataset:
     for entity in item['entities']:
-        if entity['label'] == 'TASK': # Убедимся, что это задача
+        if entity['label'] == 'TASK':
             original_text = entity['text']
             lemmatized_text = lemmatize_text(original_text)
-            text_length = len(original_text.split()) # Длина текста в словах
+            text_length = len(original_text.split())
 
             task_texts_for_priority_lemmatized.append(lemmatized_text)
             priority_labels_all.append(entity['priority'])
 
             has_explicit_duration = 1 if entity.get('has_explicit_duration_phrase', False) else 0
-            explicit_duration_parsed = entity.get('explicit_duration_parsed_minutes', 0) # Get the new field, default to 0
+            explicit_duration_parsed = entity.get('explicit_duration_parsed_minutes', 0)
             task_features_for_duration.append([lemmatized_text, has_explicit_duration, text_length, explicit_duration_parsed])
             duration_labels_all.append(entity['duration_minutes'])
             duration_phrases_original_all.append(entity.get('duration_phrase_original', ''))
@@ -228,14 +227,14 @@ print(f"Собрано {len(task_texts_for_priority_lemmatized)} задач дл
 if not task_features_for_duration:
     print("ОШИБКА: Не найдено ни одной задачи в датасете для обучения модели длительности.")
 else:
-    # --- 6. Обучение модели регрессии длительности ---
+
     from sklearn.compose import ColumnTransformer
-    # from sklearn.preprocessing import StandardScaler # Может понадобиться для text_length, если разброс большой
+
     from sklearn.preprocessing import MinMaxScaler
 
 
     print("\n--- Обучение модели регрессии длительности ---")
-    # Добавляем duration_phrases_original_all в разделение
+
     X_train_dur_features, X_test_dur_features, \
     y_train_dur, y_test_dur, \
     X_train_original_phrases, X_test_original_phrases = train_test_split(
@@ -243,32 +242,32 @@ else:
         test_size=0.2, random_state=42
     )
 
-    # Препроцессор для ColumnTransformer
-    # Элемент 0: лемматизированный текст
-    # Элемент 1: has_explicit_duration_phrase (бинарный)
-    # Элемент 2: text_length (числовой)
-    # Элемент 3: explicit_duration_parsed_minutes (числовой)
+
+
+
+
+
     duration_preprocessor = ColumnTransformer(
         transformers=[
-            ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=3), 0), # к лемматизированному тексту
-            ('explicit_time_flag_feat', 'passthrough', [1]),      # бинарный признак флага как есть
-            ('text_length_feat', MinMaxScaler(), [2]),            # числовой признак длины текста, масштабируем
-            ('parsed_duration_feat', MinMaxScaler(), [3])       # новый числовой признак явной длительности, масштабируем
+            ('tfidf', TfidfVectorizer(ngram_range=(1,2), min_df=3), 0),
+            ('explicit_time_flag_feat', 'passthrough', [1]),
+            ('text_length_feat', MinMaxScaler(), [2]),
+            ('parsed_duration_feat', MinMaxScaler(), [3])
         ],
         remainder='drop'
     )
 
     duration_pipeline = Pipeline([
         ('preprocessor', duration_preprocessor),
-        ('reg', RandomForestRegressor(random_state=42)) # Используем RandomForestRegressor
+        ('reg', RandomForestRegressor(random_state=42))
     ])
 
-    # Обновленная сетка параметров для RandomForestRegressor
-    # No changes needed here for now, unless new features interact poorly with existing hyperparams
+
+
     duration_parameters = {
         'preprocessor__tfidf__ngram_range': [(1, 1), (1, 2)],
         'preprocessor__tfidf__min_df': [3, 5],
-        # 'preprocessor__parsed_duration_feat__scaler': [MinMaxScaler(), StandardScaler(), 'passthrough'], # Example if we wanted to tune scaler for new feat
+
         'reg__n_estimators': [100, 200],
         'reg__max_depth': [None, 10, 20],
         'reg__min_samples_split': [2, 5],
@@ -280,7 +279,7 @@ else:
         print("ОШИБКА (Длительность): Обучающая выборка пуста.")
     else:
         print("Запуск GridSearchCV для модели регрессии длительности (RandomForestRegressor)...")
-        # Увеличим cv до 3, если позволит время, можно и 5. Начнем с 3.
+
         duration_gs_reg = GridSearchCV(duration_pipeline, duration_parameters, cv=3,
                                        n_jobs=-1, verbose=1, scoring='neg_mean_absolute_error')
         try:
@@ -301,23 +300,23 @@ else:
                 print(f"  Mean Absolute Error (MAE): {mean_absolute_error(y_test_dur, y_pred_dur):.2f}")
                 print(f"  Root Mean Squared Error (RMSE): {np.sqrt(mean_squared_error(y_test_dur, y_pred_dur)):.2f}")
 
-                # --- Анализ предсказаний модели длительности ---
-                if X_test_dur_features and y_test_dur and X_test_original_phrases: # Ensure all necessary lists are available
+
+                if X_test_dur_features and y_test_dur and X_test_original_phrases:
                     print("\n--- Анализ предсказаний модели длительности (первые N тестовых примеров) ---")
-                    num_duration_samples_to_check = min(10, len(X_test_dur_features)) # Print up to 10 samples
+                    num_duration_samples_to_check = min(10, len(X_test_dur_features))
 
                     for i in range(num_duration_samples_to_check):
-                        original_feature_values = X_test_dur_features[i] # This is [lemmatized_text, has_explicit_duration_phrase, text_length]
+                        original_feature_values = X_test_dur_features[i]
                         true_duration = y_test_dur[i]
                         original_phrase = X_test_original_phrases[i]
-                        # The model's predict method was already called on the whole X_test_dur_features to get y_pred_dur
+
                         predicted_duration = y_pred_dur[i]
 
                         print(f"\n  Пример {i+1}:")
                         print(f"    Лемматизированный текст: '{original_feature_values[0]}'")
                         print(f"    Флаг явной длительности (has_explicit_duration_phrase): {original_feature_values[1]}")
-                        print(f"    Длина текста (исходная, до обработки ColumnTransformer): {original_feature_values[2]}") # This is text_length before scaling
-                        print(f"    Распарсенная явная длительность (минуты, 0 если нет): {original_feature_values[3]}") # New parsed duration feature
+                        print(f"    Длина текста (исходная, до обработки ColumnTransformer): {original_feature_values[2]}")
+                        print(f"    Распарсенная явная длительность (минуты, 0 если нет): {original_feature_values[3]}")
                         print(f"    Оригинальная фраза длительности: '{original_phrase}'")
                         print(f"    Эталонная длительность: {true_duration} минут")
                         print(f"    Предсказанная длительность: {predicted_duration:.2f} минут")
@@ -330,9 +329,9 @@ else:
             duration_model = None
 
 
-    # --- 7. Обучение классификатора приоритета (с числовыми метками) ---
+
     print("\n--- Обучение классификатора приоритета ---")
-    # Используем task_texts_for_priority_lemmatized
+
     if not task_texts_for_priority_lemmatized:
         print("ОШИБКА (Приоритет): Нет текстов задач для обучения.")
         priority_model = None
@@ -342,22 +341,22 @@ else:
             stratify=priority_labels_all if len(set(priority_labels_all)) > 1 else None
         )
 
-        # Пайплайн для классификации приоритета с лемматизацией (уже применена к данным)
-        # и LogisticRegression с class_weight='balanced'
+
+
         priority_pipeline = Pipeline([
             ('tfidf', TfidfVectorizer()),
-            # Используем LinearSVC с class_weight='balanced' и увеличенным max_iter
-            ('clf', LinearSVC(random_state=42, class_weight='balanced', max_iter=10000, dual=True)) # dual=True (default) for hinge/squared_hinge with l2
+
+            ('clf', LinearSVC(random_state=42, class_weight='balanced', max_iter=10000, dual=True))
         ])
 
-        # Сетка параметров для LinearSVC
+
         priority_parameters = {
             'tfidf__ngram_range': [(1, 1), (1, 2)],
             'tfidf__min_df': [3, 5],
-            # 'tfidf__max_df': [0.7, 0.85, 0.95], # Можно добавить, если нужно
+
             'clf__C': [0.1, 1, 10],
-            'clf__penalty': ['l2'], # LinearSVC с dual=True поддерживает l2
-            'clf__loss': ['hinge', 'squared_hinge'] # Стандартные потери для SVC
+            'clf__penalty': ['l2'],
+            'clf__loss': ['hinge', 'squared_hinge']
         }
 
         priority_model = None
@@ -381,16 +380,16 @@ else:
                 if X_test_pri:
                     y_pred_pri = priority_model.predict(X_test_pri)
                     print("\nОтчет по классификации приоритета (LinearSVC, на тестовой выборке с лучшими параметрами):")
-                    # Метки теперь строки ("low", "medium", "high")
-                    labels_pri = sorted(list(set(y_train_pri))) # Используем метки из y_train_pri для порядка, если они все есть
-                    # или объединяем y_test_pri и y_pred_pri, если в тестовой могут быть не все классы
-                    # labels_pri = sorted(list(set(y_test_pri) | set(y_pred_pri)))
+
+                    labels_pri = sorted(list(set(y_train_pri)))
+
+
                     print(classification_report(y_test_pri, y_pred_pri, labels=labels_pri, zero_division=0))
                 else:
                     print("Тестовая выборка для приоритета пуста.")
             except Exception as e:
                 print(f"ОШИБКА при GridSearchCV или оценке классификатора приоритета (LinearSVC): {e}")
-                # Попытка с более простой моделью или параметрами, если основная не удалась
+
                 print("Попытка обучения классификатора приоритета (LinearSVC) с параметрами по умолчанию (упрощенными)...")
                 try:
                     default_priority_pipeline = Pipeline([
@@ -403,28 +402,27 @@ else:
                     if X_test_pri:
                         y_pred_pri_default = priority_model.predict(X_test_pri)
                         print("\nОтчет по классификации приоритета (LinearSVC, на тестовой выборке, модель по умолчанию):")
-                        labels_pri_default = sorted(list(set(y_train_pri))) # Аналогично
-                        # labels_pri_default = sorted(list(set(y_test_pri) | set(y_pred_pri_default)))
+                        labels_pri_default = sorted(list(set(y_train_pri)))
+
                         print(classification_report(y_test_pri, y_pred_pri_default, labels=labels_pri_default, zero_division=0))
                 except Exception as e_default:
                     print(f"ОШИБКА при обучении классификатора приоритета (LinearSVC) с параметрами по умолчанию: {e_default}")
                     priority_model = None
 
 
-# --- Сохранение всех моделей ---
+
 output_model_dir = os.path.join(script_dir, "models_sklearn")
 if not os.path.exists(output_model_dir):
     os.makedirs(output_model_dir)
     print(f"Создана директория: {output_model_dir}")
 
-# NER модели
+
 ner_vectorizer_path = os.path.join(output_model_dir, "ner_vectorizer.pkl")
 ner_model_path = os.path.join(output_model_dir, "ner_model.pkl")
 if ner_vectorizer: joblib.dump(ner_vectorizer, ner_vectorizer_path); print(f"NER Векторизатор сохранен в: {ner_vectorizer_path}")
 if ner_model: joblib.dump(ner_model, ner_model_path); print(f"NER Модель сохранена в: {ner_model_path}")
 
-# Модели классификации (длительность и приоритет)
-# Векторизаторы TF-IDF являются частью пайплайнов, поэтому сохраняем только пайплайны
+
 duration_model_path = os.path.join(output_model_dir, "duration_model.pkl")
 priority_model_path = os.path.join(output_model_dir, "priority_model.pkl")
 
@@ -436,11 +434,10 @@ if 'priority_model' in locals() and priority_model:
     print(f"Модель (пайплайн) для приоритета сохранена в: {priority_model_path}")
 
 
-# --- Функции для использования NER модели и оценки на уровне сущностей (для отладки NER) ---
-# (Оставлено для возможной отладки NER, если понадобится)
+
 def iob_tags_to_entities(tokens_info_list, predicted_tags_list):
-    # ... (реализация этой функции не меняется, можно скопировать из предыдущей версии, если нужна)
-    # Эта функция в основном для оценки NER, не для обучения классификаторов атрибутов
+
+
     entities = []
     current_entity_tokens = []
     current_entity_start_char = -1
@@ -463,13 +460,13 @@ def iob_tags_to_entities(tokens_info_list, predicted_tags_list):
         elif tag.startswith('I-'):
             if current_entity_tokens and tag[2:] == current_entity_label:
                 current_entity_tokens.append(token_text)
-            else: # Ошибка разметки или начало новой сущности без B-
+            else:
                 if current_entity_tokens:
                      entities.append({
                         "text": " ".join(current_entity_tokens), "label": current_entity_label,
                         "start": current_entity_start_char, "end": tokens_info_list[i-1]['end']
                     })
-                # Начать новую сущность, даже если это I- без B-
+
                 current_entity_tokens = [token_text]
                 current_entity_start_char = token_info['start']
                 current_entity_label = tag[2:]
@@ -482,14 +479,14 @@ def iob_tags_to_entities(tokens_info_list, predicted_tags_list):
                 current_entity_tokens = []
                 current_entity_start_char = -1
                 current_entity_label = None
-    if current_entity_tokens: # Завершить последнюю сущность
+    if current_entity_tokens:
         entities.append({
             "text": " ".join(current_entity_tokens), "label": current_entity_label,
             "start": current_entity_start_char, "end": tokens_info_list[-1]['end']
         })
     return entities
 
-# --- Основной блок выполнения (проверка NER) ---
+
 if __name__ == '__main__':
     print("\n--- Проверка NER модели ---")
     if ner_model and ner_vectorizer and y_test_flat_ner and y_pred_flat_ner is not None and len(y_pred_flat_ner) == len(y_test_flat_ner):
@@ -518,8 +515,8 @@ if __name__ == '__main__':
             print(f"  Эталонные IOB: {y_test_sents_ner[i]}")
             print(f"  Предсказанные IOB: {list(current_predicted_tags_for_sample)}")
 
-            # predicted_entities = iob_tags_to_entities(current_tokens_info_for_sample, list(current_predicted_tags_for_sample))
-            # print(f"  Предсказанные сущности (NER): {predicted_entities}")
+
+
     elif not X_train_flat_ner:
          print("ОШИБКА (NER в main): Не удалось извлечь признаки для обучающей выборки NER.")
     elif ner_model is None or y_pred_flat_ner is None:

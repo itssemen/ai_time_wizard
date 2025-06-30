@@ -1,11 +1,9 @@
 import json
 import random
-# from faker import Faker # Faker не используется, можно будет удалить, если не понадобится в будущем
-# from datetime import datetime, timedelta # datetime не используется
 
-# fake = Faker('ru_RU') # Faker не используется
 
-# --- Расширенные параметры для генерации ---
+
+
 
 # Дополнительные глаголы и контексты для разнообразия
 ADDITIONAL_ACTIONS_CONTEXTS = {
@@ -35,8 +33,6 @@ ADDITIONAL_ACTIONS_CONTEXTS = {
     ]
 }
 
-# Категории задач и примерные действия с типичными длительностями (min, max) в минутах
-# Длительности уменьшены примерно на 30%
 TASK_CATEGORIES = {
     "короткие_коммуникации": {
         "actions": [
@@ -121,7 +117,7 @@ TASK_CATEGORIES = {
         "actions": [
             "сделать зарядку", "пойти на тренировку в {место_тренировки}", "пробежка на {дистанцию_бег}", "заняться йогой",
             "посетить врача {специалист_врач}", "принять лекарства", "сделать упражнения для {части_тела}", "поплавать в бассейне",
-            "сходить на массаж", "прогуляться на свежем воздухе" # прогуляться - более короткий вариант, чем погулять
+            "сходить на массаж", "прогуляться на свежем воздухе"
         ],
         "duration_range": (10, 120),
         "keywords_for_duration": {"тренировка": (30,75), "пробежка": (20,60), "врача": (30,60), "массаж": (45,75), "прогуляться на свежем воздухе": (15,45), "сделать зарядку": (10,20), "заняться йогой": (30,75)}
@@ -143,7 +139,7 @@ TASK_CATEGORIES = {
         "duration_range": (15, 90),
         "keywords_for_duration": {"спланировать": (20,60), "проанализировать": (30,90), "подвести итоги": (15,45), "оценить риски": (20,60)}
     },
-    "общие_задачи_с_новым_контекстом": { # Новая категория для использования ADDITIONAL_ACTIONS_CONTEXTS
+    "общие_задачи_с_новым_контекстом": {
         "actions": [
             "{глагол_общего_назначения} {объект_действия_разный}",
             "{глагол_общего_назначения} {объект_действия_разный} {контекст_места_инструмент}",
@@ -153,9 +149,9 @@ TASK_CATEGORIES = {
             "тщательно {глагол_общего_назначения} {объект_действия_разный}"
         ],
         "duration_range": (10, 120),
-        "keywords_for_duration": {"проверить": (10,45), "подготовить": (20,90), "проанализировать": (30,120), "создать": (45,180), "тщательно": (0,0)} # 'тщательно' само по себе не задает время, но может влиять в комбинации
+        "keywords_for_duration": {"проверить": (10,45), "подготовить": (20,90), "проанализировать": (30,120), "создать": (45,180), "тщательно": (0,0)}
     },
-    "поездки_транспорт": { # Новая категория
+    "поездки_транспорт": {
         "actions": [
             "съездить в {место_поездки}", "доехать до {места_назначения_поездка}", "отвезти {кого_или_что_отвезти} в {место_назначения_поездка}",
             "забрать {кого_или_что_забрать_поездка} из {откуда_забрать_поездка}", "поездка по делам в {район_города}",
@@ -164,7 +160,7 @@ TASK_CATEGORIES = {
         "duration_range": (15, 120),
         "keywords_for_duration": {"съездить": (20,90), "доехать": (15,75), "отвезти": (20,75), "забрать": (20,75)}
     },
-    "финансы_бюджет": { # Новая категория
+    "финансы_бюджет": {
         "actions": [
             "проверить баланс {чего_баланс}", "оплатить {что_счета_финансы}", "перевести деньги {кому_перевод} за {за_что_перевод}",
             "составить бюджет на {период_бюджет}", "проанализировать расходы за {период_расходы}", "пополнить {что_пополнить}"
@@ -190,7 +186,7 @@ TASK_CATEGORIES = {
         "duration_range": (15, 90),
         "keywords_for_duration": {"спланировать неделю": (30,75), "итоги недели": (15,45), "отчет": (30,90), "очистить стол": (10,30)}
     },
-    "самообслуживание_и_здоровье_рутина": { # Мелкие, регулярные задачи, не спорт
+    "самообслуживание_и_здоровье_рутина": {
         "actions": [
             "принять душ", "почистить зубы", "умыться", "причесаться", "нанести крем {какой_крем}",
             "выпить стакан воды", "проверить уровень {чего_проверить_здоровье}", "заказать линзы/очки",
@@ -317,14 +313,14 @@ PLACEHOLDERS = {
     "период_расходы": ["прошлый месяц", "последнюю неделю", "год", "командировку", "отпуск"],
     "что_пополнить": ["транспортную карту", "счет мобильного телефона", "брокерский счет", "электронный кошелек", "депозит в банке"],
 
-    # Плейсхолдеры для новых категорий "ежедневные_ритуалы", "еженедельное_планирование_и_обзоры", "самообслуживание_и_здоровье_рутина"
+
     "какие_новости": ["отраслевые", "мировые", "технологические", "финансовые", "спортивные", "местные"],
     "что_зарядить_техника": ["телефон", "ноутбук", "планшет", "наушники", "умные часы", "фотоаппарат"],
     "мессенджере": ["Telegram", "WhatsApp", "Slack", "Discord", "Skype", "корпоративном чате"],
     "какой_крем": ["для рук", "для лица", "увлажняющий", "солнцезащитный", "питательный"],
     "чего_проверить_здоровье": ["сахара в крови", "давления", "пульса", "температуры", "веса", "качества сна"],
 
-    # Плейсхолдер для "личные_дела_поручения"
+
     "что_проверить_личное": ["почтовый ящик (физический)", "счетчики воды/электричества", "срок годности продуктов", "наличие лекарств", "задолженности по штрафам"]
 }
 
@@ -359,42 +355,42 @@ def get_realistic_duration(action_text_template, action_text_concrete):
     action_text_lower = action_text_concrete.lower()
     base_duration = 0
 
-    # Сначала ищем по ключевым словам в конкретной фразе, если они есть в категории
+
     for category_name, cat_data in TASK_CATEGORIES.items():
-        if action_text_template in cat_data["actions"]: # Проверяем, что шаблон из этой категории
+        if action_text_template in cat_data["actions"]:
             found_keyword_duration = False
             for keyword, (dur_min, dur_max) in cat_data.get("keywords_for_duration", {}).items():
-                if keyword.lower() in action_text_lower: # Ensure keyword matching is case-insensitive
-                    # Используем уже уменьшенные значения из TASK_CATEGORIES
+                if keyword.lower() in action_text_lower:
+
                     base_duration = random.randint(dur_min // 5, dur_max // 5) * 5
                     found_keyword_duration = True
                     break
             if found_keyword_duration:
                 break
-            # Если специфичных ключевых слов не найдено, используем общий диапазон категории
+
             cat_min, cat_max = cat_data["duration_range"]
-            # Используем уже уменьшенные значения из TASK_CATEGORIES
+
             base_duration = random.randint(cat_min // 5, cat_max // 5) * 5
-            break # Нашли категорию, выходим из цикла по категориям
+            break
 
-    if base_duration == 0: # Если категория не найдена (маловероятно) или что-то пошло не так
-        # Используем уменьшенные дефолтные значения
-        base_duration = random.choice([20, 30, 40, 60]) # Было [30, 45, 60, 90]
+    if base_duration == 0:
 
-    # Глобальное уменьшение на 30% уже учтено в TASK_CATEGORIES.
-    # Убедимся, что минимальная длительность хотя бы 5 минут (если не 0) и кратна 5.
+        base_duration = random.choice([20, 30, 40, 60])
+
+
+
     if base_duration <= 0:
         return 0
 
-    base_duration = max(5, (base_duration + 2) // 5 * 5) # Округление до ближайших 5 мин, минимум 5
+    base_duration = max(5, (base_duration + 2) // 5 * 5)
     return base_duration
 
 
 def determine_priority(action_text_template, action_text_concrete, explicit_priority_phrase=None):
     action_text_concrete_lower = action_text_concrete.lower()
-    # high: "high", medium: "medium", low: "low"
 
-    # 1. Явные фразы приоритета
+
+
     if explicit_priority_phrase:
         phrase_lower = explicit_priority_phrase.lower()
         if any(k in phrase_lower for k in HIGH_PRIORITY_KEYWORDS):
@@ -402,13 +398,13 @@ def determine_priority(action_text_template, action_text_concrete, explicit_prio
         if any(k in phrase_lower for k in LOW_PRIORITY_KEYWORDS):
             return "low"
 
-    # 2. Ключевые слова в самом тексте задачи
+
     if any(k in action_text_concrete_lower for k in HIGH_PRIORITY_KEYWORDS):
         return "high"
     if any(k in action_text_concrete_lower for k in LOW_PRIORITY_KEYWORDS):
         return "low"
 
-    # 3. Эвристики на основе категории задачи
+
     category_name = None
     for cat_name, cat_data in TASK_CATEGORIES.items():
         if action_text_template in cat_data["actions"]:
@@ -417,18 +413,18 @@ def determine_priority(action_text_template, action_text_concrete, explicit_prio
 
     if category_name:
         if category_name in ["работа_проекты", "встречи_созвоны"]:
-            # Для рабочих задач и встреч, если нет других указаний, шанс на высокий/средний приоритет выше
+
             if random.random() < 0.4: return "high"
             if random.random() < 0.7: return "medium"
-            # остальное на низкий (редко для таких категорий без явных слов)
+
         elif category_name in ["личные_дела_поручения", "спорт_здоровье", "творчество_создание", "планирование_анализ_будущего"]:
-             # Эти категории могут быть как важными, так и не очень
+
             if random.random() < 0.2: return "high"
             if random.random() < 0.6: return "medium"
             return "low"
         elif category_name in ["отдых_хобби", "быт_еда", "уборка_организация"]:
-            # Эти категории чаще имеют низкий или средний приоритет
-            if random.random() < 0.1: return "high" # Редко высокий
+
+            if random.random() < 0.1: return "high"
             if random.random() < 0.5: return "medium"
             return "low"
         elif category_name == "короткие_коммуникации":
@@ -436,24 +432,24 @@ def determine_priority(action_text_template, action_text_concrete, explicit_prio
                 return random.choice(["medium", "high"])
             return random.choice(["low", "medium"])
         elif category_name == "общие_задачи_с_новым_контекстом":
-            # Здесь сложнее, зависит от конкретных слов. Дадим смещение к среднему.
+
             if any(kw in action_text_concrete_lower for kw in ["отчет", "презентац", "документ", "дедлайн", "срочная задача", "проект", "клиент", "утвердить", "верифицировать"]):
                 return random.choice(["medium", "high"])
-            if any(kw in action_text_concrete_lower for kw in ["тщательно", "детально"]): # слова, подразумевающие важность
+            if any(kw in action_text_concrete_lower for kw in ["тщательно", "детально"]):
                 return random.choice(["medium", "high"])
-            return random.choice(["low", "medium", "medium"]) # Смещение к среднему
+            return random.choice(["low", "medium", "medium"])
         elif category_name == "поездки_транспорт":
-            # Поездки могут быть важны (к врачу, на важную встречу) или нет (просто съездить)
+
             if any(kw in action_text_concrete_lower for kw in ["срочно", "важно", "к врачу", "на встречу"]):
                 return "high"
             return random.choice(["low", "medium", "medium"])
         elif category_name == "финансы_бюджет":
-            if any(kw in action_text_concrete_lower for kw in ["бюджет", "расходы", "оплатить", "перевести"]): # Обычно это важно или средне
+            if any(kw in action_text_concrete_lower for kw in ["бюджет", "расходы", "оплатить", "перевести"]):
                 return random.choice(["medium", "high"])
             return random.choice(["low", "medium"])
 
-    # 4. Общие ключевые слова (если категория не помогла или для общих случаев)
-    # Добавим больше ключевых слов для высокого и низкого приоритета
+
+
     high_priority_general_keywords = [
         "отчет", "презентац", "документ", "дедлайн", "срочная задача", "клиент", "договор", "баг", "исправить ошибку",
         "проблема", "инцидент", "уязвимость", "заблокировано", "критический", "утвердить", "согласовать", "фикс", "релиз"
@@ -468,7 +464,7 @@ def determine_priority(action_text_template, action_text_concrete, explicit_prio
     if any(k in action_text_concrete_lower for k in low_priority_general_keywords):
         return "low"
 
-    # 5. По умолчанию, если ничего не подошло
+
     return "medium"
 
 
@@ -524,97 +520,96 @@ def generate_task_item():
         ("", None) # Вариант без явного указания времени
     ]
     
-    # Вероятность явного указания времени (например, 80%)
-    # has_explicit_duration_phrase will be determined after duration_phrase is set.
-    # explicit_duration_parsed_minutes will store the directly parsed numeric value from the phrase.
 
-    duration_phrase = "" # Initialize
-    actual_duration_minutes = 0 # Initialize
-    has_explicit_duration_phrase = False # Initialize
 
-    if random.random() < 0.80: # Увеличена вероятность явного указания времени
-        duration_phrase_template, duration_minutes_from_phrase = random.choice(time_options) # time_options уже с уменьшенными значениями
 
-        # Обработка динамических фраз
+
+    duration_phrase = ""
+    actual_duration_minutes = 0
+    has_explicit_duration_phrase = False
+
+    if random.random() < 0.80:
+        duration_phrase_template, duration_minutes_from_phrase = random.choice(time_options)
+
+
         if "{N}" in duration_phrase_template:
             if "минут" in duration_phrase_template or "мин." in duration_phrase_template:
-                n_val = random.choice([5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]) # Оставляем как есть, уже кратно 5
+                n_val = random.choice([5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60])
                 actual_duration_minutes = n_val
                 duration_phrase = duration_phrase_template.format(N=n_val)
                 has_explicit_duration_phrase = True
             elif "часов" in duration_phrase_template or "ч." in duration_phrase_template:
-                n_val = random.choice([0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]) # Немного расширим для часов, но оставим реалистичным
+                n_val = random.choice([0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4])
                 actual_duration_minutes = int(n_val * 60)
-                duration_phrase = duration_phrase_template.format(N=str(n_val).replace('.5', ',5')) # Для русского формата "1,5"
+                duration_phrase = duration_phrase_template.format(N=str(n_val).replace('.5', ',5'))
                 has_explicit_duration_phrase = True
-            else: # на всякий случай, если шаблон другой
+            else:
                 actual_duration_minutes = get_realistic_duration(action_template, action_text_concrete)
                 duration_phrase = ""
-                # has_explicit_duration_phrase остается False
-        elif duration_minutes_from_phrase is None: # Если выбран вариант "без явного указания времени"
+
+        elif duration_minutes_from_phrase is None:
             actual_duration_minutes = get_realistic_duration(action_template, action_text_concrete)
-            duration_phrase = "" # Убедимся, что фраза пустая
-            # has_explicit_duration_phrase остается False
+            duration_phrase = ""
+
         else:
-            actual_duration_minutes = duration_minutes_from_phrase # Это значение из time_options, уже уменьшенное
+            actual_duration_minutes = duration_minutes_from_phrase
             duration_phrase = duration_phrase_template
-            if duration_phrase.strip(): # Если фраза не пустая
+            if duration_phrase.strip():
                 has_explicit_duration_phrase = True
 
-            # Небольшая вариативность для фраз типа "часик", "пару часов"
-            # actual_duration_minutes уже уменьшен. Применим вариативность к уменьшенному значению.
+
+
             if duration_phrase_template in ["часик", "пару часов", "на часок-другой", "на пару-тройку часов"]:
-                 # Делаем так, чтобы actual_duration_minutes всегда был кратен 5
-                 # Диапазон вариативности тоже можно немного уменьшить
-                 variance_minutes = random.randint(-15, 15) // 5 * 5 # было (-30, 30)
+
+
+                 variance_minutes = random.randint(-15, 15) // 5 * 5
                  actual_duration_minutes = actual_duration_minutes + variance_minutes
-                 actual_duration_minutes = max(5, actual_duration_minutes // 5 * 5) # Не менее 5 минут, кратно 5
-    else: # No explicit duration phrase chosen from time_options initially
+                 actual_duration_minutes = max(5, actual_duration_minutes // 5 * 5)
+    else:
         duration_phrase = ""
         actual_duration_minutes = get_realistic_duration(action_template, action_text_concrete)
-        # has_explicit_duration_phrase будет установлено на основе duration_phrase ниже
 
-    # Финальное определение has_explicit_duration_phrase
+
+
     has_explicit_duration_phrase = bool(duration_phrase.strip())
 
-    # Парсим финальную фразу, чтобы получить explicit_duration_parsed_minutes
+
     explicit_duration_parsed_minutes = parse_duration_phrase_to_minutes(duration_phrase)
 
-    # Если actual_duration_minutes не был установлен (например, из-за пустого duration_phrase и get_realistic_duration вернул 0),
-    # но мы смогли что-то распарсить, используем распарсенное значение.
+
+
     if actual_duration_minutes == 0 and explicit_duration_parsed_minutes > 0:
         actual_duration_minutes = explicit_duration_parsed_minutes
-    # Если get_realistic_duration вернул значение, а explicit_duration_parsed_minutes другое (или 0),
-    # приоритет у actual_duration_minutes, так как он может быть основан на семантике, а не только на явной фразе.
-    # Однако, если есть ЯВНАЯ фраза и она успешно распарсилась, actual_duration_minutes должен ей соответствовать.
-    # Логика выше (в блоке if random.random() < 0.80) уже стремится это обеспечить.
-    # Здесь можно добавить корректировку, если explicit_duration_parsed_minutes > 0 и отличается от actual_duration_minutes,
-    # но это может нарушить логику "реалистичной" длительности, если фраза обманчива.
-    # Пока оставляем так: actual_duration_minutes - это "истинная" метка длительности.
 
-    # Убедимся, что actual_duration_minutes кратна 5, если она не 0
+
+
+
+
+
+
+
     if actual_duration_minutes <= 0:
-        actual_duration_minutes = 0 # Если вдруг стало отрицательным или 0, ставим 0
+        actual_duration_minutes = 0
     else:
-        actual_duration_minutes = max(5, (actual_duration_minutes + 2) // 5 * 5) # Округление до ближайших 5 мин, минимум 5
+        actual_duration_minutes = max(5, (actual_duration_minutes + 2) // 5 * 5)
 
-    # Фразы приоритета
+
     priority_phrases = ["", "это очень важно", "нужно сделать срочно", "это не горит", "можно сделать потом",
                         "обязательно выполни", "критически важно", "если останется время", "первостепенно",
                         "не к спеху", "сделай как можно скорее", "постарайся успеть", "второстепенная задача",
                         "это прям горит", "подождет до завтра", "это приоритетно", "сделай это в первую очередь",
                         "не забудь, это важно", "можно не спешить с этим", "пока не трогай", "отложи на потом"]
 
-    # Вероятность явного указания приоритета фразой (например, 60%)
+
     explicit_priority_phrase = ""
-    if random.random() < 0.6: # Увеличена вероятность
+    if random.random() < 0.6:
         explicit_priority_phrase = random.choice(priority_phrases)
 
     priority = determine_priority(action_template, action_text_concrete, explicit_priority_phrase)
 
-    # Убедимся, что текст задачи не пустой, если плейсхолдеры не заполнились (маловероятно)
+
     if not action_text_concrete.strip():
-        action_text_concrete = "какое-то дело" # Запасной вариант
+        action_text_concrete = "какое-то дело"
 
     return action_text_concrete, duration_phrase, actual_duration_minutes, priority, explicit_priority_phrase, has_explicit_duration_phrase, explicit_duration_parsed_minutes
 
@@ -624,22 +619,21 @@ def parse_duration_phrase_to_minutes(phrase_text):
     Tries to parse a duration phrase (e.g., "2 часа", "30 минут", "1ч30м") into minutes.
     Returns minutes as int, or 0 if parsing fails or phrase is vague.
     """
-    # --- DEBUG PRINT ---
-    # print(f"parse_duration_phrase_to_minutes attempting to parse: '{phrase_text}'")
-    # --- END DEBUG PRINT ---
+
+
 
     if not phrase_text or not isinstance(phrase_text, str):
-        # if phrase_text: print(f"Parser returning 0 due to type: '{phrase_text}'")
+
         return 0
 
     text = phrase_text.lower().strip()
     import re
 
-    if not text: # If original phrase was just spaces
-        # print(f"Parser returning 0 due to empty after strip: '{phrase_text}'")
+    if not text:
+
         return 0
 
-    # Pattern 1: Xч Yм (e.g., "1ч30м") - Most specific, exact match
+
     match_1 = re.fullmatch(r'(\d+(?:[.,]\d+)?)\s*ч\s*(\d+)\s*м', text)
     if match_1:
         try:
@@ -648,7 +642,7 @@ def parse_duration_phrase_to_minutes(phrase_text):
             return int(h * 60) + m
         except ValueError: return 0
 
-    # Pattern 2: X час Y минут (and variants, number first for hour) - Exact match
+
     match_2 = re.fullmatch(r'(\d+(?:[.,]\d+)?)\s*(?:час(?:а|ов)?|ч\.?)\s+(\d+)\s*(?:мин(?:ут|уты|ы)?|м\.?)', text)
     if match_2:
         try:
@@ -657,7 +651,7 @@ def parse_duration_phrase_to_minutes(phrase_text):
             return int(h * 60) + m
         except ValueError: return 0
 
-    # Pattern 3a: X.Y часов or X часов (number first) - Exact match
+
     match_3a = re.fullmatch(r'(\d+(?:[.,]\d+)?)\s*(?:час(?:а|ов)?|ч\.?)', text)
     if match_3a:
         try:
@@ -665,7 +659,7 @@ def parse_duration_phrase_to_minutes(phrase_text):
             return int(h * 60)
         except ValueError: return 0
 
-    # Pattern 3b: часов X (unit first) - Exact match
+
     match_3b = re.fullmatch(r'(?:час(?:а|ов)?|ч\.?)\s*(\d+(?:[.,]\d+)?)', text)
     if match_3b:
         try:
@@ -673,7 +667,7 @@ def parse_duration_phrase_to_minutes(phrase_text):
             return int(h * 60)
         except ValueError: return 0
 
-    # Pattern 4a: Y минут (number first) - Exact match
+
     match_4a = re.fullmatch(r'(\d+)\s*(?:мин(?:ут|уты|ы)?|м\.?)', text)
     if match_4a:
         try:
@@ -681,7 +675,7 @@ def parse_duration_phrase_to_minutes(phrase_text):
             return m
         except ValueError: return 0
 
-    # Pattern 4b: минут Y (unit first) - Exact match
+
     match_4b = re.fullmatch(r'(?:мин(?:ут|уты|ы)?|м\.?)\s*(\d+)', text)
     if match_4b:
         try:
@@ -689,13 +683,13 @@ def parse_duration_phrase_to_minutes(phrase_text):
             return m
         except ValueError: return 0
 
-    # Pattern 5: Specific word phrases (exact matches for simple cases)
+
     if text == "полчаса": return 30
     if text == "полтора часа": return 90
-    if text == "час": return 60 # Only if it's the entire phrase "час"
+    if text == "час": return 60
 
-    # If no specific numeric pattern matched, return 0.
-    # Vague phrases or unhandled numeric words will result in 0 for this feature.
+
+
     return 0
 
 
@@ -708,10 +702,10 @@ def generate_freeform_sentence():
         "Итак, что у нас тут:", "Нужно быстренько:", "Сфокусируюсь на:" # Новые стартеры
     ]
     
-    # Шаблоны для сборки предложения с задачей
-    # {action} - сама задача
-    # {duration_phrase} - фраза о времени, например "полчаса"
-    # {priority_phrase} - фраза о приоритете, например "это очень важно"
+
+
+
+
     sentence_templates = [
         "{action} {duration_phrase} {priority_phrase}",
         "{action} {priority_phrase} {duration_phrase}",
@@ -729,56 +723,54 @@ def generate_freeform_sentence():
         "Если успею, то {action} {duration_phrase}",
         "В планах также {action}",
         "Кстати, еще {action} {priority_phrase}",
-        "И {action} {duration_phrase} {priority_phrase}.", # Добавил точку для разнообразия
+        "И {action} {duration_phrase} {priority_phrase}.",
         "Не забыть бы про {action}.",
         "Еще одна вещь: {action} {priority_phrase}",
         "Также {action} {duration_phrase}",
-        "Надо {action}, {priority_phrase}, займет {duration_phrase}" # Новые шаблоны
+        "Надо {action}, {priority_phrase}, займет {duration_phrase}"
     ]
     
     full_text = random.choice(starters) + " "
-    num_tasks = random.randint(1, 7) # Увеличим максимальное число задач до 7
+    num_tasks = random.randint(1, 7)
     entities = []
     current_pos = len(full_text)
 
     for i in range(num_tasks):
         action_text_concrete, duration_ph, duration_min, task_priority, priority_ph, has_expl_dur_ph, expl_dur_parsed_min = generate_task_item()
         
-        # Выбираем шаблон для текущей задачи
+
         template = random.choice(sentence_templates)
         
-        # Подготавливаем части для форматирования
+
         format_args = {
-            "action": action_text_concrete, # Используем конкретный текст задачи
+            "action": action_text_concrete,
             "duration_phrase": duration_ph.strip(),
             "priority_phrase": priority_ph.strip()
         }
         
-        # Собираем полный текст текущего элемента списка дел
-        # Убираем лишние пробелы, которые могли возникнуть из-за пустых фраз
+
+
         current_task_full_phrase = template.format(**format_args)
         current_task_full_phrase = ' '.join(filter(None, current_task_full_phrase.split(' ')))
-        current_task_full_phrase = current_task_full_phrase.replace(" ,", ",").replace(" .", ".") # Чистим пунктуацию
+        current_task_full_phrase = current_task_full_phrase.replace(" ,", ",").replace(" .", ".")
+
         
-        # Добавляем в общий текст
         full_text += current_task_full_phrase
 
-        # Определяем start/end для action_text_concrete
-        # Ищем action_text_concrete в только что добавленном current_task_full_phrase
+
+
         action_start_in_segment = -1
-        # Пробуем найти точное совпадение сначала
-        # Для более надежного поиска можно использовать fuzzy matching или учитывать возможные вариации из-за форматирования
-        # но для генерации, где мы контролируем процесс, это должно работать нормально.
 
-        # Чтобы поиск был точнее, мы ищем action_text_concrete в последнем добавленном сегменте (current_task_full_phrase)
-        # и затем смещаем на current_pos.
-        # Однако, если action_text_concrete сам является результатом форматирования (например, содержит duration_phrase),
-        # то лучше искать его "как есть".
 
-        # Ищем action_text_concrete в full_text, начиная с current_pos.
-        # Это более надежно, если action_text_concrete не содержит других фраз.
-        # Если action_text_concrete может содержать duration_phrase или priority_phrase (из-за шаблона),
-        # то нужно извлекать "чистую" задачу. Для простоты, сейчас считаем, что action_text_concrete - это и есть задача.
+
+
+
+
+
+
+
+
+
 
         search_text_lower = full_text[current_pos:].lower()
         action_to_find_lower = action_text_concrete.lower()
@@ -787,19 +779,19 @@ def generate_freeform_sentence():
 
         if action_start_in_segment != -1:
             action_start_global = current_pos + action_start_in_segment
-            action_end_global = action_start_global + len(action_text_concrete) # Длина оригинального, не lower-case
+            action_end_global = action_start_global + len(action_text_concrete)
 
-            # Проверка на пересечение с предыдущими сущностями (простой вариант)
+
             valid_entity = True
             for prev_entity in entities:
                 if max(prev_entity['start'], action_start_global) < min(prev_entity['end'], action_end_global):
                     valid_entity = False
-                    # print(f"Warning: Overlapping entity found for '{action_text_concrete}'. Skipping.") # Для отладки
+
                     break
 
             if valid_entity:
                 entities.append({
-                    "text": action_text_concrete, # Текст самой задачи
+                    "text": action_text_concrete,
                     "start": action_start_global,
                     "end": action_end_global,
                     "label": "TASK",
@@ -812,14 +804,15 @@ def generate_freeform_sentence():
 
         current_pos += len(current_task_full_phrase)
 
-        # Добавление разделителей
+
         if i < num_tasks - 1:
-            # Добавляем больше вариаций разделителей и опционально точку перед следующим элементом
+
             if random.random() < 0.2 and not full_text.strip().endswith((".", "!", "?", ";", ",")):
-                full_text += random.choice([". ", "! ", "? "]) # Завершаем предыдущее "предложение"
+                full_text += random.choice([". ", "! ", "? "])
                 current_pos += 2
-                # Иногда начинаем следующее "предложение" с заглавной буквы (имитация)
-                # Это не меняет сами токены, но может влиять на контекст для NER
+
+
+
                 if random.random() < 0.5:
                      current_task_full_phrase = current_task_full_phrase[0].upper() + current_task_full_phrase[1:]
 
@@ -828,15 +821,15 @@ def generate_freeform_sentence():
             full_text += sep
             current_pos += len(sep)
         else:
-            # Убедимся, что в конце есть знак препинания, если его еще нет
+
             if not full_text.strip().endswith((".", "!", "?")):
                  full_text += random.choice([".", "!"])
                  current_pos += 1
-            elif full_text.strip().endswith((",", ";")): # Заменяем висящие запятые/точки с запятой
+            elif full_text.strip().endswith((",", ";")):
                 full_text = full_text.strip()[:-1] + random.choice([".", "!"])
 
 
-    # Финальная очистка текста (убрать лишние пробелы по краям, двойные пробелы, пробелы перед знаками препинания)
+
     full_text = ' '.join(full_text.split())
     full_text = full_text.replace(" .", ".").replace(" ,", ",").replace(" !", "!").replace(" ?", "?")
     full_text = full_text.replace(" ;", ";")
@@ -844,33 +837,33 @@ def generate_freeform_sentence():
 
     return {
         "text": full_text,
-        "entities": entities # Отдаем только непересекающиеся сущности
+        "entities": entities
     }
 
-# Генерация датасета
-NUM_EXAMPLES = 100 # Увеличено количество примеров
+
+NUM_EXAMPLES = 100
 dataset = []
 generated_count = 0
-# Увеличим attempt_limit пропорционально, и добавим еще запас, т.к. генерация может быть сложнее
+
 attempt_limit = NUM_EXAMPLES * 5
 
 while generated_count < NUM_EXAMPLES and attempt_limit > 0:
     example = generate_freeform_sentence()
-    # Проверяем, что есть хотя бы одна сущность, чтобы избежать пустых примеров
-    # и что текст не слишком короткий (например, минимум 10 символов)
-    # И что есть хотя бы одна задача с явным указанием длительности и одна с явным приоритетом (для баланса)
-    # Это условие может быть слишком строгим, но попробуем для улучшения качества.
-    # Если будет генерироваться мало данных, можно ослабить.
-    has_explicit_duration_task = any(e.get('has_explicit_duration_phrase', False) for e in example["entities"])
-    # has_explicit_priority_task = any(e.get('priority_phrase_original', "") != "" for e in example["entities"]) # Это не совсем то, priority_phrase_original может быть пустой, но приоритет определен
 
-    # Проверим, что хотя бы одна задача имеет не средний (1) приоритет, если генерируется фраза приоритета
-    # или что есть задачи с высоким и низким приоритетом в целом.
-    # Лучше ориентироваться на разнообразие приоритетов в целом в примере.
-    priorities_in_example = {e['priority'] for e in example["entities"] if 'priority' in e} # Ensure 'priority' key exists
+
+
+
+
+    has_explicit_duration_task = any(e.get('has_explicit_duration_phrase', False) for e in example["entities"])
+
+
+
+
+
+    priorities_in_example = {e['priority'] for e in example["entities"] if 'priority' in e}
     has_varied_priorities = False
-    if priorities_in_example: # Check if the set is not empty
-        # Check for more than one unique priority OR if the only priority is not "medium"
+    if priorities_in_example:
+
         has_varied_priorities = len(priorities_in_example) > 1 or \
                                 ("medium" not in priorities_in_example and len(priorities_in_example) > 0)
 
@@ -878,7 +871,7 @@ while generated_count < NUM_EXAMPLES and attempt_limit > 0:
     if example["entities"] and len(example["text"]) > 10 and has_explicit_duration_task and has_varied_priorities:
         dataset.append(example)
         generated_count += 1
-    elif example["entities"] and len(example["text"]) > 10 and random.random() < 0.3: # 30% шанс добавить, даже если условия не идеальны, но базовые (сущности и длина) соблюдены
+    elif example["entities"] and len(example["text"]) > 10 and random.random() < 0.3:
         dataset.append(example)
         generated_count += 1
 
@@ -887,20 +880,20 @@ while generated_count < NUM_EXAMPLES and attempt_limit > 0:
 if generated_count < NUM_EXAMPLES:
     if attempt_limit <= 0:
         print(f"Предупреждение: Достигнут лимит попыток генерации. Сгенерировано {generated_count} из {NUM_EXAMPLES} примеров.")
-    else: # Сюда мы не должны попасть, если generated_count < NUM_EXAMPLES, т.к. цикл бы продолжался, если attempt_limit > 0
+    else:
         print(f"Предупреждение: Сгенерировано только {generated_count} из {NUM_EXAMPLES} запрошенных примеров (несмотря на оставшиеся попытки).")
 elif generated_count == 0 and NUM_EXAMPLES > 0 :
      print(f"ОШИБКА: Не сгенерировано ни одного примера. Проверьте условия отбора в цикле генерации.")
 
 
-# Сохранение
+
 output_file_path = 'ml/freeform_task_dataset.json'
 with open(output_file_path, 'w', encoding='utf-8') as f:
     json.dump(dataset, f, ensure_ascii=False, indent=2)
 
 print(f"Создан датасет ({len(dataset)} примеров) и сохранен в '{output_file_path}'.")
 
-# Пример вывода одного элемента
+
 if dataset:
     print("\nПример сгенерированного элемента:")
     print(json.dumps(dataset[0], ensure_ascii=False, indent=2))

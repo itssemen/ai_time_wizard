@@ -4,30 +4,29 @@ import joblib
 import nltk
 import numpy as np
 from sklearn.metrics import classification_report, mean_squared_error, mean_absolute_error
-from sklearn.feature_extraction import DictVectorizer # Нужен для ner_vectorizer
-from sklearn.feature_extraction.text import TfidfVectorizer # Нужен для пайплайнов
-import pymorphy3 # Добавлено для лемматизации
-import math # Добавлено для возможного использования
+from sklearn.feature_extraction import DictVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pymorphy3
+import math
 
-# --- Инициализация лемматизатора ---
+
 morph = pymorphy3.MorphAnalyzer()
 
-# --- Конфигурация путей ---
-# Предполагаем, что скрипт может быть запущен из корня проекта или из папки ml/test_models
-script_dir = os.path.dirname(os.path.abspath(__file__))
-base_dir = os.path.dirname(script_dir) # Это папка ml/
-project_root = os.path.dirname(base_dir) # Это корень проекта
 
-# Пути к моделям и данным относительно base_dir (папки ml/)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+base_dir = os.path.dirname(script_dir)
+project_root = os.path.dirname(base_dir)
+
+
 MODELS_DIR = os.path.join(base_dir, "models_sklearn")
-DATA_FILE_PATH = os.path.join(base_dir, "freeform_task_dataset.json") # Используем тот же датасет
+DATA_FILE_PATH = os.path.join(base_dir, "freeform_task_dataset.json")
 
 NER_VECTORIZER_PATH = os.path.join(MODELS_DIR, "ner_vectorizer.pkl")
 NER_MODEL_PATH = os.path.join(MODELS_DIR, "ner_model.pkl")
 DURATION_MODEL_PATH = os.path.join(MODELS_DIR, "duration_model.pkl")
 PRIORITY_MODEL_PATH = os.path.join(MODELS_DIR, "priority_model.pkl")
 
-# --- Загрузка ресурсов NLTK ---
+
 def download_nltk_resource_if_needed(resource_name, resource_path_to_check):
     try:
         nltk.data.find(resource_path_to_check)
@@ -44,7 +43,7 @@ def download_nltk_resource_if_needed(resource_name, resource_path_to_check):
 download_nltk_resource_if_needed('punkt', 'tokenizers/punkt')
 
 
-# --- 1. Загрузка данных ---
+
 def load_dataset(file_path):
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -58,7 +57,7 @@ def load_dataset(file_path):
         print(f"ERROR: Could not decode JSON from file '{file_path}'.")
         return []
 
-# --- 2. Функции для подготовки данных NER (аналогично model_training.py) ---
+
 def get_tokens_with_char_spans(text):
     tokens = []
     tokenizer = nltk.tokenize.WhitespaceTokenizer()
@@ -145,7 +144,7 @@ def iob_tags_to_entities(tokens_info_list, predicted_tags_list):
                     })
                 current_entity_tokens = [token_text]
                 current_entity_start_char = token_info['start']
-                current_entity_label = tag[2:] # Start new entity even if I- without B-
+                current_entity_label = tag[2:]
         elif tag == 'O':
             if current_entity_tokens:
                 entities.append({
@@ -162,7 +161,7 @@ def iob_tags_to_entities(tokens_info_list, predicted_tags_list):
         })
     return entities
 
-# --- Вспомогательные функции для извлечения признаков (аналогично backend/app.py) ---
+
 def lemmatize_text_for_model(text: str) -> str:
     """Лемматизирует текст для подачи в ML модель."""
     words = text.split()
@@ -172,20 +171,19 @@ def lemmatize_text_for_model(text: str) -> str:
 def extract_duration_features(task_text: str) -> list:
     """Извлекает признаки из текста задачи для модели предсказания длительности."""
     lemmatized_text = lemmatize_text_for_model(task_text)
-    text_length = len(task_text.split()) # Длина оригинального текста в словах
+    text_length = len(task_text.split())
 
-    # ВАЖНО: В тестовом скрипте мы не имеем доступа к информации о явном указании времени,
-    # так как это требует более сложного парсинга текста задачи, который есть в generate_dataset.py
-    # или мог бы быть в более продвинутой версии этой функции.
-    # Для целей тестирования модели здесь, мы будем использовать значения по умолчанию (0),
-    # как это сделано в `backend/app.py` при отсутствии такой информации.
-    # Это означает, что мы тестируем предсказание модели на основе лемматизированного текста и длины.
-    has_explicit_duration = 0 # Заглушка, как в backend/app.py
-    explicit_duration_parsed_minutes = 0.0 # Заглушка, как в backend/app.py
+
+
+
+
+
+    has_explicit_duration = 0
+    explicit_duration_parsed_minutes = 0.0
 
     return [lemmatized_text, has_explicit_duration, float(text_length), explicit_duration_parsed_minutes]
 
-# --- 3. Загрузка моделей ---
+
 def load_models():
     models = {}
     try:
@@ -202,7 +200,7 @@ def load_models():
         return None
     return models
 
-# --- 4. Тестирование моделей ---
+
 def test_ner_model(ner_model, ner_vectorizer, dataset):
     print("\n--- Testing NER Model ---")
     if not dataset:
@@ -211,7 +209,7 @@ def test_ner_model(ner_model, ner_vectorizer, dataset):
 
     all_true_iob_tags_flat = []
     all_pred_iob_tags_flat = []
-    all_tokens_info_sents = [] # для iob_tags_to_entities
+    all_tokens_info_sents = []
 
     for item_idx, item in enumerate(dataset):
         text = item['text']
@@ -228,8 +226,8 @@ def test_ner_model(ner_model, ner_vectorizer, dataset):
         token_texts = [t['text'] for t in tokens_with_spans]
         features = sent2features(token_texts)
 
-        if not features: # Если вдруг features пустые
-            all_pred_iob_tags_flat.extend(['O'] * len(true_iob_tags)) # Предсказываем 'O' по умолчанию
+        if not features:
+            all_pred_iob_tags_flat.extend(['O'] * len(true_iob_tags))
             continue
 
         try:
@@ -238,7 +236,7 @@ def test_ner_model(ner_model, ner_vectorizer, dataset):
             all_pred_iob_tags_flat.extend(pred_iob_tags)
         except Exception as e:
             print(f"Error during NER prediction for item {item_idx}: {e}")
-            # Добавляем 'O' теги, чтобы длины совпадали для classification_report
+
             all_pred_iob_tags_flat.extend(['O'] * len(true_iob_tags))
 
 
@@ -248,7 +246,7 @@ def test_ner_model(ner_model, ner_vectorizer, dataset):
 
     if len(all_true_iob_tags_flat) != len(all_pred_iob_tags_flat):
         print(f"Warning: Mismatch in length of true IOB tags ({len(all_true_iob_tags_flat)}) and predicted IOB tags ({len(all_pred_iob_tags_flat)}). NER report might be inaccurate.")
-        # Обрезаем до минимальной длины для отчета, или пропускаем
+
         min_len = min(len(all_true_iob_tags_flat), len(all_pred_iob_tags_flat))
         all_true_iob_tags_flat = all_true_iob_tags_flat[:min_len]
         all_pred_iob_tags_flat = all_pred_iob_tags_flat[:min_len]
@@ -265,15 +263,15 @@ def test_ner_model(ner_model, ner_vectorizer, dataset):
         print(classification_report(all_true_iob_tags_flat, all_pred_iob_tags_flat, labels=labels_ner, zero_division=0))
 
     print("\nNER: Example of predicted entities (first few dataset entries):")
-    # Предсказываем сущности для первых нескольких предложений
-    # Пересобираем предсказанные теги по предложениям
+
+
     start_idx = 0
-    for i, tokens_info_sent in enumerate(all_tokens_info_sents[:min(3, len(all_tokens_info_sents))]): # Первые 3 примера
+    for i, tokens_info_sent in enumerate(all_tokens_info_sents[:min(3, len(all_tokens_info_sents))]):
         num_tokens_in_sent = len(tokens_info_sent)
         pred_tags_for_sent = all_pred_iob_tags_flat[start_idx : start_idx + num_tokens_in_sent]
         start_idx += num_tokens_in_sent
 
-        true_tags_for_sent = create_iob_tags(tokens_info_sent, dataset[i]['entities']) # Эталонные теги для этого предложения
+        true_tags_for_sent = create_iob_tags(tokens_info_sent, dataset[i]['entities'])
 
         predicted_entities = iob_tags_to_entities(tokens_info_sent, pred_tags_for_sent)
         true_entities_text = [f"'{e['text']}' ({e['label']})" for e in dataset[i]['entities']]
@@ -305,17 +303,17 @@ def test_duration_model(duration_model, dataset):
         print("No 'TASK' entities found in the dataset for duration model testing.")
         return
 
-    # Подготовка признаков для модели длительности
+
     features_for_duration_model = []
     for task_text in task_texts:
-        features_for_duration_model.append(extract_duration_features(task_text)) # Используем существующую функцию
+        features_for_duration_model.append(extract_duration_features(task_text))
 
     if not features_for_duration_model:
         print("No features extracted for duration model testing.")
         return
 
     try:
-        # Модель ожидает 2D массив признаков
+
         pred_durations = duration_model.predict(features_for_duration_model)
         print("\nDuration Model Evaluation (on all tasks from dataset):")
         print(f"  Mean Squared Error (MSE): {mean_squared_error(true_durations, pred_durations):.2f}")
@@ -337,20 +335,20 @@ def test_priority_model(priority_model, dataset):
         return
 
     task_texts = []
-    true_priorities = [] # Теперь ожидаются строки: "low", "medium", "high"
+    true_priorities = []
 
     for item in dataset:
         for entity in item['entities']:
-            if entity['label'] == 'TASK' and 'priority' in entity: # Убедимся, что ключ 'priority' существует
+            if entity['label'] == 'TASK' and 'priority' in entity:
                 task_texts.append(entity['text'])
                 priority_val = entity['priority']
-                # Ожидаем, что priority_val уже строка ("low", "medium", "high")
+
                 if isinstance(priority_val, str) and priority_val.lower() in ["low", "medium", "high"]:
                     true_priorities.append(priority_val.lower())
                 else:
-                    # Если значение неожиданное, пропускаем или логируем ошибку
+
                     print(f"Warning: Unexpected priority value '{priority_val}' for task '{entity['text']}'. Skipping this task for priority test.")
-                    task_texts.pop() # Удаляем текст задачи, так как метка некорректна
+                    task_texts.pop()
                     continue
 
 
@@ -359,25 +357,25 @@ def test_priority_model(priority_model, dataset):
         return
 
     try:
-        # Модель LinearSVC должна напрямую предсказывать строки "low", "medium", "high"
+
         pred_priorities = priority_model.predict(task_texts)
 
-        # Убедимся, что pred_priorities - это список строк
+
         if not all(isinstance(p, str) for p in pred_priorities):
             print("Warning: Predicted priorities are not all strings. This might indicate an issue.")
-            # Попытка привести к строке, если возможно, или обработать ошибку
+
             pred_priorities = [str(p).lower() if isinstance(p, (str, int, float)) else "unknown" for p in pred_priorities]
 
 
         print("\nPriority Model Classification Report (on all tasks from dataset):")
-        # Метки для отчета - это уникальные значения из true_priorities и pred_priorities
-        # Порядок важен для отчета, обычно "low", "medium", "high"
+
+
         defined_labels = ["low", "medium", "high"]
         actual_labels_in_data = sorted(list(set(true_priorities) | set(pred_priorities)))
 
-        # Используем defined_labels, если все они присутствуют, иначе используем фактические
+
         report_labels = [l for l in defined_labels if l in actual_labels_in_data]
-        if not report_labels: # Если вдруг ни одна из defined_labels не найдена
+        if not report_labels:
             report_labels = actual_labels_in_data
         if not report_labels:
              print("No valid priority labels available for classification report.")
@@ -387,9 +385,9 @@ def test_priority_model(priority_model, dataset):
 
         print("\nPriority Model: Example predictions (first few tasks):")
         for i in range(min(5, len(task_texts))):
-            # true_priorities[i] и pred_priorities[i] уже должны быть строками "low", "medium", "high"
+
             true_p_text = true_priorities[i]
-            pred_p_text = pred_priorities[i] if i < len(pred_priorities) else "N/A" # Защита от несоответствия длин
+            pred_p_text = pred_priorities[i] if i < len(pred_priorities) else "N/A"
             print(f"  Task: \"{task_texts[i]}\", True Priority: {true_p_text}, Predicted Priority: {pred_p_text}")
     except Exception as e:
         print(f"Error during priority model prediction or evaluation: {e}")
@@ -397,7 +395,7 @@ def test_priority_model(priority_model, dataset):
         traceback.print_exc()
 
 
-# --- Основной блок ---
+
 if __name__ == "__main__":
     print("Starting model testing script...")
 
@@ -411,19 +409,19 @@ if __name__ == "__main__":
         print("Failed to load models. Exiting.")
         exit()
 
-    # Тестирование NER
+
     if models.get('ner_model') and models.get('ner_vectorizer'):
         test_ner_model(models['ner_model'], models['ner_vectorizer'], dataset)
     else:
         print("NER model or vectorizer not loaded. Skipping NER tests.")
 
-    # Тестирование модели длительности
+
     if models.get('duration_model'):
         test_duration_model(models['duration_model'], dataset)
     else:
         print("Duration model not loaded. Skipping duration tests.")
 
-    # Тестирование модели приоритета
+
     if models.get('priority_model'):
         test_priority_model(models['priority_model'], dataset)
     else:
